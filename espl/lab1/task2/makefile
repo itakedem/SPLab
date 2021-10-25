@@ -12,7 +12,7 @@ c-lib: task2.c
 
 exec: libs task2.o
 	gcc -g -m32 task2.o -o task2
-	rm task1c.o
+	rm task2.o
 
 .PHONY: clean
 clean:
