@@ -11,7 +11,7 @@ int main(int argc, char **argv)
 {
     FILE *in = stdin;
     FILE *out = stdout;
-    char c;
+    int c;
 
     char task = 'a';
 
