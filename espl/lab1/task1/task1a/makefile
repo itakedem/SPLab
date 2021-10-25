@@ -10,7 +10,7 @@ c-lib: task1a.c
         # -o numbers.o = output compiled file to numbers.o
 	gcc -g -m32 -c -o task1a.o task1a.c
 
-exec: libs my_echo.o
+exec: libs task1a.o
 	gcc -g -m32 task1a.o -o task1a
 	rm task1a.o
 
