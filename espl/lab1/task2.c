@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 
 void char2ascii(int c, FILE* in, FILE* out);
 void char2Binary(int c, FILE* in, FILE* out);
