@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-void printLowHighChar(char c, FILE* out);
-void lowHighSwitch(int c, FILE* in, FILE* out);
+void printLowHighChar(char c);
+void lowHighSwitch(int c);
 void num2Binary(int n, int arr[8]);
 void char2Binary(int c);
 void resolver(int argc, char* task, char ** argv);
