@@ -4,6 +4,8 @@
 void char2ascii(int c);
 void char2Binary(int c);
 void lowHighSwitch(int c);
+void printLowHighChar(char c);
+void num2Binary(int n, int arr[8]);
 void resolver(int argc, char* task, char ** argv);
 FILE *in;
 FILE *out;
@@ -87,5 +89,31 @@ void num2Binary(int n, int arr[8])
         arr[i] = n & 1;
         n >>= 1;
         i--;
+    }
+}
+
+void lowHighSwitch(int c)
+{
+    do
+    {
+        printLowHighChar(c);
+    } while ((c = fgetc(in)) != '\n');
+}
+
+void printLowHighChar(char c)
+{
+    if (c >= 'a' && c <= 'z')
+    {
+        c = c - 32;
+        fprintf(out, "%c", c);
+    }
+    else if (c >= 'A' && c <= 'Z')
+    {
+        c = c + 32;
+        fprintf(out, "%c", c);
+    }
+    else
+    {
+        fprintf(out, "%c", c);
     }
 }
