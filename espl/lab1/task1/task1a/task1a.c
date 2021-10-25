@@ -15,7 +15,7 @@ int main(int argc, char **argv)
     while ((c = fgetc(stdin)) != EOF)
     {
         char2ascii(c, stdin, stdout);
-        printf(stdout, "\n")
+        printf(stdout, '\n')
     }
 
     return 0;
