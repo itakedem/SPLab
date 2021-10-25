@@ -26,6 +26,8 @@ int main(int argc, char **argv)
             char2ascii(c);
         if (task == 'b')
             char2Binary(c);
+        if (task == 'c')
+            lowHighSwitch(c)
         fprintf(out, "\n");
     }
     fclose(in);
