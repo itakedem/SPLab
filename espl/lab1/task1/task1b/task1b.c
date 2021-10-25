@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 
 void num2Binary(int n, int arr[8]);
