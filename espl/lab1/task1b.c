@@ -28,6 +28,4 @@ void num2Binary(int n, int arr[8])
 		n >>= 1;
 		i--;
 	}
-
 }
-

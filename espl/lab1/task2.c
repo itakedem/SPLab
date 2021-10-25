@@ -26,7 +26,7 @@ int main(int argc, char **argv)
             char2Binary(c, in, out);
         if (task == 'c')
             lowHighSwitch(c, in, out);
-            fprintf(out, "\n");
+        fprintf(out, "\n");
     }
     fclose(in);
     fclose(out);
