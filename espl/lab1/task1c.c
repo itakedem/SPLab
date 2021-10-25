@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 
 void printLowHighChar(char c, FILE* out);
 void lowHighSwitch(int c, FILE* in, FILE* out)
