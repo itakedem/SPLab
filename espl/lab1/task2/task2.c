@@ -41,10 +41,10 @@ void resolver(int argc, char* task, char ** argv)
     while (i < argc)
     {
         if (strcmp(argv[i], "-i") == 0)
-            *in = fopen(argv[++i], "r");
+            in = fopen(argv[++i], "r");
         
         if (strcmp(argv[i], "-o") == 0)
-            *out = fopen(argv[++i], "w");
+            out = fopen(argv[++i], "w");
         
         if (strcmp(argv[i], "-b") == 0)
             *task = 'b';
