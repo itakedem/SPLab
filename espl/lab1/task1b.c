@@ -2,30 +2,30 @@
 #include <stdlib.h>
 #include <string.h>
 
+void num2Binary(int n, int arr[8]);
 
 void char2Binary(int c, FILE* in, FILE* out)
 {
-	int ans[8];
+	int arr[8];
 	int i;
 	do
 	{
-		num2Binary(c, ans);
+		num2Binary(c, arr);
 		for (i = 0; i < 8; i++)
-			fprintf(out, "%d", ans[i]);
+			fprintf(out, "%d", arr[i]);
 		fprintf(out, " ");
 		
 	} while ((c = fgetc(in)) != '\n');
 }
 
 
-void num2Binary(char c, int arr[8])
+void num2Binary(int n, int arr[8])
 {
-	int val = c - 0;
 	int i = 7;
 	while (i >= 0)
 	{
-		arr[i] = val & 1;
-		val >>= 1;
+		arr[i] = n & 1;
+		n >>= 1;
 		i--;
 	}
 

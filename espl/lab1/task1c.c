@@ -2,12 +2,13 @@
 #include <string.h>
 #include <stdlib.h>
 
-void lowHighSwitch(char *c, FILE* in, FILE* out)
+void printLowHighChar(char c, FILE* out);
+void lowHighSwitch(int c, FILE* in, FILE* out)
 {
     do
     {
-        printLowHighChar(*c, out);
-    } while ((*c = fgetc(in)) != '\n');  
+        printLowHighChar(c, out);
+    } while ((c = fgetc(in)) != '\n');
 }
 
 void printLowHighChar(char c, FILE* out)
