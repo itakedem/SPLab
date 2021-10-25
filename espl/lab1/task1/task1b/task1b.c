@@ -34,19 +34,24 @@ int main(int argc, char **argv)
 
 void char2ascii(int c, FILE* in, FILE* out)
 {
-
+    do
+    {
         fprintf(out, "%d ", c);
+    } while ((c = fgetc(in)) != '\n');
 }
 
 void char2Binary(int c, FILE* in, FILE* out)
 {
 	int arr[8];
 	int i;
-
+	do
+	{
 		num2Binary(c, arr);
 		for (i = 0; i < 8; i++)
 			fprintf(out, "%d", arr[i]);
 		fprintf(out, " ");
+
+	} while ((c = fgetc(in)) != '\n');
 }
 
 
