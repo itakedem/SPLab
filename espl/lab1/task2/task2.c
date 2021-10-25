@@ -9,8 +9,8 @@ void resolver(int argc, char* task, char ** argv);
 
 int main(int argc, char **argv)
 {
-    FILE *in = stdin;
-    FILE *out = stdout;
+    in = stdin;
+    out = stdout;
     int c;
 
     char task = 'a';
