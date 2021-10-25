@@ -3,28 +3,29 @@
 
 
 void num2Binary(int n, int arr[8]);
-void char2Binary(int c, FILE* in, FILE* out);
-void resolver(int argc, char* task, FILE** out, FILE**in, char ** argv);
-void char2ascii(int c, FILE* in, FILE* out);
-
+void char2Binary(int c);
+void resolver(int argc, char* task, char ** argv);
+void char2ascii(int c);
+FILE *in;
+FILE *out;
 
 
 int main(int argc, char **argv)
 {
-    FILE *in = stdin;
-    FILE *out = stdout;
+    in = stdin;
+    out = stdout;
     int c;
 
     char task = 'a';
 
-    resolver(argc, &task, &out, &in, argv);
+    resolver(argc, &task, argv);
 
     while ((c = fgetc(in)) != EOF)
     {
         if (task == 'a')
-            char2ascii(c, in, out);
+            char2ascii(c);
         if (task == 'b')
-            char2Binary(c, in, out);
+            char2Binary(c);
         fprintf(out, "\n");
     }
     fclose(in);
@@ -33,7 +34,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void char2ascii(int c, FILE* in, FILE* out)
+void char2ascii(int c)
 {
     do
     {
@@ -41,7 +42,7 @@ void char2ascii(int c, FILE* in, FILE* out)
     } while ((c = fgetc(in)) != '\n');
 }
 
-void char2Binary(int c, FILE* in, FILE* out)
+void char2Binary(int c)
 {
 	int arr[8];
 	int i;
@@ -67,7 +68,7 @@ void num2Binary(int n, int arr[8])
 	}
 }
 
-void resolver(int argc, char* task, FILE** out, FILE**in, char ** argv)
+void resolver(int argc, char* task, char ** argv)
 {
     int i = 1;
     while (i < argc)

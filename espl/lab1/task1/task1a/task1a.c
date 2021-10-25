@@ -8,8 +8,8 @@ int main(int argc, char **argv)
     {
         do
         {
-            fprintf(out, "%d ", c);
-        } while ((c = fgetc(in)) != '\n');
+            fprintf(stdout, "%d ", c);
+        } while ((c = fgetc(stdin)) != '\n');
 
         fprintf(stdout, "\n");
     }
