@@ -17,16 +17,16 @@ int main(int argc, char **argv)
 
     char task = 'a';
 
-    resolver(argc, &task, &out, &in, argv);
+    resolver(argc, &task, argv);
 
     while ((c = fgetc(in)) != EOF)
     {
         if (task == 'a')
-            char2ascii(c, in, out);
+            char2ascii(c);
         if (task == 'b')
-            char2Binary(c, in, out);
+            char2Binary(c);
         if (task == 'c')
-            lowHighSwitch(c, in, out);
+            lowHighSwitch(c);
         fprintf(out, "\n");
     }
     fclose(in);
@@ -35,7 +35,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void resolver(int argc, char* task, FILE** out, FILE**in, char ** argv)
+void resolver(int argc, char* task, char ** argv)
 {
     int i = 1;
     while (i < argc)
