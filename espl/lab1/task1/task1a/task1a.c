@@ -15,7 +15,6 @@ int main(int argc, char **argv)
     while ((c = fgetc(stdin)) != EOF)
     {
         fprintf(stdout, "%d ", c);
-        fprintf(stdout, "\n");
     }
 
     return 0;
