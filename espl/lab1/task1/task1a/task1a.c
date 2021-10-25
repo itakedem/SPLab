@@ -11,8 +11,7 @@ void char2ascii(int c, FILE* in, FILE* out)
 
 int main(int argc, char **argv)
 {
-    char c;
-    while ((c = fgetc(stdin)) != EOF)
-        char2ascii(c, stdin, stdout);
+    char c = fgetc(stdin);
+    char2ascii(c, stdin, stdout);
     return 0;
 }
