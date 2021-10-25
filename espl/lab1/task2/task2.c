@@ -5,6 +5,8 @@ void char2ascii(int c);
 void char2Binary(int c);
 void lowHighSwitch(int c);
 void resolver(int argc, char* task, char ** argv);
+FILE *in;
+FILE *out;
 
 
 int main(int argc, char **argv)
