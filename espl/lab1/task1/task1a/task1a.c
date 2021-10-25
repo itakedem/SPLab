@@ -6,7 +6,7 @@ int main(int argc, char **argv)
     char c;
     while ((c = fgetc(stdin)) != EOF)
     {
-        fprintf(out, "%d ", c);
+        fprintf(stdout, "%d ", c);
         fprintf(stdout, "\n");
     }
 
