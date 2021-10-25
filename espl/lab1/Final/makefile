@@ -1,4 +1,4 @@
-all: exec
+all: task1a task1b task1c task2
 
 task1a: task1a.o
 	gcc -m32 -g -Wall -o task1a task1a.o
