@@ -13,6 +13,10 @@ int main(int argc, char **argv)
 {
     char c;
     while ((c = fgetc(stdin)) != EOF)
+    {
         char2ascii(c, stdin, stdout);
+        printf(stdout, "\n")
+    }
+
     return 0;
 }
