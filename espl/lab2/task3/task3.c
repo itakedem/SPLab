@@ -145,11 +145,13 @@ void operate(struct fun_desc menu[4])
     {
         fprintf(out, "%s", "Please choose printer type: \n");
         int i = 0;
-        while (i < 4) {
+        while (i < 4)
+        {
             fprintf(out, "%d) %s", i, menu[i].name);
             fprintf(out, "\n");
+            i++;
         }
-        fprintf(out, "%d) %s", i, "bitwise or");
+        fprintf(out, "%s", "5) bitwise or");
         fprintf(out, "\n");
         string_reader(&option);
         if (option > 5 || option < 0)
