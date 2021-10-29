@@ -4,6 +4,11 @@
 #include <ctype.h>
 #define BUFFERSIZE 10
 
+struct fun_desc {
+    char *name;
+
+    void (*fun)(void);
+};
 
 FILE * in;
 FILE * out;
@@ -151,16 +156,12 @@ void operate()
             bitwise_or(str);
         else
             string_printer(str, menu[option]);
-    } while (option != EOF)
+    } while (option != EOF);
 
 }
 
 
 
 
-struct fun_desc {
-    char *name;
 
-    void (*fun)(void);
-};
 
