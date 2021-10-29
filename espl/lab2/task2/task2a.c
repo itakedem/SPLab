@@ -1,5 +1,8 @@
 #include <stdio.h>
 
+FILE * in = stdin;
+FILE * out = stdout;
+
 void echo_printer(char c); /* task 0 from lab1 - prints c to the standard output */
 void ascii_printer(char c); /* task 1a from lab1 - print the ASCII code of c to the standard output*/
 void binary_printer(char c); /* task 1b from lab1 – print the binary representation of c to the standard output */
