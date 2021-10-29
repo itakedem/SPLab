@@ -4,8 +4,8 @@
 #include <ctype.h>
 
 
-FILE * in = stdin;
-FILE * out = stdout;
+FILE * in;
+FILE * out;
 
 void echo_printer(char c); /* task 0 from lab1 - prints c to the standard output */
 void ascii_printer(char c); /* task 1a from lab1 - print the ASCII code of c to the standard output*/
@@ -80,5 +80,7 @@ void bitwise_and(char* s){
 
 int main(int argc, char **argv)
 {
+    in = stdin;
+    out = stdout;
     string_printer("tal", lower_to_upper_printer);
 }
