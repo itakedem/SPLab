@@ -41,7 +41,7 @@ void binary_printer(char c)
     do
     {
         num2Binary(c, arr);
-        arr_printer(arr);
+        arr_printer(arr, 8);
     } while ((c = fgetc(in)) != '\n');
 }
 
@@ -90,13 +90,13 @@ void bitwise_or(char* s)
         or(sum, carry);
         i++;
     }
-    arr_printer(sum);
+    arr_printer(sum, 8);
 }
 
-void arr_printer(int* arr)
+void arr_printer(int* arr, int len)
 {
     int i = 0;
-    while (i < (sizeof(arr) / sizeof(arr[0])))
+    while (i < len)
     {
         fprintf(out, "%d ", arr[i]);
         i++;
