@@ -20,6 +20,7 @@ void binary_printer(char c); /* task 1b from lab1 – print the binary represent
 void lower_to_upper_printer(char c); /* task 1c from lab1 – print c to the standard output in upper case */
 void arr_printer(int* arr, int len);
 void operate(struct fun_desc menu[4]);
+void or(int sum[8], int carry[8]);
 
 void echo_printer(char c)
 {
@@ -44,7 +45,6 @@ void num2Binary(int n, int arr[8])
 void binary_printer(char c)
 {
     int arr[8];
-    int i;
     do
     {
         num2Binary(c, arr);
@@ -137,7 +137,7 @@ int main(int argc, char **argv)
 
 void operate(struct fun_desc menu[4])
 {
-    char* str;
+    char* str = "";
     fprintf(out, "%s", "Please enter a string (0<size<=10): \n");
     string_reader(str);
     char option;
