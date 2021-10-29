@@ -7,7 +7,7 @@
 struct fun_desc {
     char *name;
 
-    void (*fun)(void);
+    void (*fun)(char);
 };
 
 FILE * in;
@@ -155,7 +155,7 @@ void operate()
         if (option == '4')
             bitwise_or(str);
         else
-            string_printer(str, menu[atoi(&option)]);
+            string_printer(str, menu[atoi(&option)].fun);
     } while (option != EOF);
 
 }
