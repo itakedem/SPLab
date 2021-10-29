@@ -155,7 +155,7 @@ void operate()
         if (option == '4')
             bitwise_or(str);
         else
-            string_printer(str, menu[option]);
+            string_printer(str, menu[atoi(&option)]);
     } while (option != EOF);
 
 }
