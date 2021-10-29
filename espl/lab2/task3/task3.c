@@ -130,6 +130,8 @@ int main(int argc, char **argv)
             {"binary printer", binary_printer},
             {"lower to upper printer", lower_to_upper_printer}};
     operate(menu);
+    fclose(in);
+    fclose(out);
     return 0;
 }
 
