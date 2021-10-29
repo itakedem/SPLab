@@ -32,7 +32,7 @@ void num2Binary(int n, int arr[8])
     }
 }
 
-void binary_printer(int c)
+void binary_printer(char c)
 {
     int arr[8];
     int i;
