@@ -130,18 +130,18 @@ int main(int argc, char **argv)
 void operate()
 {
     char* str;
-    fprintf(out, "%s", "Please enter a string (0<size<=10): \n")
+    fprintf(out, "%s", "Please enter a string (0<size<=10): \n");
     string_reader(str);
     char option;
     do
     {
-        fprintf(out, "%s", "Please choose printer type: \n")
+        fprintf(out, "%s", "Please choose printer type: \n");
         int i = 0;
         while (i < 5) {
             fprintf(out, "%d) %s", i, menu[i].name);
             fprintf(out, "\n");
         }
-        string_reader(&option)
+        string_reader(&option);
         if (option > 5 || option < 0)
         {
             fprintf(out, "%s", "Please select 1-4 or CTRL-D to exit. \n");
@@ -150,7 +150,7 @@ void operate()
         if (option == '4')
             bitwise_or(str);
         else
-            string_printer(str, menu[option])
+            string_printer(str, menu[option]);
     } while (option != EOF)
 
 }
