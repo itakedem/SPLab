@@ -12,7 +12,7 @@ struct fun_desc {
 
 FILE * in;
 FILE * out;
-struct fun_desc menu[5];
+struct fun_desc menu[4];
 
 void echo_printer(char c); /* task 0 from lab1 - prints c to the standard output */
 void ascii_printer(char c); /* task 1a from lab1 - print the ASCII code of c to the standard output*/
@@ -124,11 +124,10 @@ void or(int sum[8], int carry[8])
 int main(int argc, char **argv)
 {
     menu = {
-            {"echo_printer", echo_printer},
-            {"ascii_printer", ascii_printer},
-            {"binary_printer", binary_printer},
-            {"lower_to_upper_printer", lower_to_upper_printer},
-            {"bitwise_or", bitwise_or}};
+            {"echo printer", echo_printer},
+            {"ascii printer", ascii_printer},
+            {"binary printer", binary_printer},
+            {"lower to upper printer", lower_to_upper_printer}};
     operate();
 }
 
@@ -142,10 +141,12 @@ void operate()
     {
         fprintf(out, "%s", "Please choose printer type: \n");
         int i = 0;
-        while (i < 5) {
+        while (i < 4) {
             fprintf(out, "%d) %s", i, menu[i].name);
             fprintf(out, "\n");
         }
+        fprintf(out, "%d) %s", i, "bitwise or");
+        fprintf(out, "\n");
         string_reader(&option);
         if (option > 5 || option < 0)
         {
