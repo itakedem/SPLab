@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#define BUFFERSIZE 10
 
 
 FILE * in;
@@ -74,12 +75,36 @@ void string_printer(char* str, void (*func_ptr) (char))
     fprintf(out, "\n");
 }
 
-void string_reader(char* s){
-    /* TODO: Complete during task 2c*/
+void string_reader(char* s)
+{
+    fgets(s, BUFFERSIZE, in);
 }
 
-void bitwise_and(char* s){
-    /* TODO: Complete during task2c */
+void bitwise_or(char* s)
+{
+    int carry[8];
+    int sum[8] = {0,0,0,0,0,0,0,0};
+    int i = 0;
+    char c;
+    while ((c = s[i]) != '\0')
+    {
+        num2Binary(c, carry);
+        or(sum, carry);
+        i++;
+    }
+
+    for (i = 0; i < 8; i++)
+        fprintf(out, "%d ", sum[i]);
+    printf("\n");
+}
+
+void or(int sum[8], int carry[8])
+{
+    for (int i = 0; i < 8; i++)
+    {
+        if (!(sum[i] == 0 && carry[i] == 0))
+            sum[i] = 1;
+    }
 }
 
 int main(int argc, char **argv)
@@ -87,4 +112,5 @@ int main(int argc, char **argv)
     in = stdin;
     out = stdout;
     string_printer("tal", lower_to_upper_printer);
+    bitwise_or("tal");
 }
