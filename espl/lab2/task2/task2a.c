@@ -12,6 +12,7 @@ void echo_printer(char c); /* task 0 from lab1 - prints c to the standard output
 void ascii_printer(char c); /* task 1a from lab1 - print the ASCII code of c to the standard output*/
 void binary_printer(char c); /* task 1b from lab1 – print the binary representation of c to the standard output */
 void lower_to_upper_printer(char c); /* task 1c from lab1 – print c to the standard output in upper case */
+void arr_printer(int* arr);
 
 void echo_printer(char c)
 {
@@ -40,10 +41,7 @@ void binary_printer(char c)
     do
     {
         num2Binary(c, arr);
-        for (i = 0; i < 8; i++)
-            fprintf(out, "%d", arr[i]);
-        fprintf(out, " ");
-
+        arr_printer(arr);
     } while ((c = fgetc(in)) != '\n');
 }
 
@@ -92,9 +90,13 @@ void bitwise_or(char* s)
         or(sum, carry);
         i++;
     }
+    arr_printer(sum);
+}
 
-    i = 0;
-    while (i < 8)
+void arr_printer(int* arr)
+{
+    int i = 0;
+    while (i < sizeof(arr))
     {
         fprintf(out, "%d ", sum[i]);
         i++;
