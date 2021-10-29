@@ -93,8 +93,12 @@ void bitwise_or(char* s)
         i++;
     }
 
-    for (i = 0; i < 8; i++)
+    i = 0;
+    while (i < 8)
+    {
         fprintf(out, "%d ", sum[i]);
+        i++;
+    }
     printf("\n");
 }
 
