@@ -96,7 +96,7 @@ void bitwise_or(char* s)
 void arr_printer(int* arr)
 {
     int i = 0;
-    while (i < sizeof(arr))
+    while (i < (sizeof(array) / sizeof(array[0])))
     {
         fprintf(out, "%d ", arr[i]);
         i++;
