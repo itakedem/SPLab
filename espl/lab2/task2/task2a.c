@@ -67,7 +67,10 @@ void string_printer(char* str, void (*func_ptr) (char))
     char c;
     int i = 0;
     while ((c = str[i]) != '\0')
+    {
         func_ptr(c);
+        i++;
+    }
 }
 
 void string_reader(char* s){
@@ -82,5 +85,5 @@ int main(int argc, char **argv)
 {
     in = stdin;
     out = stdout;
-    string_printer("tal\0", lower_to_upper_printer);
+    string_printer("tal", lower_to_upper_printer);
 }
