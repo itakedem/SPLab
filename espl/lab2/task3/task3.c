@@ -12,7 +12,7 @@ struct fun_desc {
 
 FILE * in;
 FILE * out;
-struct fun_descs menu[];
+struct fun_desc menu[5];
 
 void echo_printer(char c); /* task 0 from lab1 - prints c to the standard output */
 void ascii_printer(char c); /* task 1a from lab1 - print the ASCII code of c to the standard output*/
@@ -123,7 +123,7 @@ void or(int sum[8], int carry[8])
 
 int main(int argc, char **argv)
 {
-    menu[5] = {
+    menu = {
             {"echo_printer", echo_printer},
             {"ascii_printer", ascii_printer},
             {"binary_printer", binary_printer},
