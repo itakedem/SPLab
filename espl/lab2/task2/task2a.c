@@ -82,5 +82,5 @@ int main(int argc, char **argv)
 {
     in = stdin;
     out = stdout;
-    string_printer("tal", lower_to_upper_printer);
+    string_printer("tal\0", lower_to_upper_printer);
 }
