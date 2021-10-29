@@ -123,7 +123,7 @@ void or(int sum[8], int carry[8])
 
 int main(int argc, char **argv)
 {
-    menu[] = {
+    menu[5] = {
             {"echo_printer", echo_printer},
             {"ascii_printer", ascii_printer},
             {"binary_printer", binary_printer},
