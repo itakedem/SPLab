@@ -98,7 +98,7 @@ void arr_printer(int* arr)
     int i = 0;
     while (i < sizeof(arr))
     {
-        fprintf(out, "%d ", sum[i]);
+        fprintf(out, "%d ", arr[i]);
         i++;
     }
     printf("\n");
