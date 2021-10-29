@@ -71,6 +71,7 @@ void string_printer(char* str, void (*func_ptr) (char))
         func_ptr(c);
         i++;
     }
+    fprintf(out, "\n");
 }
 
 void string_reader(char* s){
