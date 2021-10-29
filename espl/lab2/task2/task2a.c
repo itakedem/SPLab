@@ -106,10 +106,12 @@ void arr_printer(int* arr)
 
 void or(int sum[8], int carry[8])
 {
-    for (int i = 0; i < 8; i++)
+    int i = 0;
+    while (i < 8)
     {
         if (!(sum[i] == 0 && carry[i] == 0))
             sum[i] = 1;
+        i++;
     }
 }
 
