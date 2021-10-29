@@ -12,6 +12,7 @@ struct fun_desc {
 
 FILE * in;
 FILE * out;
+struct fun_desc menu[4];
 
 
 void echo_printer(char c); /* task 0 from lab1 - prints c to the standard output */
@@ -19,7 +20,7 @@ void ascii_printer(char c); /* task 1a from lab1 - print the ASCII code of c to 
 void binary_printer(char c); /* task 1b from lab1 – print the binary representation of c to the standard output */
 void lower_to_upper_printer(char c); /* task 1c from lab1 – print c to the standard output in upper case */
 void arr_printer(int* arr, int len);
-void operate(struct fun_desc menu[4]);
+void operate();
 
 void echo_printer(char c)
 {
@@ -124,7 +125,7 @@ void or(int sum[8], int carry[8])
 
 int main(int argc, char **argv)
 {
-    struct fun_desc menu[4] = {
+    menu = {
             {"echo printer", echo_printer},
             {"ascii printer", ascii_printer},
             {"binary printer", binary_printer},
@@ -132,7 +133,7 @@ int main(int argc, char **argv)
     operate(menu);
 }
 
-void operate(struct fun_desc menu[4])
+void operate()
 {
     char* str;
     fprintf(out, "%s", "Please enter a string (0<size<=10): \n");
