@@ -13,6 +13,7 @@ void ascii_printer(char c); /* task 1a from lab1 - print the ASCII code of c to 
 void binary_printer(char c); /* task 1b from lab1 – print the binary representation of c to the standard output */
 void lower_to_upper_printer(char c); /* task 1c from lab1 – print c to the standard output in upper case */
 void arr_printer(int* arr, int len);
+void or(int sum[8], int carry[8]);
 
 void echo_printer(char c)
 {
@@ -20,7 +21,7 @@ void echo_printer(char c)
 }
 void ascii_printer(char c)
 {
-    fprintf(stdout, "%d", c);
+    fprintf(stdout, "%d ", c);
 }
 
 void num2Binary(int n, int arr[8])
@@ -37,12 +38,8 @@ void num2Binary(int n, int arr[8])
 void binary_printer(char c)
 {
     int arr[8];
-    int i;
-    do
-    {
-        num2Binary(c, arr);
-        arr_printer(arr, 8);
-    } while ((c = fgetc(in)) != '\n');
+    num2Binary(c, arr);
+    arr_printer(arr, 8);
 }
 
 void lower_to_upper_printer(char c)
@@ -91,6 +88,7 @@ void bitwise_or(char* s)
         i++;
     }
     arr_printer(sum, 8);
+    fprintf(out, "\n");
 }
 
 void arr_printer(int* arr, int len)
@@ -98,10 +96,10 @@ void arr_printer(int* arr, int len)
     int i = 0;
     while (i < len)
     {
-        fprintf(out, "%d ", arr[i]);
+        fprintf(out, "%d", arr[i]);
         i++;
     }
-    printf("\n");
+    fprintf(out, " ");
 }
 
 void or(int sum[8], int carry[8])
@@ -119,6 +117,19 @@ int main(int argc, char **argv)
 {
     in = stdin;
     out = stdout;
+    printf("echo_printer test: \n");
+    string_printer("tal", echo_printer);
+
+    printf("ascii_printer test: \n");
+    string_printer("tal", ascii_printer);
+
+    printf("binary_printer test: \n");
+    string_printer("tal", binary_printer);
+
+    printf("lower_to_upper_printer test: \n");
     string_printer("tal", lower_to_upper_printer);
-    bitwise_or("tal");
+
+    printf("bitwise_or test: \n");
+    bitwise_or("abd");
+    return 0;
 }

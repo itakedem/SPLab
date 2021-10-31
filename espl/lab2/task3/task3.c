@@ -28,7 +28,7 @@ void echo_printer(char c)
 }
 void ascii_printer(char c)
 {
-    fprintf(stdout, "%d", c);
+    fprintf(stdout, "%d ", c);
 }
 
 void num2Binary(int n, int arr[8])
@@ -45,11 +45,8 @@ void num2Binary(int n, int arr[8])
 void binary_printer(char c)
 {
     int arr[8];
-    do
-    {
-        num2Binary(c, arr);
-        arr_printer(arr, 8);
-    } while ((c = fgetc(in)) != '\n');
+    num2Binary(c, arr);
+    arr_printer(arr, 8);
 }
 
 void lower_to_upper_printer(char c)
@@ -72,7 +69,7 @@ void string_printer(char* str, void (*func_ptr) (char))
 {
     char c;
     int i = 0;
-    while ((c = str[i]) != '\0')
+    while ((c = str[i]) != '\n')
     {
         func_ptr(c);
         i++;
@@ -91,13 +88,14 @@ void bitwise_or(char* s)
     int sum[8] = {0,0,0,0,0,0,0,0};
     int i = 0;
     char c;
-    while ((c = s[i]) != '\0')
+    while ((c = s[i]) != '\n')
     {
         num2Binary(c, carry);
         or(sum, carry);
         i++;
     }
     arr_printer(sum, 8);
+    fprintf(out, "\n");
 }
 
 void arr_printer(int* arr, int len)
@@ -105,10 +103,10 @@ void arr_printer(int* arr, int len)
     int i = 0;
     while (i < len)
     {
-        fprintf(out, "%d ", arr[i]);
+        fprintf(out, "%d", arr[i]);
         i++;
     }
-    printf("\n");
+    fprintf(out, " ");
 }
 
 void or(int sum[8], int carry[8])
@@ -124,6 +122,8 @@ void or(int sum[8], int carry[8])
 
 int main(int argc, char **argv)
 {
+    in = stdin;
+    out = stdout;
     struct fun_desc menu[4] = {
             {"echo printer", echo_printer},
             {"ascii printer", ascii_printer},
@@ -137,13 +137,12 @@ int main(int argc, char **argv)
 
 void operate(struct fun_desc menu[4])
 {
-    char* str = "";
+    char str[10];
     fprintf(out, "%s", "Please enter a string (0<size<=10): \n");
-    string_reader(str);
-    char option;
-    do
-    {
-        fprintf(out, "%s", "Please choose printer type: \n");
+    string_reader(&str[0]);
+    int option;
+    int eof;
+    fprintf(out, "%s", "Please choose printer type: \n");
         int i = 0;
         while (i < 4)
         {
@@ -152,18 +151,26 @@ void operate(struct fun_desc menu[4])
             i++;
         }
         fprintf(out, "%s", "5) bitwise or");
-        fprintf(out, "\n");
-        string_reader(&option);
+        fprintf(out, "\n\n");
+    do
+    {
+        fprintf(out, "Option: ");
+        eof = scanf("%d",&option);
+        if(eof <= 0)
+        {
+            fprintf(out, "DONE.\n");
+            break;
+        }
         if (option > 5 || option < 0)
         {
             fprintf(out, "%s", "Please select 1-4 or CTRL-D to exit. \n");
             continue;
         }
-        if (option == '4')
+        else if (option == 4)
             bitwise_or(str);
         else
-            string_printer(str, menu[atoi(&option)].fun);
-    } while (option != EOF);
+            string_printer(str, menu[option].fun);
+    } while (1);
 
 }
 
