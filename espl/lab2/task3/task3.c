@@ -161,7 +161,7 @@ void operate(struct fun_desc menu[4])
             fprintf(out, "DONE.\n");
             break;
         }
-        if (option > 5 || option < 0)
+        if (option > 4  || option < 0)
         {
             fprintf(out, "%s", "Please select 1-4 or CTRL-D to exit. \n");
             continue;

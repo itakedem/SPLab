@@ -36,7 +36,7 @@ void point_at(void *p){
     static int addr0 = 2;
     static int addr1;
 
-
+    printf("- &local: %p\n",&local);
     long dist1 = (size_t)&addr6 - (size_t)p;
     long dist2 = (size_t)&local - (size_t)p;
     long dist3 = (size_t)&foo - (size_t)p;
