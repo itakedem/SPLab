@@ -20,7 +20,6 @@ void binary_printer(char c); /* task 1b from lab1 – print the binary represent
 void lower_to_upper_printer(char c); /* task 1c from lab1 – print c to the standard output in upper case */
 void arr_printer(int* arr, int len);
 void operate(struct fun_desc menu[4]);
-void or(int sum[8], int carry[8]);
 
 void echo_printer(char c)
 {
@@ -84,17 +83,15 @@ void string_reader(char* s)
 
 void bitwise_or(char* s)
 {
-    int carry[8];
-    int sum[8] = {0,0,0,0,0,0,0,0};
-    int i = 0;
+    char sum = s[0];
+    int i = 1;
     char c;
     while ((c = s[i]) != '\n')
     {
-        num2Binary(c, carry);
-        or(sum, carry);
+        sum |= c;
         i++;
     }
-    arr_printer(sum, 8);
+    binary_printer(sum, 8);
     fprintf(out, "\n");
 }
 
@@ -109,26 +106,17 @@ void arr_printer(int* arr, int len)
     fprintf(out, " ");
 }
 
-void or(int sum[8], int carry[8])
-{
-    int i = 0;
-    while (i < 8)
-    {
-        if (!(sum[i] == 0 && carry[i] == 0))
-            sum[i] = 1;
-        i++;
-    }
-}
 
 int main(int argc, char **argv)
 {
     in = stdin;
     out = stdout;
-    struct fun_desc menu[4] = {
+    struct fun_desc menu[5] = {
             {"echo printer", echo_printer},
             {"ascii printer", ascii_printer},
             {"binary printer", binary_printer},
-            {"lower to upper printer", lower_to_upper_printer}};
+            {"lower to upper printer", lower_to_upper_printer},
+            {"bitwise or", null}};
     operate(menu);
     fclose(in);
     fclose(out);
@@ -143,15 +131,14 @@ void operate(struct fun_desc menu[4])
     int option;
     int eof;
     fprintf(out, "%s", "Please choose printer type: \n");
-        int i = 0;
-        while (i < 4)
-        {
-            fprintf(out, "%d) %s", i, menu[i].name);
-            fprintf(out, "\n");
-            i++;
-        }
-        fprintf(out, "%s", "4) bitwise or");
-        fprintf(out, "\n\n");
+    int i = 0;
+    while (i < 5)
+    {
+        fprintf(out, "%d) %s", i, menu[i].name);
+        fprintf(out, "\n");
+        i++;
+    }
+    fprintf(out, "\n\n");
     do
     {
         fprintf(out, "Option: ");
