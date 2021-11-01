@@ -37,7 +37,13 @@ void binary_printer(char c)
 {
     int arr[8];
     num2Binary(c, arr);
-    arr_printer(arr, 8);
+    int i = 0;
+    while (i < 8)
+    {
+        fprintf(out, "%d", arr[i]);
+        i++;
+    }
+    fprintf(out, " ");
 }
 
 void lower_to_upper_printer(char c)
