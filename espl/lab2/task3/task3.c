@@ -150,7 +150,7 @@ void operate(struct fun_desc menu[4])
             fprintf(out, "\n");
             i++;
         }
-        fprintf(out, "%s", "5) bitwise or");
+        fprintf(out, "%s", "4) bitwise or");
         fprintf(out, "\n\n");
     do
     {
