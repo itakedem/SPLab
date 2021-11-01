@@ -91,7 +91,7 @@ void bitwise_or(char* s)
         sum |= c;
         i++;
     }
-    binary_printer(sum, 8);
+    binary_printer(sum);
     fprintf(out, "\n");
 }
 
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
             {"ascii printer", ascii_printer},
             {"binary printer", binary_printer},
             {"lower to upper printer", lower_to_upper_printer},
-            {"bitwise or", null}};
+            {"bitwise or", NULL}};
     operate(menu);
     fclose(in);
     fclose(out);
