@@ -1,4 +1,4 @@
-all: exec
+all: task2a task2b task2c task3
 
 task2a: task2a.o
 	gcc -m32 -g -Wall -o task2a task2a.o
@@ -26,5 +26,5 @@ task3.o: task3.c
 
 .PHONY: clean
 clean:
-	rm -rf ./*.o exec
+	rm -rf ./*.o task2a task2b task2c task3
 
