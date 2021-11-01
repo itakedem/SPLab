@@ -1,13 +1,13 @@
-all: task2a
+all: task2Full
 
-task2a: task2a.o
-	gcc -m32 -g -Wall -o task2a task2a.o
+task2Full: task2Full.o
+	gcc -m32 -g -Wall -o task2Full task2Full.o
 
-task2a.o: task2Full.c
-	gcc -g -Wall -m32 -ansi -c -o task2a.o task2a.c
+task2Full.o: task2Full.c
+	gcc -g -Wall -m32 -ansi -c -o task2Full.o task2Full.c
 
 
 .PHONY: clean
 
 clean:
-	rm -f *.o  task2a
+	rm -f *.o  task2Full
