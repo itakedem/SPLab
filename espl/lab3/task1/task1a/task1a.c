@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct diff {
     long offset; /* offset of the difference in file starting from zero*/
