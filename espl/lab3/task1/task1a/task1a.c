@@ -23,6 +23,8 @@ void list_print(node *diff_list,FILE* output)
         curr = curr->next;
     }
 }
+
+
 /* Print the nodes in diff_list in the following format: byte POSITION ORIG_VALUE NEW_VALUE.
 Each item followed by a newline character. */
 
@@ -49,18 +51,17 @@ node* list_append(node* diff_list, diff* data)
    and return a pointer to the list (i.e., the first node in the list).
    If the list is null - create a new entry and return a pointer to the entry.*/
 
-
-void list_free(node* node)
+void list_free(node* head)
 {
-    if (node != NULL)
+    if (head != NULL)
     {
-        node* next = (node*)calloc (sizeof(node), 1);
-        next = node->next;
-        free(node);
+        node* next = head->next;
+        free(head);
         list_free(next);
-        free(next);
     }
 }
+
+
 int main(int argc, char **argv)
 {
     diff diff1 = {1, 'a', 'b'};
