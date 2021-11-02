@@ -6,7 +6,7 @@ task1a: task1a.o
 task1a.o: task1a.c
 	gcc -g -Wall -m32 -ansi -c -o task1a.o task1a.c
 	
-	
+
 .PHONY: clean
 
 clean: 
