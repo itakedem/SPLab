@@ -49,14 +49,25 @@ node* list_append(node* diff_list, diff* data)
    and return a pointer to the list (i.e., the first node in the list).
    If the list is null - create a new entry and return a pointer to the entry.*/
 
+
+void list_free(node* node)
+{
+    if (node != null)
+    {
+        node* next = node->next;
+        free(node);
+        list_free(next);
+    }
+}
 int main(int argc, char **argv)
 {
     diff diff1 = {1, 'a', 'b'};
     diff diff2 = {2, 'a', 'a'};
-    node* lst1 = (node*)calloc (sizeof(node), 1);;
+    node* lst1 = (node*)calloc (sizeof(node), 1);
     lst1 = list_append(lst1, &diff1);
     lst1 = list_append(lst1, &diff2);
     list_print(lst1, stdout);
 
+    list_free(lst1);
     return 0;
 }
