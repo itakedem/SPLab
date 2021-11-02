@@ -35,6 +35,6 @@ int main(int argc, char **argv) {
         printf(" %d", numbers[i]);
     printf("\n");
 
-    free(arr);
+    free(numbers);
     return 0;
 }
