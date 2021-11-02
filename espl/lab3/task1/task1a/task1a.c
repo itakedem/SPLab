@@ -30,7 +30,6 @@ Each item followed by a newline character. */
 
 node* list_append(node* diff_list, diff* data)
 {
-    newNode = new node(list_append(diff_list.next, data),diff_list.data)
     node* newNode = (node*)calloc (sizeof(node), 1);
     if (diff_list == NULL)
     {
@@ -38,9 +37,9 @@ node* list_append(node* diff_list, diff* data)
         return newNode;
     }
 
-    *newNode = list_append(list_append(diff_list.next, data), diff_list.data);
+    *newNode = list_append(list_append(diff_list->next, data), diff_list->diff_data);
 
-    return diff_list;
+    return newNode;
 }
 /* Add a new node with the given data to the list,
    and return a pointer to the list (i.e., the first node in the list).
