@@ -54,8 +54,8 @@ void list_free(node* head)
     if (head != NULL)
     {
         node* next = head->next;
-        list_free(next);
         free(head);
+        list_free(next);
     }
 }
 
