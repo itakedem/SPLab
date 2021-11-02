@@ -7,8 +7,9 @@ int main(int argc, char **argv)
     char buffer[8];
     while (fread(buffer, 8, sizeof(char), file) == sizeof(char))
     {
-        printf("%s", buffer);
+        printf("%X", buffer &0xff);
     }
+    printf("\n")
 
     fclose(file);
     return 0;
