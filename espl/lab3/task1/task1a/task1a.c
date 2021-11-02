@@ -30,14 +30,14 @@ node* list_append(node* diff_list, diff* data)
     node* curr = diff_list;
     if (curr == NULL)
     {
-        return {data, NULL};
+        return new {data, NULL};
     }
 
     while (curr->next != NULL)
     {
         curr = curr->next;
     }
-    curr->next = {data, NULL};
+    curr->next = new {data, NULL};
 
     return diff_list;
 }
@@ -48,8 +48,8 @@ node* list_append(node* diff_list, diff* data)
 int main(int argc, char **argv)
 {
     node lst1;
-    lst1 = list_append(lst1, {&{1, 'a', 'b'}, NULL})
-    lst1 = list_append(lst1, {&{2, 'a', 'a'}, NULL})
+    lst1 = list_append(lst1, new {&{1, 'a', 'b'}, NULL})
+    lst1 = list_append(lst1, new {&{2, 'a', 'a'}, NULL})
     list_print(lst1, stdout);
 
     return 0;
