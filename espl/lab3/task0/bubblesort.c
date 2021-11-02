@@ -14,6 +14,7 @@ void bubbleSort(int numbers[], int array_size) {
             }
         }
     }
+    free(temp);
 }
 
 int main(int argc, char **argv) {
