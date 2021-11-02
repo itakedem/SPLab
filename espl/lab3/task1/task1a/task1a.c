@@ -37,7 +37,7 @@ node* list_append(node* diff_list, diff* data)
         return newNode;
     }
 
-    newNode = list_append(list_append(diff_list->next, data), diff_list->diff_data);
+    newNode = (node){diff_list->diff_data, list_append(diff_list->next, data)};
 
     return newNode;
 }
