@@ -16,9 +16,9 @@ struct node {
 void list_print(node *diff_list,FILE* output)
 {
     node* curr = diff_list;
-    while (curr != null)
+    while (curr != NULL)
     {
-        fprintf(output, "%ld %c %c", curr->diff_data->offset, curr->diff_data->orig_value, curr->diff_data->new_value)
+        fprintf(output, "%ld %c %c", curr->diff_data->offset, curr->diff_data->orig_value, curr->diff_data->new_value);
         curr = curr->next;
     }
 }
@@ -30,14 +30,14 @@ node* list_append(node* diff_list, diff* data)
     node* curr = diff_list;
     if (curr == NULL)
     {
-        return new {data, NULL};
+        return {data, NULL};
     }
 
     while (curr->next != NULL)
     {
         curr = curr->next;
     }
-    curr->next = new {data, NULL};
+    curr->next = {data, NULL};
 
     return diff_list;
 }
