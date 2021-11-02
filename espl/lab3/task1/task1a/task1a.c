@@ -19,7 +19,7 @@ void list_print(node *diff_list,FILE* output)
     node* curr = diff_list;
     while (curr != NULL)
     {
-       /* fprintf(output, "%ld %c %c \n", curr->diff_data->offset, curr->diff_data->orig_value, curr->diff_data->new_value);*/
+        fprintf(output, "%ld %c %c \n", curr->diff_data->offset, curr->diff_data->orig_value, curr->diff_data->new_value);
         curr = curr->next;
     }
 }
