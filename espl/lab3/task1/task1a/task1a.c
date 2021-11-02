@@ -53,8 +53,8 @@ int main(int argc, char **argv)
     diff diff1 = {1, 'a', 'b'};
     diff diff2 = {2, 'a', 'a'};
     node* lst1;
-    lst1 = list_append(lst1, {&diff1, NULL});
-    lst1 = list_append(lst1, {&diff2, NULL});
+    lst1 = list_append(lst1, &diff1);
+    lst1 = list_append(lst1, &diff2);
     list_print(lst1, stdout);
 
     return 0;
