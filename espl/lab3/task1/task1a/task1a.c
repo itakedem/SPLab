@@ -29,7 +29,7 @@ Each item followed by a newline character. */
 node* list_append(node* diff_list, diff* data)
 {
     node* curr = diff_list;
-    node* newNode = (node*)calloc (sizeof(node*), 1);
+    node* newNode = (node*)calloc (sizeof(node), 1);
     if (curr == NULL)
     {
         newNode = {data, NULL};
