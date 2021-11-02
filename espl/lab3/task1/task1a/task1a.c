@@ -41,7 +41,7 @@ node* list_append(node* diff_list, diff* data)
     list_free(diff_list);
 
     return newNode;
-}k
+}
 /* Add a new node with the given data to the list,
    and return a pointer to the list (i.e., the first node in the list).
    If the list is null - create a new entry and return a pointer to the entry.*/
