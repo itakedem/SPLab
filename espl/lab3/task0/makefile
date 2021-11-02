@@ -12,7 +12,7 @@ bubblesort: bubblesort.o
 bubblesort.o: bubblesort.c
 	gcc -g -Wall -m32 -ansi -c -o bubblesort.o bubblesort.c
 
-	
+
 .PHONY: clean
 
 clean: 
