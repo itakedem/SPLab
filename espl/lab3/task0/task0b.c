@@ -2,8 +2,11 @@
 #include <stdlib.h>
 
 int PrintHex(char buffer[], size_t length){
-    for (size_t i = 0; i < (length - 1); i++){
+    size_t i = 0
+    while (i < (length - 1))
+    {
         printf("%02hhX ", buffer[i]);
+        i++;
     }
     printf("%02hhX\n", buffer[length - 1]);
     return 0;
