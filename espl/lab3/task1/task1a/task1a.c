@@ -30,20 +30,15 @@ Each item followed by a newline character. */
 
 node* list_append(node* diff_list, diff* data)
 {
-    node* curr = diff_list;
+    newNode = new node(list_append(diff_list.next, data),diff_list.data)
     node* newNode = (node*)calloc (sizeof(node), 1);
-    if (curr == NULL)
+    if (diff_list == NULL)
     {
         *newNode = (node){data, NULL};
         return newNode;
     }
 
-    while (curr->next != NULL)
-    {
-        curr = curr->next;
-    }
-    *newNode = (node){data, NULL};
-    curr->next = newNode;
+    *newNode = list_append(list_append(diff_list.next, data), diff_list.data);
 
     return diff_list;
 }
