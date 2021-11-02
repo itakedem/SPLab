@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void list_free(node* head);
+
 typedef struct diff {
     long offset; /* offset of the difference in file starting from zero*/
     unsigned char orig_value;     /* value of the byte in ORIG */
