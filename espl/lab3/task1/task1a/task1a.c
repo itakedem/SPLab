@@ -38,6 +38,7 @@ node* list_append(node* diff_list, diff* data)
     }
 
     *newNode = (node){diff_list->diff_data, list_append(diff_list->next, data)};
+    list_free(diff_list);
 
     return newNode;
 }k
@@ -61,11 +62,10 @@ int main(int argc, char **argv)
     diff diff1 = {1, 'a', 'b'};
     diff diff2 = {2, 'a', 'a'};
     node* lst1 = (node*)calloc (sizeof(node), 1);
-    node* lst2 = (node*)calloc (sizeof(node), 1);
     lst1 = list_append(lst1, &diff1);
-    lst2 = list_append(lst1, &diff2);
-    list_print(lst2, stdout);
+    lst1 = list_append(lst1, diff2);
+    list_print(lst1, stdout);
 
-    list_free(lst2);
+    list_free(lst1);
     return 0;
 }
