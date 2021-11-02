@@ -54,7 +54,7 @@ void list_free(node* node)
 {
     if (node != NULL)
     {
-        node* next = (node)calloc (sizeof(node), 1);
+        node* next = (node*)calloc (sizeof(node), 1);
         next = node->next;
         free(node);
         list_free(next);
