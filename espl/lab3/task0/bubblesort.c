@@ -26,7 +26,8 @@ int main(int argc, char **argv) {
     int *numbers = (int *) calloc(n, sizeof(int));
 
     printf("Original array:");
-    for (i = 0; i <n; ++i) {
+
+    for (i = 0; i < n; ++i) {
         printf(" %s", arr[i]);
         numbers[i] = atoi(arr[i]);
     }
