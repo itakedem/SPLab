@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 int PrintHex(char buffer[], size_t length){
-    int i = 0
+    int i = 0;
     while (i < (length - 1))
     {
         printf("%02hhX ", buffer[i]);
