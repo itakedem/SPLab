@@ -61,10 +61,11 @@ int main(int argc, char **argv)
     diff diff1 = {1, 'a', 'b'};
     diff diff2 = {2, 'a', 'a'};
     node* lst1 = (node*)calloc (sizeof(node), 1);
+    node* lst2 = (node*)calloc (sizeof(node), 1);
     lst1 = list_append(lst1, &diff1);
-    lst1 = list_append(lst1, &diff2);
-    list_print(lst1, stdout);
+    lst2 = list_append(lst1, &diff2);
+    list_print(lst2, stdout);
 
-    list_free(lst1);
+    list_free(lst2);
     return 0;
 }
