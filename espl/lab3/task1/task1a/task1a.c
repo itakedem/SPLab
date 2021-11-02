@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void list_free(node* head);
 
 typedef struct diff {
     long offset; /* offset of the difference in file starting from zero*/
@@ -15,6 +14,8 @@ struct node {
     diff *diff_data; /* pointer to a struct containing the offset and the value of the bytes in each of the files*/
     node *next;
 };
+
+void list_free(node* head);
 
 void list_print(node *diff_list,FILE* output)
 {
