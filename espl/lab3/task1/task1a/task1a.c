@@ -54,9 +54,11 @@ void list_free(node* node)
 {
     if (node != null)
     {
+        node* next = (node*)calloc (sizeof(node), 1);
         node* next = node->next;
         free(node);
         list_free(next);
+        free(next);
     }
 }
 int main(int argc, char **argv)
