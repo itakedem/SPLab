@@ -35,5 +35,6 @@ int main(int argc, char **argv) {
         printf(" %d", numbers[i]);
     printf("\n");
 
+    delete numbers;
     return 0;
 }
