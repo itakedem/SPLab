@@ -28,16 +28,19 @@ Each item followed by a newline character. */
 node* list_append(node* diff_list, diff* data)
 {
     node* curr = diff_list;
+    node* newNode = (node*)calloc (sizeof(node*), 1);
     if (curr == NULL)
     {
-        return {data, NULL};
+        newNode = {data, NULL};
+        return newNode;
     }
 
     while (curr->next != NULL)
     {
         curr = curr->next;
     }
-    curr->next = {data, NULL};
+    newNode = {data, NULL};
+    curr->next = newNode;
 
     return diff_list;
 }
@@ -47,9 +50,11 @@ node* list_append(node* diff_list, diff* data)
 
 int main(int argc, char **argv)
 {
-    node lst1;
-    lst1 = list_append(lst1, new {&{1, 'a', 'b'}, NULL})
-    lst1 = list_append(lst1, new {&{2, 'a', 'a'}, NULL})
+    diff diff1 = {1, 'a', 'b'};
+    diff diff2 = {2, 'a', 'a'};
+    node* lst1;
+    lst1 = list_append(lst1, {&diff1, NULL});
+    lst1 = list_append(lst1, {&diff2, NULL});
     list_print(lst1, stdout);
 
     return 0;
