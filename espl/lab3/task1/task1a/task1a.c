@@ -54,9 +54,12 @@ node* list_append(node* diff_list, diff* data)
     {
         return create_new_node(data, NULL);
     }
-
-    node* newList = create_new_node(diff_list->diff_data, list_append(diff_list->next, data));
-    free(diff_list);
+    diff * newDiff = create_new_diff(diff_list->diff_data->offset,
+                                        diff_list->diff_data->orig_value,
+                                        diff_list->diff_data->new_value);
+    node* newList = create_new_node(newDiff, list_append(diff_list->next, data));
+    
+    list_free(diff_list);
 
     return newList;
 }
@@ -64,26 +67,29 @@ node* list_append(node* diff_list, diff* data)
    and return a pointer to the list (i.e., the first node in the list).
    If the list is null - create a new entry and return a pointer to the entry.*/
 
-    void list_free(node* head)
+void list_free(node* head)
+{
+    if (head != NULL)
     {
-        if (head != NULL)
-        {
-            list_free(head->next);
-            free(head);
-        }
+        list_free(head->next);
+        free(head->diff_data);
+        free(head);
     }
+}
 
 
-    int main(int argc, char **argv)
-    {
-        diff *diff1 = create_new_diff(1, 'a', 'b');
-        diff* diff2 = create_new_diff(2, 'a', 'a');
-        node* lst1 = list_append(NULL, diff1);
-        lst1 = list_append(lst1, diff2);
-        list_print(lst1, stdout);
+int main(int argc, char **argv)
+{
+    diff *diff1 = create_new_diff(1, 'a', 'b');
+    diff* diff2 = create_new_diff(2, 'a', 'a');
+    diff* diff3 = create_new_diff(3, 'a', 'a');
+    diff* diff4 = create_new_diff(4, 'a', 'a');
+    node* lst1 = list_append(NULL, diff1);
+    lst1 = list_append(lst1, diff2);
+    lst1 = list_append(lst1, diff3);
+    lst1 = list_append(lst1, diff4);
+    list_print(lst1, stdout);
 
-        list_free(lst1);
-        free(diff1);
-        free(diff2);
-        return 0;
-    }
+    list_free(lst1);
+    return 0;
+}

@@ -70,7 +70,7 @@ node* list_append(node* diff_list, diff* data)
                                         diff_list->diff_data->orig_value,
                                         diff_list->diff_data->new_value);
     node* newList = create_new_node(newDiff, list_append(diff_list->next, data));
-    free(diff_list);
+    list_free(diff_list);
 
     return newList;
 }
