@@ -54,14 +54,14 @@ node* list_append(node* diff_list, diff* data)
     {
         return create_new_node(data, NULL);
     }
-    diff * newDiff = create_new_diff(diff_list->diff_data->offset,
+    /*diff * newDiff = create_new_diff(diff_list->diff_data->offset,
                                         diff_list->diff_data->orig_value,
                                         diff_list->diff_data->new_value);
     node* newList = create_new_node(newDiff, list_append(diff_list->next, data));
     
-    list_free(diff_list);
+    list_free(diff_list);*/
 
-    return newList;
+    return create_new_node(data, diff_list);
 }
 /* Add a new node with the given data to the list,
    and return a pointer to the list (i.e., the first node in the list).
