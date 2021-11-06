@@ -11,7 +11,7 @@ typedef struct diff {
 typedef struct node node;
 
 struct node {
-    diff diff_data; / pointer to a struct containing the offset and the value of the bytes in each of the files*/
+    diff* diff_data; /* pointer to a struct containing the offset and the value of the bytes in each of the files*/
     node *next;
 };
 
@@ -34,7 +34,7 @@ node* create_new_node(diff* newDiff, node* newNext)
     return newNode;
 }
 
-void list_print(node diff_list,FILE output)
+void list_print(node* diff_list,FILE* output)
 {
     node* curr = diff_list;
     while (curr != NULL)
