@@ -58,7 +58,7 @@ void list_print(node* diff_list,FILE* output)
     node* curr = diff_list;
     while (limit!=0  && curr != NULL)
     {
-        fprintf(output, "%ld %02X %02X \n", curr->diff_data->offset, curr->diff_data->orig_value, curr->diff_data->new_value);
+        fprintf(output, "byte %ld %02X %02X \n", curr->diff_data->offset, curr->diff_data->orig_value, curr->diff_data->new_value);
         curr = curr->next;
         limit--;
     }
@@ -144,14 +144,26 @@ void resolver(int argc, char* task, char ** argv)
         if (strcmp(argv[i], "-o") == 0)
             out = fopen(argv[++i], "w");
         
-        if (strcmp(argv[i], "-t") == 0)
+        else if (strcmp(argv[i], "-t") == 0)
             *task = 'b';
         
-        if (strcmp(argv[i], "-k") == 0)
+        else if (strcmp(argv[i], "-k") == 0)
         {
             *task = 'c';
             limit =atoi(argv[++i]);
         }
+        else
+        {
+            if (path1 == NULL)
+            {
+                path1 = argv[i];
+            }
+            else
+            {
+                path2 = argv[i];
+            }
+        }
+        
         i++;
     }
 }
@@ -169,11 +181,11 @@ int listSize(node* list){
 int main(int argc, char **argv)
 {
     out = stdout;
-    path1 = argv[1];
-    path2 = argv[2];
-    node *diffList = buildDiffList();
+    path1 = NULL;
+    path2 = NULL;
     char task = 'a';
     resolver(argc, &task, argv);
+    node *diffList = buildDiffList();
     if(task == 'b')
     {
         fprintf(out,"%d\n", listSize(diffList));

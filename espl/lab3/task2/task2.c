@@ -18,6 +18,14 @@ struct node {
 
 void list_free(node* head);
 
+FILE* out;
+FILE * file1;
+FILE * file2;
+char* path1;
+char* path2;
+int limit = -1;
+int numOfRestore = -1;
+
 int PrintHex(char buffer[], size_t length){
     int i = 0;
     while (i < (length - 1))
@@ -49,10 +57,11 @@ node* create_new_node(diff* newDiff, node* newNext)
 void list_print(node* diff_list,FILE* output)
 {
     node* curr = diff_list;
-    while (curr != NULL)
+    while (limit!=0  && curr != NULL)
     {
         fprintf(output, "byte %ld %02X %02X \n", curr->diff_data->offset, curr->diff_data->orig_value, curr->diff_data->new_value);
         curr = curr->next;
+        limit--;
     }
 }
 
@@ -89,15 +98,11 @@ void list_free(node* head)
     }
 }
 
-FILE * file1;
-FILE * file2;
-char* path1;
-char* path2;
 
 long getSize()
 {
     file1 = fopen(path1, "rb");
-    file2 = fopen(path2, "rb");
+    file2 = fopen(path2, "rb+");
     fseek(file1,0, SEEK_END);
     long size1 = ftell(file1);
     rewind(file1);
@@ -132,13 +137,86 @@ node* buildDiffList()
     return diffList;
 }
 
+void resolver(int argc, char* task, char ** argv)
+{
+    int i = 1;
+    while (i < argc)
+    {
+        if (strcmp(argv[i], "-o") == 0)
+            out = fopen(argv[++i], "w");
+        
+        else if (strcmp(argv[i], "-t") == 0)
+            *task = 'b';
+        
+        else if (strcmp(argv[i], "-k") == 0)
+        {
+            *task = 'c';
+            limit =atoi(argv[++i]);
+        }
+        else if (strcmp(argv[i], "-r") == 0)
+        {
+            *task = 'd';
+            i++;
+            if(i<argc)
+                numOfRestore =atoi(argv[i]);
+        }
+        else
+        {
+            if (path1 == NULL)
+            {
+                path1 = argv[i];
+            }
+            else
+            {
+                path2 = argv[i];
+            }
+        }
+        i++;
+    }
+}
+int listSize(node* list){
+    int size=0;
+    node* curr=list;
+    while(curr!=NULL)
+    {
+        curr=curr->next;
+        size++;
+    }
+    return size;
+}
 
+void restore(node* list)
+{
+    node* curr = list;
+    while(numOfRestore !=0 && curr != NULL)
+    {
+        fseek(file2, curr->diff_data->offset, SEEK_SET);
+        fwrite(&curr->diff_data->orig_value, 1, 1, file2);
+        curr = curr->next;
+        numOfRestore--;
+    }
+
+}
 int main(int argc, char **argv)
 {
-    path1 = argv[1];
-    path2 = argv[2];
+    out = stdout;
+    path1 = NULL;
+    path2 = NULL;
+    char task = 'a';
+    resolver(argc, &task, argv);
     node *diffList = buildDiffList();
-    list_print(diffList, stdout);
+    if(task == 'b')
+    {
+        fprintf(out,"%d\n", listSize(diffList));
+    }
+    else if(task == 'd')
+    {
+        restore(diffList);
+    }
+    else
+    {
+        list_print(diffList, out);
+    }
     list_free(diffList);
     fclose(file1);
     fclose(file2);
