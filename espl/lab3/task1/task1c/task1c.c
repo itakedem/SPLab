@@ -177,6 +177,16 @@ int listSize(node* list){
     return size;
 }
 
+void closeFiles()
+{
+    fclose(file1);
+    fclose(file2);
+    if (out != NULL)
+    {
+        fclose(out);
+    }
+}
+
 int main(int argc, char **argv)
 {
     out = stdout;
@@ -194,7 +204,6 @@ int main(int argc, char **argv)
         list_print(diffList, out);
     }
     list_free(diffList);
-    fclose(file1);
-    fclose(file2);
+    closeFiles();
     return 0;
 }
