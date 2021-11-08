@@ -75,14 +75,14 @@ node* list_append(node* diff_list, diff* data)
     {
         return create_new_node(data, NULL);
     }
-    /*diff * newDiff = create_new_diff(diff_list->diff_data->offset,
-                                        diff_list->diff_data->orig_value,
-                                        diff_list->diff_data->new_value);
-    node* newList = create_new_node(newDiff, list_append(diff_list->next, data));
-    
-    list_free(diff_list);*/
+    node* curr = diff_list;
+    while(curr->next !=NULL)
+    {
+        curr = curr->next;
+    }
+    curr->next = create_new_node(data, NULL);
 
-    return create_new_node(data, diff_list);
+    return diff_list;
 }
 /* Add a new node with the given data to the list,
    and return a pointer to the list (i.e., the first node in the list).
@@ -137,6 +137,11 @@ node* buildDiffList()
     return diffList;
 }
 
+int isDigit(char* str)
+{
+    return (strcmp(str, "0") == 0 ) || (atoi(str) != 0);
+}
+
 void resolver(int argc, char* task, char ** argv)
 {
     int i = 1;
@@ -157,7 +162,7 @@ void resolver(int argc, char* task, char ** argv)
         {
             *task = 'd';
             i++;
-            if(i<argc)
+            if(i<argc && isDigit(argv[i]))
                 numOfRestore =atoi(argv[i]);
         }
         else
@@ -197,13 +202,19 @@ void restore(node* list)
     }
 
 }
-int main(int argc, char **argv)
+
+void closeFiles()
 {
-    out = stdout;
-    path1 = NULL;
-    path2 = NULL;
-    char task = 'a';
-    resolver(argc, &task, argv);
+    fclose(file1);
+    fclose(file2);
+    if (out != NULL)
+    {
+        fclose(out);
+    }
+}
+
+void doTask(char task)
+{
     node *diffList = buildDiffList();
     if(task == 'b')
     {
@@ -218,7 +229,17 @@ int main(int argc, char **argv)
         list_print(diffList, out);
     }
     list_free(diffList);
-    fclose(file1);
-    fclose(file2);
+}
+int main(int argc, char **argv)
+{
+    out = stdout;
+    path1 = NULL;
+    path2 = NULL;
+    char task = 'a';
+    resolver(argc, &task, argv);
+    
+    doTask(task);
+    closeFiles();
+    
     return 0;
 }
