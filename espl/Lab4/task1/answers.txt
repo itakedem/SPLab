@@ -1,7 +1,11 @@
 How many parameters does this function have?
+the function has 1 param
 
 What does this function return?
+the function return the length of the pointer
 
 How many local variables are used by this function?
 
+
 Is there a function in the C standard library which is the counterpart of this function?
+strlen
