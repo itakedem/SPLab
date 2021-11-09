@@ -12,8 +12,8 @@ cmpstr1.o: cmpstr.c
 scmp.o: scmp.c
 	gcc -m32 -c -o scmp.o scmp.c
 	
-cmpstr2.o: cmpstr.asm
-	nasm -g -f elf -w+all -o cmpstr2.o cmpstr.asm
+cmpstr2.o: cmpstr.s
+	nasm -g -f elf -w+all -o cmpstr2.o cmpstr.s
 
 funcA.o: funcA.asm
 	nasm -g -f elf -w+all -o funcA.o funcA.asm
