@@ -207,7 +207,7 @@ void closeFiles()
 {
     fclose(file1);
     fclose(file2);
-    if (out != NULL)
+    if (out != stdout)
     {
         fclose(out);
     }
