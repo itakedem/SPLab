@@ -1,13 +1,16 @@
 all: scmp1
 
-scmp1: scmp.o
-	gcc -m32 -o scmp1 scmp.o
+scmp1: scmp.o funcA.o cmpstr1.o
+	gcc -m32 -o scmp1 scmp.o funcA.o cmpstr1.o
 
-cmpstr1.o: cmpstr.c
+cmpstr1.o: cmpstr.c 
 	gcc -m32 -c -o cmpstr1.o cmpstr.c
 
 scmp.o: scmp.c
 	gcc -m32 -c -o scmp.o scmp.c
+
+funcA.o: funcA.asm
+	nasm -g -f elf -w+all -o funcA.o funcA.asm
 	
 .PHONY: clean
 
