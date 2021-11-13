@@ -9,10 +9,10 @@ section .rodata
     string4 db '', 0
 
 section .text 
-	global task3
+	global _start
     extern printf
 
-task3:
+_start:
     mov ebx, string1
     call printer
 
@@ -25,7 +25,7 @@ task3:
     mov ebx, string4
     call printer
 
-    jmp finish
+    jmp _exit
 
 printer:
     push ebp        ;save previous stack state
@@ -45,32 +45,33 @@ printer:
 
 counter:
     push ebp        ;save previous stack state
-    mov ebp, esp    ;set a new activation frame
-
-    mov ecx,-1      ;ecx counts the location in the string
+    push edx
+    push ecx
+    mov ebp, esp
+    mov edx,-1      ;ecx counts the location in the string
     mov eax, 0      ;counts the number of times X in the string
 
 
-.count:
-    add ecx, 1          ;inc string position counter
-    mov edx, ecx        ;set edx to the current location of the string
+count:
+    add edx, 1          ;inc string position counter
+    mov ecx, edx        ;set edx to the current location of the string
 
-    add edx, ebx        ;get the position of the char
+    add ecx, ebx        ;get the position of the char
 
-    movzx edx, BYTE [edx]   ;get a byte from the current position
+    movzx ecx, BYTE [ecx]   ;get a byte from the current position
 
-    test dl dl
-    je finishedString
+    test cl, cl
+        je finishedString
 
-    cmp edx, X
+    cmp ecx, X
     je incCounter
-    jmp .count
 
+    jmp count
 
 
 incCounter:
     add eax, 1
-    jmp .count
+    jmp count
 
 finishedString:
     mov esp, ebp    ;restore pointers
@@ -79,23 +80,6 @@ finishedString:
     pop ebp         ;restore pointers
     ret
 
-
-printer:
-    push ebp            ;backup ebp
-    mov ebp, esp        ;set EBP to Func activation frame
-    call counter
-
-    push eax            ;arg 4 to printf - %d counter
-    push ebx           ; argument 3 to printf - %s
-    push X         ; argument 2 to printf - %c
-    push print_format   ; argument 1 to printf
-    call printf
-
-    mov esp, ebp        ;restore pointers
-    pop ebp             ;restore pointers
-    ret
-
-finish:
+_exit:
     mov eax, 1
-    mov ebx, 0
     int 80h
