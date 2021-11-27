@@ -14,25 +14,30 @@ atou_s:
     mov edx, ebx
     mov ecx, 1
     mov eax, 0             ;set eax to be 0
-    call find_end
+    call .find_end
 
 .adder:
     dec edx
     cmp edx, ebx
     je .finish
-    add [edx], 0
-    mul [edx], ecx
+    mov dl, [edx]
+    xor dl, 0x20
+    mov [edx], dl
+    mul [edx], [ebp - 4]
     add eax, [edx]
-    mul ecx, 10
+    mul cl, 10
     jmp .adder
 
 
 .find_end:
     mov dl, [edx]
     test dl, dl            ;check if \0
-    je ret
+    je .end
     inc edx
     jmp .find_end
+
+.end:
+    ret
 
 
 .finish:
