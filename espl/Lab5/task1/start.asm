@@ -39,34 +39,35 @@ read:
 
     int 0x80        ;tells the kernel to do a system call from the registers
 
-    pop ecx         ;free register
-    pop ebx         ;free register
     pop edx         ;free register
+    pop ecx         ;free register
+    pop ebx         ;free registers
 
     leave           ;closes the stack frame
     ret             ;clearing args and returns
 
 
 write:
-        enter 0, 0      ;sets a stack frame
+    enter 0, 0      ;sets a stack frame
 
-        push ebx        ;save current register
-        push ecx        ;save current register
-        push edx        ;save current register
+    push ebx        ;save current register
+    push ecx        ;save current register
+    push edx        ;save current register
 
-        mov eax, 4      ;4 is the sys command to write file
-        mov ebx, DESC   ;2nd arg is the path to the file
-        mov ecx, POS    ;3rd arg is the mode of the opening
-        mov edx, SIZE   ;4th arg is the size of the buffer
+    mov eax, 4      ;4 is the sys command to write file
+    mov ebx, DESC   ;2nd arg is the path to the file
+    mov ecx, POS    ;3rd arg is the mode of the opening
+    mov edx, SIZE   ;4th arg is the size of the buffer
 
-        int 0x80        ;tells the kernel to do a system call from the registers
+    int 0x80        ;tells the kernel to do a system call from the registers
 
-        pop ecx         ;free register
-        pop ebx         ;free register
-        pop edx         ;free register
+    pop edx         ;free register
+    pop ecx         ;free register
+    pop ebx         ;free register
+    
 
-        leave           ;closes the stack frame
-        ret             ;clearing args and returns
+    leave           ;closes the stack frame
+    ret             ;clearing args and returns
 
 %define PATH dword [ebp + 8]
 %define MODE dword [ebp + 12]
@@ -117,7 +118,7 @@ strlen:
     mov bl, BYTE [ebx] ; puts a byte(char) from the string in bl
 
     test bl, bl        ; checks if byte is \0
-    jne .comp_len      ; if not \0 cont to next byte
+    jne .countLen      ; if not \0 cont to next byte
 
     pop ebx
     leave              ;closes the stack frame
