@@ -1,11 +1,11 @@
 How many parameters does this function have?
-the function has 1 param
+1 param - [ebp+12]
 
 What does this function return?
-the function return the length of the pointer
+the length of the arg
 
 How many local variables are used by this function?
-
+NO local variables use.
 
 Is there a function in the C standard library which is the counterpart of this function?
-strlen
+the func strlen
