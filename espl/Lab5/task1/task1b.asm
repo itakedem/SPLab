@@ -22,7 +22,7 @@ utoa_s:
     div dword [ebp - 4]     ;after this -> number will be on eax, and the remainder on edx
     mov cl, dl             ;cl will hold the remainder
 
-    or eax, edx            ;check if finished dividing
+    or edx, eax            ;check if finished dividing
     jne .convert
     jmp .finish_convert
 
@@ -41,7 +41,7 @@ reverse:
 
 .check_reverse:
     cmp ecx, ebx
-    jge reverse
+    jge .pop
 
 .replace:
     mov al, [ebx]          ;replace the bytes

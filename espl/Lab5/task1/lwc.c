@@ -3,7 +3,7 @@ int close(int fd);
 int read(int fd, char *buf, int size);
 int write(int fd, char *buf, int size);
 int strlen(char *s);
-char* utoa_s(int num);
+void utoa_s(int num, char* buf);
 
 #define EUSAGE	"usage: lwc [filename]\n"
 #define EARGC	"error: wrong number of arguments\n"
@@ -67,9 +67,13 @@ int main(int argc, char **argv) {
 	if(inp)               /* close descriptor if opened by the program */
 		close(inp);
 
-	print(utoa_s(nlines)); print(" lines\n");
-	print(utoa_s(nwords)); print(" words\n");
-	print(utoa_s(nchars)); print(" chars\n");
+	char buffer[11]; 
+	utoa_s(nlines, buffer);  
+	print(buffer); print(" lines\n");
+	utoa_s(nwords, buffer);
+	print(buffer); print(" words\n");
+	utoa_s(nchars, buffer);
+	print(buffer); print(" chars\n");
 
 	return 0;
 
