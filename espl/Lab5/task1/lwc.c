@@ -3,7 +3,7 @@ int close(int fd);
 int read(int fd, char *buf, int size);
 int write(int fd, char *buf, int size);
 int strlen(char *s);
-char* utoa_s(int num)
+char* utoa_s(int num);
 
 #define EUSAGE	"usage: lwc [filename]\n"
 #define EARGC	"error: wrong number of arguments\n"
