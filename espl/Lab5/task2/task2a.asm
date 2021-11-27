@@ -9,7 +9,7 @@ section .text
 _start:
     mov eax, [esp]          ; argc
     mov ebx, esp            ; argv @esp+4
-    add ebx, 4h             ;4h means write
+    add ebx, 4h             ;4h means write - to ask Tali why we're adding it
 
     push ebx
     push eax
