@@ -69,7 +69,7 @@ clear_buffer:
 .remove_byte:
     mov [ebx], byte 0      ;removes one byte
     inc ebx                ;increments pointer
-    jmp clear_buffers
+    jmp clear_buffer
 
 
 .end:
