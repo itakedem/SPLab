@@ -61,7 +61,7 @@ count:
     movzx ecx, BYTE [ecx]   ;get a byte from the current position
 
     test cl, cl
-        je finishedString
+    je finishedString
 
     cmp ecx, X
     je incCounter
