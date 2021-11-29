@@ -431,15 +431,23 @@ countWordToCount:
     cmp byte [edx], 0
     je .checkBuffer
 
-    movzx edx, BYTE [edx]
-    movzx ecx, BYTE [ecx]
-    cmp edx, ecx
+    push edx
+    push ecx
+    call .checkChars
+    cmp eax, 0
     jne .nextChar
 
     inc edx
     inc ecx
     jmp .checkWord
 
+.checkChars:
+    movzx edx, BYTE [edx]
+    movzx ecx, BYTE [ecx]
+    cmp edx, ecx
+    pop ecx
+    pop edx
+    ret
 
 .checkBuffer:
     cmp byte [ecx], 10
