@@ -431,7 +431,9 @@ countWordToCount:
     cmp byte [edx], 0
     je .checkBuffer
 
-    cmp byte [edx], byte [ecx]
+    movzx edx, BYTE [edx]
+    movzx ecx, BYTE [ecx]
+    cmp [edx], [ecx]
     jne .nextChar
 
     inc edx
