@@ -433,7 +433,7 @@ countWordToCount:
 
     movzx edx, BYTE [edx]
     movzx ecx, BYTE [ecx]
-    cmp [edx], [ecx]
+    cmp edx, ecx
     jne .nextChar
 
     inc edx
