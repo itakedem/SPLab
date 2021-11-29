@@ -17,6 +17,7 @@ utoa_s:
     call clear_buffer
     mov ebx, [ebp - 8]      ;restore buffer pointer to start
 
+
 .divider:
     mov edx, 0
     div dword [ebp - 4]     ;after this -> number will be on eax, and the remainder on edx
