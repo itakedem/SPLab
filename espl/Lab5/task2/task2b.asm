@@ -8,8 +8,6 @@ section .data
     wordGloble: db 0
     endOfWord: db 0, 0
 
-    format db '%d', 10, 0
-
     open_file_err: db 'Failed to open the file', 10, 0
     open_file_err_len: equ  $ - open_file_err
 
@@ -27,7 +25,6 @@ section .bss
 
 section .text
     global _start
-    extern printf
     global read
     global write
     global open
@@ -98,9 +95,8 @@ main:
 .rememberFlagWs:
     mov flag, 2             ; remember flag -ws
 
-    add ebx, 4 
-    mov edx, [ebx]
-    mov wordToCount, edx
+    add ebx, 4              ; move ebx to point on wordToCount
+    mov edx, [ebx]          ; put the address of the word in edx
     mov [wordGloble], edx
     add ebx, 4              ; ebx points to file name
 
@@ -441,15 +437,18 @@ countWordToCount:
                                 ;padding with \0 both wordToCount and wordToCompare
 
     mov eax, [wordGloble]
+
+    
+
     push eax                
-    push dword [edx]        ; where does it end ?
+    push dword [edx]       ; where does it end ?
     call cmpstr             ; ?????????????????????????????????????????
     pop edx
     pop edx 
     
     inc ebx                     ; next char if last one was space
     mov [edx], ebx            ; move edx to point the start of the next word
-    
+
     cmp eax, 0
     je .incrementWordToCount
     ret
@@ -458,9 +457,6 @@ countWordToCount:
 
 .incrementWordToCount:
     mov eax, COUNTER2                                 ; get counter adress
-    mov dl, [eax]
-    mov ah,2
-    int 21h
     inc dword [eax]
     ret
 

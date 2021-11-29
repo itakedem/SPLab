@@ -1,48 +1,36 @@
 section .text
-    global atou_s
+    global atoa_s
 
-atou_s:
-    enter 4,0       ;sets a stack frame with 8 bytes
+atoa_s:
+    enter 4, 0
+    push ebx
+    push edx
+    push ecx
+ 
+    mov ebx, [ebp+8]        ; pointer to the begining of the string
+ 
+    mov ecx, 0              ; storing the number in ecx
 
-    push ebx               ;save register
-    push edx               ;save register
-    push ecx               ;save register
+.loop1:
+    cmp byte [ebx], 0       ; check if the string is empty
+    je exit1
 
-    mov [ebp - 4], dword 1 ; divisor of base 10
+    movzx edx, byte [ebx]   ; getting the ascii value
+    sub edx, 48             ; converting the ascii value to decimal
+    mov [ebp-4], edx        ; storing the decimal value in ebp-4
+    mov eax, 10    
+    mul cl                  ; multiplying the number by 10   
+    add eax, [ebp-4]        ; adding the number to the total
+    mov ecx, eax            ; storing the total in ecx
 
-    mov ebx, [ebp + 8]     ;get argument string
-    mov edx, ebx
-    mov ecx, 1
-    mov eax, 0             ;set eax to be 0
-    call .find_end
+    inc ebx                 ; incrementing the pointer
 
-.adder:
-    dec edx
-    cmp edx, ebx
-    je .finish
-    mov dl, [edx]
-    xor dl, 0x20
-    mov [edx], dl
-    mul [edx], [ebp - 4]
-    add eax, [edx]
-    mul cl, 10
-    jmp .adder
+    jmp .loop1
 
-
-.find_end:
-    mov dl, [edx]
-    test dl, dl            ;check if \0
-    je .end
-    inc edx
-    jmp .find_end
-
-.end:
-    ret
-
-
-.finish:
-    pop ecx                ;restore registers
-    pop edx
+exit1:
+    movzx eax, cl           ; getting the number
+ 
     pop ebx
-
+ 
     leave
+    ret
