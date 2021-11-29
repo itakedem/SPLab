@@ -4,15 +4,13 @@ section .text
 atoa_s:
     enter 4, 0
     push ebx
-    push edx
-    push ecx
  
     mov ebx, [ebp+8]        ; pointer to the begining of the string
  
     mov ecx, 0              ; storing the number in ecx
 
 .loop1:
-    cmp byte [ebx], 0       ; check if the string is empty
+    cmp byte [ebx], 0       ; check end of string 
     je exit1
 
     movzx edx, byte [ebx]   ; getting the ascii value

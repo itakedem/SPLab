@@ -19,7 +19,7 @@ utoa_s:
 
 .divider:
     mov edx, 0
-    div dword [ebp - 4]     ;after this -> number will be on eax, and the remainder on edx
+    div dword [ebp - 4]     ;after this -> number will be on eax, and the remainder on edx divide eax by arg
     mov cl, dl             ;cl will hold the remainder
 
     or edx, eax            ;check if finished dividing

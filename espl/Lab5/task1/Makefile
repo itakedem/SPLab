@@ -6,7 +6,7 @@
 
 all: lwca task1c
 
-lwca: lwc.o start.o test.o
+lwca: lwc.o start.o utoa_s.o
 	ld  -melf_i386 -o $@ $^
 
 task1c: task1c.o start.o utoa_s.o atou_s.o
