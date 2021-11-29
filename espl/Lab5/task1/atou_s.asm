@@ -5,7 +5,7 @@ atoa_s:
     enter 4, 0
     push ebx
  
-    mov ebx, [ebp+8]        ; pointer to the begining of the string
+    mov ebx, [ebp+8]        ; pointer to the beginning of the string
  
     mov ecx, 0              ; storing the number in ecx
 

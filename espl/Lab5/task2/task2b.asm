@@ -164,11 +164,11 @@ main:
 .countWords:
     push eax                 ; num of bytes (got from read)
     mov ebx, ebp
-    sub ebx, 50
+    sub ebx, 50              ;beginning of the buffer
     push ebx                  ; buffer address
     mov ebx, ebp
-    sub ebx, 63
-    push ebx                   ; counter adress
+    sub ebx, 63                 ;to get the wordsCounter
+    push ebx                   ; counter address
     call countWords
     pop ebx
     pop ebx
@@ -186,7 +186,7 @@ main:
     push ebx                  ; buffer address
     mov ebx, ebp
     sub ebx, 63
-    push ebx                   ; counter adress
+    push ebx                   ; counter address
     call countWordToCount
     pop ebx
     pop ebx

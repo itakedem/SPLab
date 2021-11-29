@@ -17,8 +17,8 @@ _start:
     push ebx            ;sets argv as 2nd param
     push eax            ;sets argc as 1st param
 
-	call	main        ;calls main with the params on stack
-    mov     ebx,eax
+	call main        ;calls main with the params on stack
+    mov ebx,eax
 	mov	eax,1
 	int 0x80
 
