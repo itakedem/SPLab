@@ -428,10 +428,10 @@ countWordToCount:
     cmp ecx, BUF_SIZE2
     je .finishWordToCount
 
-    cmp BYTE [edx], 0
+    cmp byte [edx], 0
     je .checkBuffer
 
-    cmp [edx], [ecx]
+    cmp byte [edx], byte [ecx]
     jne .nextChar
 
     inc edx
@@ -440,9 +440,9 @@ countWordToCount:
 
 
 .checkBuffer:
-    cmp [ecx], 10
+    cmp byte [ecx], 10
     je .increment
-    cmp [ecx], 32
+    cmp byte [ecx], 32
     je .increment
 
     inc edx
