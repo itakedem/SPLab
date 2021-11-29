@@ -428,7 +428,7 @@ countWordToCount:
     cmp ecx, BUF_SIZE2
     je .finishWordToCount
 
-    cmp [edx], 0
+    cmp BYTE [edx], 0
     je .checkBuffer
 
     cmp [edx], [ecx]
