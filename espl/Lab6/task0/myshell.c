@@ -32,6 +32,6 @@ int main(int argc, char** argv)
 
 void execute(cmdLine* currLine)
 {
-    execv(currLine->arguments[0], currLine->arguments);
+    execv(&currDir, currLine->arguments);
     printf("hi tal");
 }
