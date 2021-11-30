@@ -5,9 +5,10 @@
 #include <sys/wait.h>
 
 #include "LineParser.h"
+
 int execute(cmdLine* currLine);
 int commands(cmdLine* line);
-
+int executeCD(cmdLine* line);
 
 
 char currDir[PATH_MAX];
@@ -73,7 +74,4 @@ int executeCD(cmdLine* line)
     if (path[0] == '~')
         return chdir(path);
     return chdir(currDir + path);
-
-
-
 }
