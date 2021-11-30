@@ -46,7 +46,7 @@ int commands(cmdLine* line)
     if (strcmp("cd", command) == 0)
         return executeCD(line);
     if (strcmp("history", command) == 0)
-        executeHis();
+        return executeHis();
     return execute(line);
 }
 
