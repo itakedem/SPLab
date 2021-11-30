@@ -72,7 +72,10 @@ int executeCD(cmdLine* line)
 {
     char* path = line->arguments[1];
     if (path[0] == '~')
-        return chdir(path);
+    {
+        return chdir(getenv("HOME"));
+    }
+        
 
     return chdir(strcat(strcat(currDir, "/"), path));
 }
