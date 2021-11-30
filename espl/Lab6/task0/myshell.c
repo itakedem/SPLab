@@ -1,6 +1,9 @@
 #include <stdio.h>
+#include <unistd.h>
 
 int main(int argc, char** argv)
 {
-    fprintf(stderr, "error?");
+    char currDir[PATH_MAX];
+    getcwd(currDir, sizeof(currDir));
+    printf(currDir);
 }
