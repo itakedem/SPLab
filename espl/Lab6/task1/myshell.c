@@ -22,7 +22,7 @@ int main(int argc, char** argv)
             printf("end of loop\n");
             break;
         }
-        execute(currLine);
+        int ans = execute(currLine);
         printf("\n");
         freeCmdLines(currLine);
     }
