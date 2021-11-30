@@ -2,8 +2,12 @@
 #include <unistd.h>
 #include <linux/limits.h>
 #include <string.h>
+#include <sys/wait.h>
 
 #include "LineParser.h"
+int execute(cmdLine* currLine);
+
+
 
 char currDir[PATH_MAX];
 char userText[2048];
