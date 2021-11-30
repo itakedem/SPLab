@@ -13,7 +13,7 @@ int executeCD(cmdLine* line);
 
 char currDir[PATH_MAX];
 char userText[2048];
-cmdLine history[2048];
+cmdLine* history[2048];
 int endOfHistory;
 
 int main(int argc, char** argv)
