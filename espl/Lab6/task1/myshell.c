@@ -49,7 +49,7 @@ int execute(cmdLine* currLine)
             _exit(1);
         }
     }
-    wait(&status)
+    wait(&status);
     return 0;
 
 }
