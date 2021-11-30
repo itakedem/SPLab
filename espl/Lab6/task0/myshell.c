@@ -34,5 +34,5 @@ void execute(cmdLine* currLine)
 {
     int ans = execvp(currLine->arguments[0], currLine->arguments);
     if (ans == -1)
-        perror("There was an error")
+        perror("There was an error");
 }
