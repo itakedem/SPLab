@@ -88,7 +88,7 @@ int executeHis()
     while (i < endOfHistory)
     {
         int j = 0;
-        while (j < sizeof(history[i]->arguments))
+        while (history[i]->arguments[j] != null)
         {
             printf("%s ", history[i]->arguments[j]);
             j++;
