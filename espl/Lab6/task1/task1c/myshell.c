@@ -46,7 +46,7 @@ int commands(cmdLine* line)
 
 }
 
-int execute(cmdLine* line, char* command)
+int execute(cmdLine* line)
 {
     int status = 0;
     int pid = fork();
