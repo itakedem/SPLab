@@ -3,7 +3,7 @@
 #include <linux/limits.h>
 #include <string.h>
 
-#include <LineParser.h>
+#include "LineParser.h"
 
 char currDir[PATH_MAX];
 char userText[2048];
