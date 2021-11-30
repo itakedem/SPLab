@@ -26,8 +26,7 @@ int main(int argc, char** argv)
             printf("end of loop\n");
             break;
         }
-        int ans = execute(currLine);
-
+        execute(currLine);
         printf("\n");
         freeCmdLines(currLine);
     }
