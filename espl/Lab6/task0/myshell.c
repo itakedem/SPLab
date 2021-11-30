@@ -2,5 +2,5 @@
 
 int main(int argc, char** argv)
 {
-    printf(stderr, "error?");
+    fprintf(stderr, "error?");
 }
