@@ -14,7 +14,7 @@ int main(int argc, char** argv)
     while (1)
     {
         printf("%s$ ", currDir);
-        fgets(userText, stdin);
+        fgets(userText, 2048 ,stdin);
         cmdLine currLine = parseSingleCmdLine(&userText);
         execute(currLine);
         printf("\n");
