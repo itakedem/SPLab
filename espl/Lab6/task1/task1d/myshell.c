@@ -88,7 +88,7 @@ int executeHis()
     while (i < endOfHistory)
     {
         int j = 0;
-        while (history[i]->arguments[j] != null)
+        while (j < history[i]->argCount)
         {
             printf("%s ", history[i]->arguments[j]);
             j++;
