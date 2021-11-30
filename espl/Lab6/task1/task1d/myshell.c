@@ -13,7 +13,7 @@ int executeCD(cmdLine* line);
 
 char currDir[PATH_MAX];
 char userText[2048];
-cmdLine history[SIZE_MAX];
+cmdLine history[2048];
 int endOfHistory;
 
 int main(int argc, char** argv)
@@ -77,10 +77,7 @@ int executeCD(cmdLine* line)
     char* path = line->arguments[1];
     if (path[0] == '~')
     {
-        int ans = chdir(getenv("HOME"));
-        perror("There was an error");
-        _exit(1);
-        return 1;
+        return chdir(getenv("HOME"));
     }
     return chdir(strcat(strcat(currDir, "/"), path));
 }
