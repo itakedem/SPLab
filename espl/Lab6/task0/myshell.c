@@ -32,8 +32,6 @@ int main(int argc, char** argv)
 
 void execute(cmdLine* currLine)
 {
-    int ans = execv(currDir, currLine->arguments);
-    if (ans == -1)
-        perror("There was an error");
-
+    execv(currLine->arguments[0], currLine->arguments);
+    printf("hi tal")
 }
