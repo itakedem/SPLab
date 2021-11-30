@@ -9,6 +9,7 @@
 int execute(cmdLine* currLine);
 int commands(cmdLine* line);
 int executeCD(cmdLine* line);
+int executeHis();
 
 
 char currDir[PATH_MAX];
@@ -34,7 +35,6 @@ int main(int argc, char** argv)
         history[endOfHistory++] = currLine;
         commands(currLine);
         printf("\n");
-        freeCmdLines(currLine);
     }
 
     return 0;
