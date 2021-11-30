@@ -18,7 +18,7 @@ int main(int argc, char** argv)
         cmdLine* currLine = parseSingleCmdLine(&userText);
         execute(currLine);
         printf("\n");
-        if (strcmp(currLine.arguments[0], "quit") == 0)
+        if (strcmp(currLine->arguments[0], "quit") == 0)
         {
             freeCmdLines(&currLine);
             printf("end of loop");      /*TODO: remove */
