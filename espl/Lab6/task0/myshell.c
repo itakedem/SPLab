@@ -19,7 +19,7 @@ int main(int argc, char** argv)
         if (strcmp(currLine->arguments[0], "quit") == 0)
         {
             freeCmdLines(currLine);
-            printf("end of loop");      /*TODO: remove */
+            printf("end of loop\n");      /*TODO: remove */
             break;
         }
         execute(currLine);
