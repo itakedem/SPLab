@@ -74,6 +74,5 @@ int executeCD(cmdLine* line)
     if (path[0] == '~')
         return chdir(path);
 
-    path = strcat("/", path);
-    return chdir(strcat(currDir, path));
+    return chdir(strcat(strcat(currDir, "/"), path));
 }
