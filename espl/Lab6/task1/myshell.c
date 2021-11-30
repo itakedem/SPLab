@@ -23,6 +23,7 @@ int main(int argc, char** argv)
             break;
         }
         int ans = execute(currLine);
+
         printf("\n");
         freeCmdLines(currLine);
     }
@@ -32,6 +33,7 @@ int main(int argc, char** argv)
 
 int execute(cmdLine* currLine)
 {
+    int status = 0;
     int pid = fork();
     if (pid == -1)
     {
@@ -47,6 +49,7 @@ int execute(cmdLine* currLine)
             _exit(1);
         }
     }
+    wait(&status)
     return 0;
 
 }
