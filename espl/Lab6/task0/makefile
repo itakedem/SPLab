@@ -1,7 +1,7 @@
 all: prog
 
 prog: myshell.o
-	gcc  -m32 -g -Wall -o prog myshell.o asmIO.o
+	gcc  -m32 -g -Wall -o prog myshell.o
 
 myshell.o:
 	gcc -g -Wall -m32 -ansi -c -o myshell.o myshell.c
