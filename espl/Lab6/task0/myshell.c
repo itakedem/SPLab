@@ -33,5 +33,5 @@ int main(int argc, char** argv)
 void execute(cmdLine* currLine)
 {
     execv(currLine->arguments[0], currLine->arguments);
-    printf("hi tal")
+    printf("hi tal");
 }
