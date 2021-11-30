@@ -13,9 +13,12 @@ int executeCD(cmdLine* line);
 
 char currDir[PATH_MAX];
 char userText[2048];
+cmdLine history[SIZE_MAX];
+int endOfHistory;
 
 int main(int argc, char** argv)
 {
+    endOfHistory = 0;
     while (1)
     {
         getcwd(currDir, sizeof(currDir));
@@ -28,6 +31,7 @@ int main(int argc, char** argv)
             printf("end of loop\n");
             break;
         }
+        history[endOfHistory++] = currLine;
         commands(currLine);
         printf("\n");
         freeCmdLines(currLine);
@@ -41,8 +45,9 @@ int commands(cmdLine* line)
     char* command = line->arguments[0];
     if (strcmp("cd", command) == 0)
         return executeCD(line);
-    else
-        return execute(line);
+    if (strcmp("history", command) == 0)
+        executeHis();
+    return execute(line);
 }
 
 int execute(cmdLine* line)
@@ -72,9 +77,27 @@ int executeCD(cmdLine* line)
     char* path = line->arguments[1];
     if (path[0] == '~')
     {
-        return chdir(getenv("HOME"));
+        int ans = chdir(getenv("HOME"));
+        perror("There was an error");
+        _exit(1);
+        return 1;
     }
-        
-
     return chdir(strcat(strcat(currDir, "/"), path));
+}
+
+int executeHis()
+{
+    int i = 0;
+    while (i < endOfHistory)
+    {
+        int j = 0;
+        while (j < sizeof(history[i]->arguments))
+        {
+            printf("%s ", history[i]->arguments[j]);
+            j++;
+        }
+        printf("\n");
+        i++;
+    }
+    return 0;
 }
