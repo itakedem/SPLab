@@ -15,16 +15,16 @@ int main(int argc, char** argv)
     {
         printf("%s$ ", currDir);
         fgets(userText, 2048 ,stdin);
-        cmdLine* currLine = parseSingleCmdLine(&userText);
+        cmdLine* currLine = parseCmdLines(userText);
         execute(currLine);
         printf("\n");
         if (strcmp(currLine->arguments[0], "quit") == 0)
         {
-            freeCmdLines(&currLine);
+            freeCmdLines(currLine);
             printf("end of loop");      /*TODO: remove */
             break;
         }
-        freeCmdLines(&currLine);
+        freeCmdLines(currLine);
     }
 
     return 0;
