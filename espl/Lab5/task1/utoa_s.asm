@@ -17,6 +17,22 @@ utoa_s:
     call clear_buffer
     mov ebx, [ebp - 8]      ;restore buffer pointer to start
 
+.check_zero:
+    cmp eax, 0
+    jne .divider
+
+.return_zero:
+    add eax, '0'
+    mov [ebx], eax
+    inc ebx
+    mov [ebx], byte 0
+    pop ecx                ;restore registers
+    pop edx
+    pop ebx
+
+    leave
+    ret
+
 .divider:
     mov edx, 0
     div dword [ebp - 4]     ;after this -> number will be on eax, and the remainder on edx divide eax by arg
@@ -74,3 +90,4 @@ clear_buffer:
 
 .end:
     ret
+

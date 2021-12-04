@@ -1,7 +1,7 @@
 section .text
     global atoa_s
 
-atou_s:
+atoa_s:
     enter 4, 0
     push ebx
  

@@ -10,7 +10,7 @@ void print(char *s) {
 
 int main(int argc, char **argv){
 	char buffer[11]; 
-	utoa_s(123, buffer); 
+	utoa_s(0, buffer); 
 	print(buffer); print("\n");
 
 	int i = atoa_s("123");

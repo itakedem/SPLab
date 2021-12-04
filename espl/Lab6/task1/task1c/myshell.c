@@ -3,7 +3,7 @@
 #include <linux/limits.h>
 #include <string.h>
 #include <sys/wait.h>
-
+#include <stdlib.h>
 #include "LineParser.h"
 
 int execute(cmdLine* currLine);
@@ -28,7 +28,9 @@ int main(int argc, char** argv)
             printf("end of loop\n");
             break;
         }
-        commands(currLine);
+        int success = commands(currLine);
+        if (success == -1)
+            perror("There was an error");
         printf("\n");
         freeCmdLines(currLine);
     }

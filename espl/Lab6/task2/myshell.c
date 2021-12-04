@@ -11,6 +11,7 @@ int commands(cmdLine* line);
 int executeCD(cmdLine* line);
 int executeHis();
 void freeHistory();
+int executeReuse(char* ind);
 
 char currDir[PATH_MAX];
 char userText[2048];
@@ -33,8 +34,9 @@ int main(int argc, char** argv)
             printf("end of loop\n");
             break;
         }
-        history[endOfHistory++] = currLine;
-        commands(currLine);
+        int ans = commands(currLine);
+        if (ans == -1)
+            perror("There was an error");
         printf("\n");
     }
 
@@ -45,10 +47,37 @@ int commands(cmdLine* line)
 {
     char* command = line->arguments[0];
     if (strcmp("cd", command) == 0)
+    {
+        history[endOfHistory++] = line;
         return executeCD(line);
+    }
     if (strcmp("history", command) == 0)
+    {
+        history[endOfHistory++] = line;
         return executeHis();
+    }
+    if (command[0] == '!')
+    {
+        int success =  executeReuse(&command[1]);
+        freeCmdLines(line);
+        return success;
+    }
+    history[endOfHistory++] = line;
     return execute(line);
+}
+
+int executeReuse(char* ind)
+{
+    int index = atoi(ind);
+    if (index >= endOfHistory)
+    {
+        fprintf(stderr, "Index is out of history list's bounds\n");
+        return -2;
+    }
+    
+    cmdLine* line = clone(history[index]);
+    
+    return commands(line);
 }
 
 int execute(cmdLine* line)
@@ -66,10 +95,14 @@ int execute(cmdLine* line)
         if (ans == -1)
         {
             perror("There was an error");
-            _exit(1);
         }
+        _exit(ans);
     }
-    waitpid(pid ,&status, 0);
+    else
+    {
+        if (line->blocking)
+            waitpid(pid, &status, 0);
+    }
     return 0;
 }
 
@@ -78,7 +111,11 @@ void freeHistory()
     int i=0;
     while (i < endOfHistory)
     {
-        freeCmdLines(history[i++]);
+        if (history[i] != NULL)
+        {
+            freeCmdLines(history[i]);
+        }
+        i++;
     }
 }
 
