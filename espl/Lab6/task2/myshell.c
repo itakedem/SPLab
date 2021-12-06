@@ -15,7 +15,7 @@ int executeReuse(char* ind);
 
 char currDir[PATH_MAX];
 char userText[2048];
-cmdLine* history[10];
+cmdLine* history[3];
 int sizeOfHistory;
 int pointerHistory;
 int isMaxhistory;
@@ -129,6 +129,7 @@ int execute(cmdLine* line)
         if (ans)
         {
             perror("There was an error");
+            freeHistory();
         }
         _exit(ans);
     }
