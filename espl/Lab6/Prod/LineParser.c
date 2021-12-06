@@ -175,8 +175,10 @@ void freeCmdLines(cmdLine *pCmdLine)
 
     if (pCmdLine->next)
         freeCmdLines(pCmdLine->next);
+    
 
     FREE(pCmdLine);
+    pCmdLine = NULL;
 }
 
 int replaceCmdArg(cmdLine *pCmdLine, int num, const char *newString)
@@ -187,4 +189,24 @@ int replaceCmdArg(cmdLine *pCmdLine, int num, const char *newString)
     FREE(pCmdLine->arguments[num]);
     ((char**)pCmdLine->arguments)[num] = strClone(newString);
     return 1;
+}
+
+cmdLine *clone(cmdLine* line)
+{
+    cmdLine* pCmdLine = (cmdLine*)malloc( sizeof(cmdLine) ) ;
+    pCmdLine->argCount = line->argCount;
+    pCmdLine->inputRedirect = NULL;
+    pCmdLine->outputRedirect  = NULL;
+    pCmdLine->blocking = line->blocking;
+    pCmdLine->idx =  line->idx;
+    pCmdLine->next = NULL;
+
+    int i=0; 
+    while(i < line->argCount)
+    {
+        ((char **)pCmdLine->arguments)[i] = strClone(line->arguments[i]);
+        i++;
+    }
+    ((char **)pCmdLine->arguments)[i] = NULL;
+    return pCmdLine;
 }
