@@ -15,32 +15,53 @@ int executeReuse(char* ind);
 
 char currDir[PATH_MAX];
 char userText[2048];
-cmdLine* history[10000000];
-int endOfHistory;
+cmdLine* history[10];
+int sizeOfHistory;
+int pointerHistory;
+int isMaxhistory;
 
 int main(int argc, char** argv)
 {
-    endOfHistory = 0;
+    sizeOfHistory = 3;
+    pointerHistory = 0;
+    isMaxhistory = 0;
     while (1)
     {
         getcwd(currDir, sizeof(currDir));
         printf("%s$ ", currDir);
         fgets(userText, 2048 ,stdin);
         cmdLine* currLine = parseCmdLines(userText);
+        if (currLine == NULL)
+        {
+            continue;
+        }
         if (strcmp(currLine->arguments[0], "quit") == 0)
         {
             freeHistory();
             freeCmdLines(currLine);
-            printf("end of loop\n");
             break;
         }
         int ans = commands(currLine);
         if (ans == -1)
             perror("There was an error");
-        printf("\n");
+        if(sizeOfHistory == pointerHistory)
+        {
+            pointerHistory = 0;
+            isMaxhistory = 1;
+        }
+        
     }
 
     return 0;
+}
+
+void addToHistory(cmdLine* line)
+{
+    if (isMaxhistory)
+    {
+        freeCmdLines(history[pointerHistory]);
+    }
+    history[pointerHistory++] = line;
 }
 
 int commands(cmdLine* line)
@@ -48,12 +69,13 @@ int commands(cmdLine* line)
     char* command = line->arguments[0];
     if (strcmp("cd", command) == 0)
     {
-        history[endOfHistory++] = line;
+        
+        addToHistory(line);
         return executeCD(line);
     }
     if (strcmp("history", command) == 0)
     {
-        history[endOfHistory++] = line;
+        addToHistory(line);
         return executeHis();
     }
     if (command[0] == '!')
@@ -62,20 +84,32 @@ int commands(cmdLine* line)
         freeCmdLines(line);
         return success;
     }
-    history[endOfHistory++] = line;
+    addToHistory(line);
     return execute(line);
 }
 
 int executeReuse(char* ind)
 {
     int index = atoi(ind);
-    if (index >= endOfHistory)
+    if (index >= sizeOfHistory)
     {
         fprintf(stderr, "Index is out of history list's bounds\n");
         return -2;
     }
+
+    if (!isMaxhistory)
+    {
+        if(index >= pointerHistory)
+        {
+            fprintf(stderr, "Index is out of history list's bounds\n");
+        return -2;
+        }
+        cmdLine* line = clone(history[index]);
     
-    cmdLine* line = clone(history[index]);
+    return commands(line);
+    }
+    
+    cmdLine* line = clone(history[(index + pointerHistory)%sizeOfHistory]);
     
     return commands(line);
 }
@@ -92,7 +126,7 @@ int execute(cmdLine* line)
     if (pid == 0)
     {
         int ans = execvp(line->arguments[0], line->arguments);
-        if (ans == -1)
+        if (ans)
         {
             perror("There was an error");
         }
@@ -109,7 +143,7 @@ int execute(cmdLine* line)
 void freeHistory()
 {
     int i=0;
-    while (i < endOfHistory)
+    while ((isMaxhistory &&i < sizeOfHistory) || (!isMaxhistory && i < pointerHistory))
     {
         if (history[i] != NULL)
         {
@@ -132,7 +166,7 @@ int executeCD(cmdLine* line)
 int executeHis()
 {
     int i = 0;
-    while (i < endOfHistory)
+    while (!isMaxhistory && i < pointerHistory)
     {
         int j = 0;
         while (j < history[i]->argCount)
@@ -143,7 +177,17 @@ int executeHis()
         printf("\n");
         i++;
     }
+    i= 0;
+    while (isMaxhistory && i < sizeOfHistory)
+    {
+        int j=0;
+        while (j < history[(i+pointerHistory)%sizeOfHistory]->argCount)
+        {
+            printf("%s ", history[(i+pointerHistory)%sizeOfHistory]->arguments[j]);
+            j++;
+        }
+        printf("\n");
+        i++;
+    }
     return 0;
 }
-
-/* TODO: add a recursive free cmdLine */
