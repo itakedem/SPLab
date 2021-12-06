@@ -195,10 +195,11 @@ cmdLine *clone(cmdLine* line)
 {
     cmdLine* pCmdLine = (cmdLine*)malloc( sizeof(cmdLine) ) ;
     pCmdLine->argCount = line->argCount;
-    pCmdLine->blocking = line->blocking;
-    pCmdLine->idx = 0;
     pCmdLine->inputRedirect = NULL;
     pCmdLine->outputRedirect  = NULL;
+    pCmdLine->blocking = line->blocking;
+    pCmdLine->idx =  line->idx;
+    pCmdLine->next = NULL;
 
     int i=0; 
     while(i < line->argCount)
@@ -206,5 +207,6 @@ cmdLine *clone(cmdLine* line)
         ((char **)pCmdLine->arguments)[i] = strClone(line->arguments[i]);
         i++;
     }
+    ((char **)pCmdLine->arguments)[i] = NULL;
     return pCmdLine;
 }
