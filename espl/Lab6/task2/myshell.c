@@ -157,7 +157,7 @@ void freeHistory()
 int executeCD(cmdLine* line)
 {
     char* path = line->arguments[1];
-    if (path[0] == '~')
+    if (line->argCount ==1 || path[0] == '~')
     {
         return chdir(getenv("HOME"));
     }
