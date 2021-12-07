@@ -26,7 +26,7 @@ char* history[3];
 int sizeOfHistory;
 int pointerHistory;
 int isMaxhistory;
-int closeIO[2];        //TODO:maybe needs char
+char closeIO[2];
 
 int main(int argc, char** argv)
 {
