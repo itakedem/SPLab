@@ -18,6 +18,7 @@ int main(int argc, char** argv)
     else
     {
         waitpid(pid, &status, 0);
+        read(p[0], buffer, MSGSIZE);
         printf("%s\n", buffer);
         printf("finished");
     }
