@@ -31,7 +31,7 @@ int main(int argc, char** argv)
         close(STDOUT_FILENO);
         dup(p[1]);
         close(p[1]);
-        int ans = excvp(args1[0], args1);
+        int ans = execvp(args1[0], args1);
 
         _exit(ans);
     }
