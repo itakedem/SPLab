@@ -5,6 +5,8 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include "LineParser.h"
+#include <fcntl.h>
+
 
 int execute(cmdLine* currLine);
 int commands(cmdLine* line);
