@@ -26,14 +26,15 @@ char* history[3];
 int sizeOfHistory;
 int pointerHistory;
 int isMaxhistory;
-char closeIO[2];
+int closeIO[2];
 
 int main(int argc, char** argv)
 {
     sizeOfHistory = 3;
     pointerHistory = 0;
     isMaxhistory = 0;
-    closeIO = {0, 0};
+    closeIO[0] = 0;
+    closeIO[1] = 0;
 
     while (1)
     {
