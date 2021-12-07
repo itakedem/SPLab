@@ -21,12 +21,15 @@ char* history[3];
 int sizeOfHistory;
 int pointerHistory;
 int isMaxhistory;
+int closeIO[2];        //TODO:maybe needs char
 
 int main(int argc, char** argv)
 {
     sizeOfHistory = 3;
     pointerHistory = 0;
     isMaxhistory = 0;
+    closeIO = {0, 0};
+
     while (1)
     {
         getcwd(currDir, sizeof(currDir));
@@ -77,14 +80,11 @@ int commands(cmdLine* line)
 {
     char* command = line->arguments[0];
     if (strcmp("cd", command) == 0)
-    {
-        
         return executeCD(line);
-    }
+
     if (strcmp("history", command) == 0)
-    {
         return executeHis();
-    }
+
     if (command[0] == '!')
     {
         int success =  executeReuse(&command[1]);
@@ -128,6 +128,7 @@ int execute(cmdLine* line)
 {
     int status = 0;
     int pid = fork();
+
     if (pid == -1)
     {
         perror("fork failed");
@@ -135,6 +136,7 @@ int execute(cmdLine* line)
     }
     if (pid == 0)
     {
+        handleIO(line);
         int ans = execvp(line->arguments[0], line->arguments);
         if (ans)
         {
@@ -142,6 +144,7 @@ int execute(cmdLine* line)
             freeHistory();
             freeCmdLines(line);
         }
+        closeFiles();
         _exit(ans);
     }
     else
@@ -150,6 +153,30 @@ int execute(cmdLine* line)
             waitpid(pid, &status, 0);
     }
     return 0;
+}
+
+void handleIO(cmdLine* line)
+{
+    if (line->outputRedirect)
+    {
+        close(STDOUT_FILENO);
+        dup2(open(line->outputRedirect, O_WRONLY | O_CREAT, 0666), STDOUT_FILENO);
+        closeIO[1] = 1;
+    }
+    if (line->inputRedirect)
+    {
+        close(STDIN_FILENO);
+        dup2(open(line->inputRedirect, O_WRONLY | O_CREAT, 0666), STDIN_FILENO);
+        closeIO[0] = 1;
+    }
+}
+
+void closeFiles()
+{
+    if (closeIO[0])
+        close(STDIN_FILENO);
+    if (closeIO[1])
+        close(STDOUT_FILENO);
 }
 
 void freeHistory()
