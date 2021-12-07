@@ -12,6 +12,9 @@ char* msg2;
 char** args1;
 char** args2;
 
+void parseStr(char* input);
+void parseArgs(char* msg, char** arg);
+
 
 int main(int argc, char** argv)
 {
@@ -75,10 +78,10 @@ void parseArgs(char* msg, char** arg)
 {
     char* delimiter = " ";
     int i = 0;
-    result = strtok( msg, delimiter);
-    while( result)
+    char* result = strtok( msg, delimiter);
+    while(result)
     {
-        arg[i++] = strClone(result);
+        arg[i++] = result;
         result = strtok(NULL, delimiter);
     }
     arg[i] = NULL;
