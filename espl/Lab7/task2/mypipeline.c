@@ -65,9 +65,10 @@ int main(int argc, char** argv)
 void parseStr(char* input)
 {
     char* delimiter = "|";
+    char* rest = input;
 
-    msg1 = strtok(input, delimiter);
-    msg2 = strtok(NULL, delimiter);
+    msg1 = strtok_r(rest, delimiter, &rest);
+    msg2 = strtok_r(rest, delimiter, &rest);
 
     msg2 = msg2 + 1;
     parseArgs(msg1, args1);
@@ -78,11 +79,12 @@ void parseArgs(char* msg, char** arg)
 {
     char* delimiter = " ";
     int i = 0;
-    char* result = strtok( msg, delimiter);
-    while(result)
+    char* rest = msg;
+    char* result ;
+
+    while((result = strtok_r(rest, delimiter, &rest)))
     {
         arg[i++] = result;
-        result = strtok(NULL, delimiter);
     }
     arg[i] = NULL;
 }
