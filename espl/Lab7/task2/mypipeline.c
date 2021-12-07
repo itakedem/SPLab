@@ -73,7 +73,7 @@ void parseStr(char* input)
 
 void parseArgs(char* msg, char** arg)
 {
-    char* delimiter2 = " ";
+    char* delimiter = " ";
     int i = 0;
     result = strtok( msg, delimiter);
     while( result)
