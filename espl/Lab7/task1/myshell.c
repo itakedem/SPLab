@@ -16,6 +16,9 @@ void freeHistory();
 int executeReuse(char* ind);
 void addToHistory(char* line);
 char *strClone(const char *source);
+void handleIO(cmdLine* line);
+void closeFiles();
+
 
 char currDir[PATH_MAX];
 char userText[2048];
