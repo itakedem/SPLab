@@ -12,12 +12,10 @@ int executeCD(cmdLine* line);
 int executeHis();
 void freeHistory();
 int executeReuse(char* ind);
-void addToHistory(char* line);
-char *strClone(const char *source);
 
 char currDir[PATH_MAX];
 char userText[2048];
-char* history[3];
+cmdLine* history[3];
 int sizeOfHistory;
 int pointerHistory;
 int isMaxhistory;
@@ -43,11 +41,6 @@ int main(int argc, char** argv)
             freeCmdLines(currLine);
             break;
         }
-        
-        if (currLine->arguments[0][0] != '!')
-        {
-            addToHistory(userText);
-        }
         int ans = commands(currLine);
         if (ans == -1)
             perror("There was an error");
@@ -57,20 +50,18 @@ int main(int argc, char** argv)
             isMaxhistory = 1;
         }
         
-        freeCmdLines(currLine);
     }
 
     return 0;
 }
 
-void addToHistory(char* line)
+void addToHistory(cmdLine* line)
 {
-    if (isMaxhistory == 1)
+    if (isMaxhistory)
     {
-        free(history[pointerHistory]);
+        freeCmdLines(history[pointerHistory]);
     }
-    char* newLine= strClone(line);
-    history[pointerHistory++] = newLine;
+    history[pointerHistory++] = line;
 }
 
 int commands(cmdLine* line)
@@ -79,17 +70,21 @@ int commands(cmdLine* line)
     if (strcmp("cd", command) == 0)
     {
         
+        addToHistory(line);
         return executeCD(line);
     }
     if (strcmp("history", command) == 0)
     {
+        addToHistory(line);
         return executeHis();
     }
     if (command[0] == '!')
     {
         int success =  executeReuse(&command[1]);
+        freeCmdLines(line);
         return success;
     }
+    addToHistory(line);
     return execute(line);
 }
 
@@ -101,27 +96,22 @@ int executeReuse(char* ind)
         fprintf(stderr, "Index is out of history list's bounds\n");
         return -2;
     }
-    int ans;
-    cmdLine* line;
+
     if (!isMaxhistory)
     {
         if(index >= pointerHistory)
         {
             fprintf(stderr, "Index is out of history list's bounds\n");
-            return -2;
+        return -2;
         }
-        line = parseCmdLines(history[index]);
-        addToHistory(history[index]);
-        ans =  commands(line);
+        cmdLine* line = clone(history[index]);
+    
+    return commands(line);
     }
-    else
-    {
-        line = parseCmdLines(history[(index + pointerHistory)%sizeOfHistory]);
-        addToHistory(history[(index + pointerHistory)%sizeOfHistory]);
-        ans = commands(line);
-    }
-    freeCmdLines(line);
-    return ans;
+    
+    cmdLine* line = clone(history[(index + pointerHistory)%sizeOfHistory]);
+    
+    return commands(line);
 }
 
 int execute(cmdLine* line)
@@ -140,7 +130,6 @@ int execute(cmdLine* line)
         {
             perror("There was an error");
             freeHistory();
-            freeCmdLines(line);
         }
         _exit(ans);
     }
@@ -155,9 +144,12 @@ int execute(cmdLine* line)
 void freeHistory()
 {
     int i=0;
-    while ((isMaxhistory == 1 &&i < sizeOfHistory) || (isMaxhistory == 0 && i <= pointerHistory))
+    while ((isMaxhistory &&i < sizeOfHistory) || (!isMaxhistory && i < pointerHistory))
     {
-        free(history[i]);
+        if (history[i] != NULL)
+        {
+            freeCmdLines(history[i]);
+        }
         i++;
     }
 }
@@ -177,21 +169,26 @@ int executeHis()
     int i = 0;
     while (!isMaxhistory && i < pointerHistory)
     {
-        printf("%s", history[i]);
+        int j = 0;
+        while (j < history[i]->argCount)
+        {
+            printf("%s ", history[i]->arguments[j]);
+            j++;
+        }
+        printf("\n");
         i++;
     }
-    i = 0;
+    i= 0;
     while (isMaxhistory && i < sizeOfHistory)
     {
-        printf("%s", history[(i+pointerHistory)%sizeOfHistory]);
+        int j=0;
+        while (j < history[(i+pointerHistory)%sizeOfHistory]->argCount)
+        {
+            printf("%s ", history[(i+pointerHistory)%sizeOfHistory]->arguments[j]);
+            j++;
+        }
+        printf("\n");
         i++;
     }
     return 0;
-}
-
-char *strClone(const char *source)
-{
-    char* clone = (char*)malloc(strlen(source) + 1);
-    strcpy(clone, source);
-    return clone;
 }
