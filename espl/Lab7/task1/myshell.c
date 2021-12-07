@@ -172,7 +172,7 @@ void handleIO(cmdLine* line)
     if (line->inputRedirect)
     {
         close(STDIN_FILENO);
-        dup2(open(line->inputRedirect, O_WRONLY | O_CREAT, 0666), STDIN_FILENO);
+        dup2(open(line->inputRedirect, O_RDONLY), STDIN_FILENO);
         closeIO[0] = 1;
     }
 }
