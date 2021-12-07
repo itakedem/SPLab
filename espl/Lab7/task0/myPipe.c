@@ -16,7 +16,11 @@ int main(int argc, char** argv)
     if (fork() == 0)
         write(p[1], msg, MSGSIZE);
     else
+    {
         while ((read(p[0], buffer, MSGSIZE)) > 0)
             printf("%s\n", buffer);
-    printf("finished");
+        printf("finished");
+    }
+
+    return 0;
 }
