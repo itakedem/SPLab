@@ -64,11 +64,13 @@ int main(int argc, char** argv)
 
 void parseStr(char* input)
 {
-    char* delimiter = "|";
+    int delimiter = '|';
     char* rest = input;
 
+    char* ind = strchr(input, delimiter);
+    input[ind] = 0;
     msg1 = strtok_r(rest, delimiter, &rest);
-    msg2 = strtok_r(rest, delimiter, &rest);
+    msg2 = strchr(input, delimiter);
 
     msg2 = msg2 + 1;
     parseArgs(msg1, args1);
