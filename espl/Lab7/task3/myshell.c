@@ -222,7 +222,7 @@ void closeFiles()
 void freeHistory()
 {
     int i=0;
-    while ((isMaxhistory == 1 &&i < sizeOfHistory) || (isMaxhistory == 0 && i <= pointerHistory))
+    while ((isMaxhistory == 1 &&i < sizeOfHistory) || (isMaxhistory == 0 && i < pointerHistory))
     {
         free(history[i]);
         i++;
