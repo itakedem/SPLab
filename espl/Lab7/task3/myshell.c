@@ -97,7 +97,7 @@ int commands(cmdLine* line)
     {
         if (strlen(command) < 2)
         {
-            perror("invalid index");
+            printf("invalid index");
             return -2;
         }
         int success =  executeReuse(&command[1]);
