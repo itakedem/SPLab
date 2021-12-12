@@ -9,7 +9,7 @@ int executePipe(cmdLine* line)
 {
     int pid, p[2], status1, status2, flag;
 
-    flag = 1;
+    flag = 0;
     if (flag)
         printf("parent process>forking\n");
 
