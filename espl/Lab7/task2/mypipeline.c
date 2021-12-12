@@ -29,7 +29,6 @@ int main(int argc, char** argv)
         close(STDOUT_FILENO);
         dup(p[1]);
         close(p[1]);
-        char* buff[]
         int ans = execvp("ls", msg1);
 
         _exit(ans);
