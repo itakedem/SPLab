@@ -21,7 +21,7 @@ void handleIO(cmdLine* line);
 void closeFiles();
 void redirect(cmdLine* line);
 void closeRedirect();
-void executePipe(cmdLine* line);
+int executePipe(cmdLine* line);
 
 
 
@@ -150,19 +150,17 @@ int execute(cmdLine* line)
     }
     if (pid == 0)
     {
-        else
+        handleIO(line);
+        int ans = execvp(line->arguments[0], line->arguments);
+        if (ans)
         {
-            handleIO(line);
-            int ans = execvp(line->arguments[0], line->arguments);
-            if (ans)
-            {
-                perror("There was an error");
-                freeHistory();
-                freeCmdLines(line);
-            }
+            perror("There was an error");
+            freeHistory();
+            freeCmdLines(line);
         }
-        closeRedirect();
-        _exit(ans);
+
+    closeRedirect();
+    _exit(ans);
     }
     else
     {
