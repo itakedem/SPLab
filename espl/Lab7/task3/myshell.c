@@ -95,7 +95,7 @@ int commands(cmdLine* line)
 
     if (command[0] == '!')
     {
-        if (strlen(command) < 1)
+        if (strlen(command) < 2)
         {
             perror("invalid index");
             return -2;
