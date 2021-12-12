@@ -4,7 +4,6 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <stdlib.h>
-#include "LineParser.h"
 #include <fcntl.h>
 #include "mypipeline.c"
 
