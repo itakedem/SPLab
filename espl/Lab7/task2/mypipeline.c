@@ -34,9 +34,10 @@ int main(int argc, char** argv)
         char* msg1[3] = {"ls","-l",NULL};
         close(STDOUT_FILENO);
         dup(p[1]);
-        close(p[1]);
         if (flag)
             printf("child 1>going to execute cmd\n");
+        close(p[1]);
+
         int ans = execvp("ls", msg1);
 
         _exit(ans);
@@ -56,11 +57,10 @@ int main(int argc, char** argv)
                 printf("child 2>redirecting stdin to the read end of the pipe\n");
             close(STDIN_FILENO);
             dup(p[0]);
-            if (flag)
-                printf("child 2>going to execute cmd\n");
             close(p[0]);
             char* msg2[4] = {"tail", "-n", "2", NULL};
-
+            if (flag)
+                printf("child 2>going to execute cmd\n");
             int ans = execvp("tail", msg2);
 
             _exit(ans);
