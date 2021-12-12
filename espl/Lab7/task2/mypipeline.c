@@ -30,14 +30,15 @@ int main(int argc, char** argv)
     if ((pid = fork()) == 0)
     {
         if (flag)
+        {
             printf("child 1>redirecting stdout to the write end of the pipe\n");
+            printf("child 1>going to execute cmd\n");
+        }
+
         char* msg1[3] = {"ls","-l",NULL};
         close(STDOUT_FILENO);
         dup(p[1]);
-        if (flag)
-            printf("child 1>going to execute cmd\n");
         close(p[1]);
-
         int ans = execvp("ls", msg1);
 
         _exit(ans);
