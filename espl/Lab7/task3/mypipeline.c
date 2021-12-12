@@ -2,12 +2,14 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <string.h>
+#include "LineParser.h"
 
-int main(int argc, char** argv)
+
+int executePipe(cmdLine* line)
 {
     int pid, p[2], status1, status2, flag;
 
-    flag = argc > 1 && strcmp(argv[1], "-d") == 0 ? 1 : 0;
+    flag = 1;
     if (flag)
         printf("parent process>forking\n");
 
@@ -22,11 +24,10 @@ int main(int argc, char** argv)
             printf("child 1>going to execute cmd\n");
         }
 
-        char* msg1[3] = {"ls","-l",NULL};
         close(STDOUT_FILENO);
         dup(p[1]);
         close(p[1]);
-        int ans = execvp("ls", msg1);
+        int ans = execvp(line->arguments[0], line->arguments);
 
         _exit(ans);
     }
@@ -46,10 +47,9 @@ int main(int argc, char** argv)
             close(STDIN_FILENO);
             dup(p[0]);
             close(p[0]);
-            char* msg2[4] = {"tail", "-n", "2", NULL};
             if (flag)
                 printf("child 2>going to execute cmd\n");
-            int ans = execvp("tail", msg2);
+            int ans = execvp(line->next->arguments[0], line->next->arguments);
 
             _exit(ans);
         }
