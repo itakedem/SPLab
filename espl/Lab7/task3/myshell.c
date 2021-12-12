@@ -26,7 +26,7 @@ int executePipe(cmdLine* line);
 
 char currDir[PATH_MAX];
 char userText[2048];
-char* history[3];
+char* history[20];
 int sizeOfHistory;
 int pointerHistory;
 int isMaxhistory;
@@ -34,7 +34,7 @@ int closeIO[2];
 
 int main(int argc, char** argv)
 {
-    sizeOfHistory = 3;
+    sizeOfHistory = 20;
     pointerHistory = 0;
     isMaxhistory = 0;
     closeIO[0] = 0;
