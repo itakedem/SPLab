@@ -121,14 +121,17 @@ int executeReuse(char* ind)
             return -2;
         }
         line = parseCmdLines(history[index]);
-        addToHistory(history[index]);
         ans =  commands(line);
+        if (ans == 0)
+            addToHistory(history[index]);
+
     }
     else
     {
         line = parseCmdLines(history[(index + pointerHistory)%sizeOfHistory]);
-        addToHistory(history[(index + pointerHistory)%sizeOfHistory]);
         ans = commands(line);
+        if (ans == 0)
+            addToHistory(history[(index + pointerHistory)%sizeOfHistory]);
     }
     freeCmdLines(line);
     return ans;
