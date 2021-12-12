@@ -64,6 +64,11 @@ int main(int argc, char** argv)
         int ans = commands(currLine);
         if (ans == -1)
             perror("There was an error");
+        if(sizeOfHistory == pointerHistory)
+        {
+            pointerHistory = 0;
+            isMaxhistory = 1;
+        }
         
         freeCmdLines(currLine);
     }
@@ -74,14 +79,11 @@ int main(int argc, char** argv)
 void addToHistory(char* line)
 {
     if (isMaxhistory == 1)
-        free(history[pointerHistory % sizeOfHistory]);
-
+    {
+        free(history[pointerHistory]);
+    }
     char* newLine= strClone(line);
-    history[pointerHistory % sizeOfHistory] = newLine;
-    pointerHistory++;
-
-    if(sizeOfHistory == pointerHistory)
-        isMaxhistory = 1;
+    history[pointerHistory++] = newLine;
 }
 
 int commands(cmdLine* line)
