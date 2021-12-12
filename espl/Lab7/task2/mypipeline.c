@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 {
     int pid, p[2], status1, status2, flag;
 
-    flag = argc > 1 && cmpstr(argv[1], "-d") ? 1 : 0;
+    flag = argc > 1 && strcmp(argv[1], "-d") ? 1 : 0;
     if (flag)
         printf("parent process>forking\n");
 
