@@ -95,6 +95,11 @@ int commands(cmdLine* line)
 
     if (command[0] == '!')
     {
+        if (strlen(command) < 1)
+        {
+            perror("invalid index");
+            return -2;
+        }
         int success =  executeReuse(&command[1]);
         return success;
     }
