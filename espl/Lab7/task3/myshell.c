@@ -78,16 +78,16 @@ int main(int argc, char** argv)
 
 void addToHistory(char* line)
 {
-    char* newLine= strClone(line);
-
     if (isMaxhistory == 1)
+    {
         free(history[pointerHistory]);
-
+    }
+    char* newLine= strClone(line);
     history[pointerHistory++] = newLine;
 }
 
 int commands(cmdLine* line)
-//{
+{
     char* command = line->arguments[0];
     if (strcmp("cd", command) == 0)
         return executeCD(line);
