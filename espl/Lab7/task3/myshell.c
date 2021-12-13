@@ -78,11 +78,11 @@ int main(int argc, char** argv)
 
 void addToHistory(char* line)
 {
-    if (isMaxhistory == 1)
-    {
-        free(history[pointerHistory]);
-    }
     char* newLine= strClone(line);
+
+    if (isMaxhistory == 1)
+        free(history[pointerHistory]);
+
     history[pointerHistory++] = newLine;
 }
 
