@@ -13,7 +13,7 @@
 int map_file(char *path, char** file);
 void magic_extractor(char* file, char* buffer);
 int calc_size(int fd);
-void print_elf(Elf32_Ehdr* header);
+void print_elf(Elf32_Ehdr* header, char* file);
 void print_scheme(Elf32_Ehdr* header);
 void print_offset(Elf32_Ehdr* header);
 void print_sections(Elf32_Ehdr* header);
