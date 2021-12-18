@@ -18,8 +18,8 @@ void print_scheme(Elf32_Ehdr* header);
 void print_offset(Elf32_Ehdr* header);
 void print_sections(Elf32_Ehdr* header);
 Elf32_Shdr *load_section_headers(Elf32_Ehdr *header, char *mapped_file);
-void print_sections_sizes(Elf32_Ehdr* header);
-void print_shstrtab(Elf32_Ehdr *elf_header);
+void print_sections_sizes(Elf32_Ehdr* header, char* file);
+void print_shstrtab(Elf32_Ehdr *header);
 
 
 int main(int argc, char** argv)
@@ -42,6 +42,8 @@ int main(int argc, char** argv)
 
     magic_extractor(file, buffer);
     printf("Magic Numbers Are: %d, %d, %d\n", buffer[0], buffer[1], buffer[2]);
+
+    print_elf(&header, file);
 
     return 0;
 }
@@ -148,5 +150,10 @@ void print_shstrtab(Elf32_Ehdr *header)
 
 void print_elf(Elf32_Ehdr* header, char* file)
 {
-
+    print_scheme(header);
+    print_entry(header);
+    print_offset(header);
+    print_sections_sizes(header, file);
+    print_sections(header);
+    print_shstrtab(header);
 }
