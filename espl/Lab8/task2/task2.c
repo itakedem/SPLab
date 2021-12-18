@@ -7,13 +7,15 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <elf.h>
-#include <stdlib.h>
 
 void magic_extractor(char* file, char* buffer);
 int map_file(char *path, char** file);
 Elf32_Shdr *load_section_headers(Elf32_Ehdr *header, char *mapped_file);
 void print_sections(char* file, Elf32_Ehdr* header, Elf32_Shdr* sections);
 int calc_size(int fd);
+void print_symbols(char* file, Elf32_Ehdr* header, Elf32_Shdr* sections);
+void print_symbol(Elf32_Shdr *cur_section, char *mapped_file, Elf32_Shdr *str_table,
+                     int section_index, char *section_name);
 
 
 int main(int argc, char** argv)
@@ -42,10 +44,63 @@ int main(int argc, char** argv)
     header = *(Elf32_Ehdr *)file;              /*extracting the header*/
 
     Elf32_Shdr *sections = load_section_headers(&header, file);
-    print_sections(file, &header, sections);
+    print_symbols(file, &header, sections);
     free(sections);
 
     return 0;
+}
+
+void print_symbols(char* file, Elf32_Ehdr* header, Elf32_Shdr* sections)
+{
+    char *section_str_table = file + sections[header->e_shstrndx].sh_offset;
+    char *curr_section_name = NULL;
+    Elf32_Shdr *curr_section = NULL;
+    Elf32_Shdr *str_table = NULL;
+
+    int i=0;
+    while (i < header->e_shnum)  /*set str_table adress*/
+    {
+        if (strncmp(".strtab", section_str_table + sections[i].sh_name, 7) == 0)
+        {
+            str_table = &sections[i];
+            break;
+        }
+        i++;
+    }
+    printf("[%2s] %-20s %-15s %-20s %-20s \n", "Id", "Value", "Section_index", "Section_name", "Symbol_name");
+    i=0;
+    while (i<header->e_shnum)
+    {
+        
+        curr_section = &sections[i];
+        curr_section_name = section_str_table + sections[i].sh_name;
+
+        if (curr_section->sh_type != SHT_SYMTAB && curr_section->sh_type != SHT_DYNSYM)
+        {
+            i++;
+            continue;
+        }
+
+        print_symbol(curr_section, file, str_table, i, curr_section_name);
+        i++;
+    }
+
+}
+
+void print_symbol(Elf32_Shdr *curr_section, char *file, Elf32_Shdr *str_table,
+                     int section_index, char *section_name)
+{
+    int num_of_symbols = curr_section->sh_size / curr_section->sh_entsize;
+    Elf32_Sym curr_symbol;
+
+    int i=0;
+    while (i<num_of_symbols)
+    {
+        curr_symbol = *(Elf32_Sym *)(file + curr_section->sh_offset + i * curr_section->sh_entsize);
+        printf("[%2d] %-20x %-15d %-20s %-20s \n", i, curr_symbol.st_value, section_index, section_name, file+curr_symbol.st_name + str_table->sh_offset);
+        i++;
+    }
+
 }
 
 void print_sections(char* file, Elf32_Ehdr* header, Elf32_Shdr* sections)
