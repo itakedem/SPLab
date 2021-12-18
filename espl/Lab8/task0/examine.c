@@ -6,10 +6,13 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <elf.h>
+
 
 
 int map_file(char *path, char** file);
 magic_extractor(char* file, char* buffer);
+int calc_size(int fd);
 
 
 int main(int argc, char** argv)
@@ -28,7 +31,7 @@ int main(int argc, char** argv)
     if (map_file(file_path, &file) != 0)
         return 1;
 
-    magic_extractor(file, buffer)
+    magic_extractor(file, buffer);
     printf("Magic Numbers Are: %s\n", info_buf);
 
 
@@ -44,7 +47,7 @@ int map_file(char *path, char** file)
         return 1;
     }
 
-    int file_size = calc_file_size(fd);
+    int file_size = calc_size(fd);
     printf("File size: [%d Bytes]\n", file_size);
 
     *file = (char *)mmap(NULL, file_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
@@ -62,4 +65,11 @@ magic_extractor(char* file, char* buffer)
 {
     strncpy(buffer, file, 3);
     buffer[3] = 0;
+}
+
+int calc_size(int fd)
+{
+    struct stat st;
+    fstat(fd, &st);
+    return st.st_size;
 }
