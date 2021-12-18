@@ -1,0 +1,59 @@
+#include <sys/mman.h>
+#include <string.h>
+#include <stdio.h>
+
+
+int map_file(char *path, char** file);
+
+
+int main(int argc, char** argv)
+{
+    char *file = NULL;
+    Elf32_Ehdr header;
+    char buffer[100];
+
+    if (argc != 2)
+    {
+        printf("Wrong arg count - only one arg needed!\n");
+        return 1;
+    }
+
+    char *file_path = (char *)argv[1];
+    if (map_file(file_path, &mapped_file) != 0)
+        return 1;
+
+    magic_extractor(file, buffer)
+    printf("Magic Numbers Are: %s\n", info_buf);
+
+
+    return 0;
+}
+
+int map_file(char *path, char** file)
+{
+    int fd = open(file_path, O_RDONLY, 0);
+    if (fd == -1)
+    {
+        printf("Failed to open %s\n", path);
+        return 1;
+    }
+
+    int file_size = calc_file_size(fd);
+    printf("File size: [%d Bytes]\n", file_size);
+
+    *file = (char *)mmap(NULL, file_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+    if (*file == MAP_FAILED)
+    {
+        printf("Failed to Map %s\n", path);
+        return 1;
+    }
+
+
+    return 0;
+}
+
+magic_extractor(char* file, char* buffer)
+{
+    strncpy(buffer, file, 3);
+    buffer[3] = 0;
+}
