@@ -18,8 +18,8 @@ int calc_size(int fd);
 int main(int argc, char** argv)
 {
     char *file = NULL;
-    Elf32_Ehdr header;
     char buffer[100];
+    Elf32_Ehdr header;
 
     if (argc != 2)
     {
@@ -31,9 +31,12 @@ int main(int argc, char** argv)
     if (map_file(file_path, &file) != 0)
         return 1;
 
+    (*header) = *(Elf32_Ehdr *)&file;
+
     magic_extractor(file, buffer);
     printf("Magic Numbers Are: %d, %d, %d\n", buffer[0], buffer[1], buffer[2]);
 
+    printf("The Entry Point is: 0x%x\n", header->e_entry);
 
     return 0;
 }
