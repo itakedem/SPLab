@@ -24,7 +24,7 @@ int main(int argc, char** argv)
     }
 
     char *file_path = (char *)argv[1];
-    if (map_file(file_path, &mapped_file) != 0)
+    if (map_file(file_path, &file) != 0)
         return 1;
 
     magic_extractor(file, buffer)
