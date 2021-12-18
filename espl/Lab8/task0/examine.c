@@ -11,7 +11,7 @@
 
 
 int map_file(char *path, char** file);
-magic_extractor(char* file, char* buffer);
+void magic_extractor(char* file, char* buffer);
 int calc_size(int fd);
 
 
@@ -32,7 +32,7 @@ int main(int argc, char** argv)
         return 1;
 
     magic_extractor(file, buffer);
-    printf("Magic Numbers Are: %s\n", info_buf);
+    printf("Magic Numbers Are: %s\n", buffer);
 
 
     return 0;
@@ -61,7 +61,7 @@ int map_file(char *path, char** file)
     return 0;
 }
 
-magic_extractor(char* file, char* buffer)
+void magic_extractor(char* file, char* buffer)
 {
     strncpy(buffer, file, 3);
     buffer[3] = 0;
