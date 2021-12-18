@@ -19,6 +19,7 @@ void print_offset(Elf32_Ehdr* header);
 void print_sections(Elf32_Ehdr* header);
 Elf32_Shdr *load_section_headers(Elf32_Ehdr *header, char *mapped_file);
 void print_sections_sizes(Elf32_Ehdr* header);
+void print_shstrtab(Elf32_Ehdr *elf_header);
 
 
 int main(int argc, char** argv)
@@ -80,7 +81,7 @@ Elf32_Shdr *load_section_headers(Elf32_Ehdr *header, char *mapped_file)
         section_headers[i] = *(Elf32_Shdr *)(mapped_file + cur_offset);
     }
 
-    return sectin_headers;
+    return section_headers;
 }
 
 void magic_extractor(char* file, char* buffer)
@@ -132,12 +133,17 @@ void print_sections_sizes(Elf32_Ehdr* header, char* file)
 {
     Elf32_Shdr *sections = load_section_headers(header, file);
     int i = 0;
-    while (i < section_headers_num)
+    while (i < header->e_shnum)
     {
         printf("Section #[%d] size: [%d Bytes]\n", i, sections[i].sh_size);
         i++;
     }
     free(sections);
+}
+
+void print_shstrtab(Elf32_Ehdr *header)
+{
+    printf("Section header string table index: %d\n", header->e_shstrndx);
 }
 
 void print_elf(Elf32_Ehdr* header, char* file)
