@@ -13,6 +13,12 @@
 int map_file(char *path, char** file);
 void magic_extractor(char* file, char* buffer);
 int calc_size(int fd);
+void print_elf(Elf32_Ehdr* header);
+void print_scheme(Elf32_Ehdr* header);
+void print_offset(Elf32_Ehdr* header);
+void print_sections(Elf32_Ehdr* header);
+Elf32_Shdr *load_section_headers(Elf32_Ehdr *header, char *mapped_file);
+void print_sections_sizes(Elf32_Ehdr* header);
 
 
 int main(int argc, char** argv)
@@ -31,12 +37,10 @@ int main(int argc, char** argv)
     if (map_file(file_path, &file) != 0)
         return 1;
 
-    header = *(Elf32_Ehdr *)&file;
+    header = *(Elf32_Ehdr *)file;              /*extracting the header*/
 
     magic_extractor(file, buffer);
     printf("Magic Numbers Are: %d, %d, %d\n", buffer[0], buffer[1], buffer[2]);
-
-    printf("The Entry Point is: 0x%x\n", header.e_entry);
 
     return 0;
 }
@@ -64,6 +68,21 @@ int map_file(char *path, char** file)
     return 0;
 }
 
+Elf32_Shdr *load_section_headers(Elf32_Ehdr *header, char *mapped_file)
+{
+    Elf32_Shdr *section_headers = (Elf32_Shdr *)malloc(sizeof(Elf32_Shdr) * header->e_shnum);
+
+    int i;
+    int cur_offset;
+    for (i = 0; i < header->e_shnum; i++)
+    {
+        cur_offset = header->e_shoff + i * sizeof(Elf32_Shdr);
+        section_headers[i] = *(Elf32_Shdr *)(mapped_file + cur_offset);
+    }
+
+    return sectin_headers;
+}
+
 void magic_extractor(char* file, char* buffer)
 {
     strncpy(buffer, file + 1, 3);
@@ -75,4 +94,53 @@ int calc_size(int fd)
     struct stat st;
     fstat(fd, &st);
     return st.st_size;
+}
+
+void print_entry(Elf32_Ehdr* header)
+{
+    printf("The Entry Point is: 0x%x\n", header->e_entry);       /*check why wrong address*/
+}
+
+void print_scheme(Elf32_Ehdr* header)
+{
+    switch (header->e_ident[5])
+    {
+        case ELFDATA2LSB:
+            printf("Data: Two's complement, little-endian\n");
+            break;
+
+        case ELFDATA2MSB:
+            printf("Data: Two's complement, big-endian\n");
+            break;
+
+        default:
+            printf("Data: Unknown data format\n");
+    }
+}
+
+void print_offset(Elf32_Ehdr* header)
+{
+    printf("Start of section headers: %d (bytes into file)\n", header->e_shentsize);
+}
+
+void print_sections(Elf32_Ehdr* header)
+{
+    printf("Number of section headers: %d\n", header->e_shnum);
+}
+
+void print_sections_sizes(Elf32_Ehdr* header, char* file)
+{
+    Elf32_Shdr *sections = load_section_headers(header, file);
+    int i = 0;
+    while (i < section_headers_num)
+    {
+        printf("Section #[%d] size: [%d Bytes]\n", i, sections[i].sh_size);
+        i++;
+    }
+    free(sections);
+}
+
+void print_elf(Elf32_Ehdr* header, char* file)
+{
+
 }
