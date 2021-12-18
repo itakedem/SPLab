@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     magic_extractor(file, buffer);
     printf("Magic Numbers Are: %d, %d, %d\n", buffer[0], buffer[1], buffer[2]);
 
-    printf("The Entry Point is: 0x%x\n", header->e_entry);
+    printf("The Entry Point is: 0x%x\n", header.e_entry);
 
     return 0;
 }
