@@ -32,7 +32,7 @@ int main(int argc, char** argv)
         return 1;
 
     magic_extractor(file, buffer);
-    printf("Magic Numbers Are: %s\n", buffer);
+    printf("Magic Numbers Are: %d\n", buffer);
 
 
     return 0;
