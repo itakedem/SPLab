@@ -50,7 +50,7 @@ int map_file(char *path, char** file)
     int file_size = calc_size(fd);
     printf("File size: [%d Bytes]\n", file_size);
 
-    *file = (char *)mmap(NULL, file_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+    (*file) = (char *)mmap(NULL, file_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
     if (*file == MAP_FAILED)
     {
         printf("Failed to Map %s\n", path);
@@ -63,7 +63,7 @@ int map_file(char *path, char** file)
 
 void magic_extractor(char* file, char* buffer)
 {
-    strncpy(buffer, file, 3);
+    strncpy(buffer, file + 1, 3);
     buffer[3] = 0;
 }
 
