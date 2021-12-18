@@ -9,6 +9,7 @@
 
 
 int map_file(char *path, char** file);
+magic_extractor(char* file, char* buffer);
 
 
 int main(int argc, char** argv)
@@ -36,7 +37,7 @@ int main(int argc, char** argv)
 
 int map_file(char *path, char** file)
 {
-    int fd = open(file_path, O_RDONLY, 0);
+    int fd = open(path, O_RDONLY, 0);
     if (fd == -1)
     {
         printf("Failed to open %s\n", path);
