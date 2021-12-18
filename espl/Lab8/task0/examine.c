@@ -31,7 +31,7 @@ int main(int argc, char** argv)
     if (map_file(file_path, &file) != 0)
         return 1;
 
-    (*header) = *(Elf32_Ehdr *)&file;
+    header = *(Elf32_Ehdr *)&file;
 
     magic_extractor(file, buffer);
     printf("Magic Numbers Are: %d, %d, %d\n", buffer[0], buffer[1], buffer[2]);
