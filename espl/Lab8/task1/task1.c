@@ -108,6 +108,7 @@ int map_file(char *path, char** file)
         return 1;
     }
 
+    close(fd);
 
     return 0;
 }
