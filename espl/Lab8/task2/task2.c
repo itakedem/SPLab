@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 void print_symbols(char* file, Elf32_Ehdr* header, Elf32_Shdr* sections)
 {
     char *section_str_table = file + sections[header->e_shstrndx].sh_offset;
-    char *curr_section_name = NULL;
+    Elf32_Shdr *curr_section = NULL;
     Elf32_Shdr *str_table = NULL;
 
     int i=0;
