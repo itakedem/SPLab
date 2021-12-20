@@ -72,7 +72,6 @@ void print_symbols(char* file, Elf32_Ehdr* header, Elf32_Shdr* sections)
     {
 
         curr_section = &sections[i];
-        curr_section_name = section_str_table + sections[i].sh_name;
 
         if (curr_section->sh_type != SHT_SYMTAB && curr_section->sh_type != SHT_DYNSYM)
         {
