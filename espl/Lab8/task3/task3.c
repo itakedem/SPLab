@@ -1,48 +1,26 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <linux/limits.h>
-#include <unistd.h>
-#include <sys/wait.h> 
-#include <sys/types.h>
-#include <libgen.h>
+#include<stdio.h>
+#include<stdlib.h>
 
- int fib(int limit){
-   int a = 0;
-   int b = 1;
-   int printed = 0;
-   if (limit < 1) return -1;
-   while(a < limit){
-     printed = a;
-     a = b;
-     b = printed+b;
-   }
-   return printed;
- }
+// size of fib: 159
 
+int fib(int limit) {
+    int a0 = 1;
+    int a1 = 1;
+//    int a2[] = { 1, 1 };
+//    char a3 = 'a';
+//    char a4 = 'a';
+//     char a5 = 'a';
+//     char a6 = 'a';
 
+    for (int i = 0; a0 + a1 < limit; i++) {
+        a1 += a0;
+        a0 = a1 - a0;
+    }
+    return a1;
+}
 
-//int fib(int limit)
-//{
-//    int a = 0, b = 1, temp = 1, last_a = -1, i = 0;
-//
-//    while (a < limit) {
-//        i += 1;
-//        last_a = a;
-//        temp += a;
-//        a = b;
-//        b = temp;
-//    }
-//
-//    // just some garbage that does nothing to waste space here
-//    for (i = 0; i < limit; i++);
-//    for (i = 0; i < limit; i++);
-//
-//    return last_a;
-//}
-
-int main(int argc, char** argv) {
-  printf("%d\n",fib(atoi(argv[1])));
-  return 0;
+int main(int argc, char **argv) {
+    int limit = atoi(argv[1]);
+    fib(limit);
+    return 0;
 }
