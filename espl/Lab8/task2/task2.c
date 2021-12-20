@@ -14,8 +14,8 @@ Elf32_Shdr *load_section_headers(Elf32_Ehdr *header, char *mapped_file);
 void print_sections(char* file, Elf32_Ehdr* header, Elf32_Shdr* sections);
 int calc_size(int fd);
 void print_symbols(char* file, Elf32_Ehdr* header, Elf32_Shdr* sections);
-void print_symbol(Elf32_Shdr *curr_section, char *file, Elf32_Shdr *str_table,
-                     int section_index, char *secion_table, Elf32_Shdr* sections);
+void print_symbol(Elf32_Shdr *cur_section, char *mapped_file, Elf32_Shdr *str_table,
+                     int section_index, char *section_name);
 
 
 int main(int argc, char** argv)
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 void print_symbols(char* file, Elf32_Ehdr* header, Elf32_Shdr* sections)
 {
     char *section_str_table = file + sections[header->e_shstrndx].sh_offset;
-    Elf32_Shdr *curr_section = NULL;
+    char *curr_section_name = NULL;
     Elf32_Shdr *str_table = NULL;
 
     int i=0;
@@ -70,7 +70,7 @@ void print_symbols(char* file, Elf32_Ehdr* header, Elf32_Shdr* sections)
     i=0;
     while (i<header->e_shnum)
     {
-        
+
         curr_section = &sections[i];
         curr_section_name = section_str_table + sections[i].sh_name;
 
@@ -80,14 +80,14 @@ void print_symbols(char* file, Elf32_Ehdr* header, Elf32_Shdr* sections)
             continue;
         }
 
-        print_symbol(curr_section, file, str_table, i, section_str_table, sections);
+        print_symbol(curr_section, file, str_table, i, curr_section_name);
         i++;
     }
 
 }
 
 void print_symbol(Elf32_Shdr *curr_section, char *file, Elf32_Shdr *str_table,
-                     int section_index, char *secion_table, Elf32_Shdr* sections)
+                     int section_index, char *section_name)
 {
     int num_of_symbols = curr_section->sh_size / curr_section->sh_entsize;
     Elf32_Sym curr_symbol;
@@ -96,10 +96,7 @@ void print_symbol(Elf32_Shdr *curr_section, char *file, Elf32_Shdr *str_table,
     while (i<num_of_symbols)
     {
         curr_symbol = *(Elf32_Sym *)(file + curr_section->sh_offset + i * curr_section->sh_entsize);
-        if (curr_symbol.st_shndx == SHN_ABS)
-            printf("[%2d] %-20x %-15d %-20s %-20s \n", i, curr_symbol.st_value, curr_symbol.st_shndx, "ABS", file+curr_symbol.st_name + str_table->sh_offset);
-        else
-            printf("[%2d] %-20x %-15d %-20s %-20s \n", i, curr_symbol.st_value, curr_symbol.st_shndx, secion_table + sections[curr_symbol.st_shndx].sh_name, file+curr_symbol.st_name + str_table->sh_offset);
+        printf("[%2d] %-20x %-15d %-20s %-20s \n", i, curr_symbol.st_value, section_index, section_name, file+curr_symbol.st_name + str_table->sh_offset);
         i++;
     }
 
