@@ -43,5 +43,6 @@ int main(int argc, char **argv)
     res = fib(atoi(argv[1]));
     goodbye(atoi(argv[1]), res);
 
+    printf("%d", res);
     return 0;
 }
