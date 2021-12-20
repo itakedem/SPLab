@@ -7,7 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 
-// params: ./patch fib 1325 66 fibonacci 1613
+// params: ./patch task3 1325 66 fibonacci 1613
 int main(int argc, char **argv) {
     char *source_file = argv[1];
     int source_pos = atoi(argv[2]);
