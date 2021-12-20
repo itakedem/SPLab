@@ -2,7 +2,7 @@ all: task3 patch fibonacci
 	
 task3: task3.c
 	gcc -g -m32 -fno-pie -c -o task3.o task3.c
-	gcc -g -m32 task3.o -o fib
+	gcc -g -m32 task3.o -o task3
 
 fibonacci: fibonacci.c
 	gcc -g -m32 -fno-pie -c -o fibonacci.o fibonacci.c
