@@ -1,6 +1,7 @@
 import csv
 import collections
 import matplotlib.pyplot as plt
+import sys
 
 
 def task1a(data):
@@ -10,8 +11,15 @@ def task1a(data):
             countries.append(country.strip())
     countryCounters = collections.Counter(countries)
     print(f"Country : Number of Movies:")
-    for country in countryCounters:
-        print(f"{country} : {countryCounters[country]}")
+    originalSTD = sys.stdout
+    with open("movies.stats", "w") as file:
+        for country in countryCounters:
+            sys.stdout = file
+            print(f"{country} | {countryCounters[country]}")
+    sys.stdout = originalSTD
+
+
+
 
 def task1b(data: list, date, country):
     cleanData = list(filter(lambda row:  country in map(lambda x: x.strip(), row[5].split(','))  and int(row[2]) >= date, data))
