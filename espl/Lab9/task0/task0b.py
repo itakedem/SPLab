@@ -35,8 +35,9 @@ def getErrorList():
     cmd = cat[fileName] | sed1 | sed2 | sed3 | awk['NF'] | sort | uniq['-c']
     return cmd()
 
-print(f"students:\n{getStudentList()}\n\n")
-print(f"NumOfStundents:\n{getNumOfStundents()}\n\n")
-print(f"errors:\n{getErrorList()}\n\n")
-print(f"NumOfErrors:\n{getNumOfErrors()}\n\n")
+if __name__ == '__main__':
+    print(f"students:\n{getStudentList()}\n\n")
+    print(f"NumOfStundents:\n{getNumOfStundents()}\n\n")
+    print(f"errors:\n{getErrorList()}\n\n")
+    print(f"NumOfErrors:\n{getNumOfErrors()}\n\n")
 
