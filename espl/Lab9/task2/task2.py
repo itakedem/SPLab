@@ -1,6 +1,4 @@
 import csv
-import collections
-import matplotlib.pyplot as plt
 import sys
 
 def task2a(data):
