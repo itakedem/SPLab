@@ -89,6 +89,8 @@ def RunServer(host):
                             UDPServerSocket.sendto(massege.encode('utf-8'),addr)                            
             elif (li[0] == '4'):#send message to user
                 rows = cur.execute("SELECT adrr FROM users WHERE user_name = ?",(li[1],),).fetchall()
+                allUsers = cur.execute("SELECT * FROM users",).fetchall()
+                print(allUsers)
                 values = []
                 values = list(rows[0])
                 adrr_toSend = (addr[0],values[0])
