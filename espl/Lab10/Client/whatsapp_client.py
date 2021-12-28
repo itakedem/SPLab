@@ -7,6 +7,7 @@ Created on Wed Dec  8 13:03:13 2021
 """
 import queue
 import socket
+import subprocess
 import threading
 import sys
 import random
@@ -42,7 +43,8 @@ def RunClient(serverIP):
     UDPClientSocket.sendto(name.encode('utf-8'),server)
     recvPackets = queue.Queue()
     threading.Thread(target=RecvData,args=(UDPClientSocket,recvPackets)).start()
-    flag = False
+    isMounted = False
+    inServer = False
     print("What is your request:")
     while True:        
         request = input()
@@ -89,14 +91,27 @@ def RunClient(serverIP):
         #data = input()
         elif request == f"mount":
             data = '6'
-            flag = True
+            isMounted = True
             UDPClientSocket.sendto(data.encode('utf-8'), server)
             print(recvPackets.get()[0].rstrip())
-        elif flag == True:
+        elif isMounted and request == f"cd {host}:{port}:/Server":
+            print("Entered Server")
+            inServer = True
+        elif inServer == True :
             UDPClientSocket.sendto(request.encode('utf-8'), server)
             print(recvPackets.get()[0].rstrip())
         elif request == 'qqq':
             break
+        else:
+            cleanData = request.split(' ')
+            if (cleanData[0] == 'cd'):
+                os.chdir(cleanData[1])
+                print(os.getcwd())
+            else:
+                result, err = subprocess.Popen(cleanData,
+                                               stderr=subprocess.PIPE,
+                                               stdout=subprocess.PIPE).communicate()
+                print(result)
     #UDPClientSocket.sendto(data.encode('utf-8'),server)
     UDPClientSocket.close()
     os._exit(1)
