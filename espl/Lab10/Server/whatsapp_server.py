@@ -130,8 +130,10 @@ def RunServer(host):
                 UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), addr)
                 flag = True
             elif (flag):
-                result = subprocess.Popen(data.split(' '))
-                UDPServerSocket.sendto(result.stdout.read(), addr)
+                result, err = subprocess.Popen(data.split(' '),
+                                          stderr=subprocess.PIPE,
+                                          stdout=subprocess.PIPE).communicate()
+                UDPServerSocket.sendto(result, addr)
     UDPServerSocket.close()
     data_base.close()
 #Serevr Code Ends Here
