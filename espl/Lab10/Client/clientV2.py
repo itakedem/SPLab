@@ -34,6 +34,7 @@ def RecvData(sock,recvPackets):
         recvPackets.put((data.decode('utf-8'),addr))
 
 def RunClient(serverIP):
+    print(serverRoot)
     host = socket.gethostbyname(socket.gethostname())
     port = random.randint(6000,10000)
     print('Client IP->'+str(host)+' Port->'+str(port))
@@ -47,7 +48,9 @@ def RunClient(serverIP):
     isMounted = False
     inServer = False
     currPath = os.getcwd()
-    serverRoot = ""
+    temp = currPath.split('/')
+    temp[len(temp) - 1] = "Server"
+    serverRoot = '/'.join(temp)
 
 
     while True:
@@ -67,7 +70,7 @@ def RunClient(serverIP):
         elif isMounted and request == f"cd :/Server":
             print("Entered Server")
             UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
-            serverRoot = recvPackets.get()[0].rstrip()
+            recvPackets.get()[0].rstrip()
             inServer = True
         elif inServer:
             UDPClientSocket.sendto(request.encode('utf-8'), server)
@@ -77,6 +80,9 @@ def RunClient(serverIP):
             break
         else:
             if splitted[0] == 'cd':
+                if verifyInServer(serverRoot, f"{currPath}/{splitted[1]}") and not inServer:
+                    print("Unauthorized. Use cd :/Server to enter the server")
+                    continue
                 os.chdir(splitted[1])
                 print(os.getcwd())
             else:
@@ -90,8 +96,11 @@ def RunClient(serverIP):
         else:
             currPath = os.getcwd()
 
-        if inServer and not stillInServer(serverRoot, currPath):
-            print("Left server")
+        if isMounted and verifyInServer(serverRoot, currPath):
+            inServer = True
+        elif isMounted and not verifyInServer(serverRoot, currPath):
+            inServer = False
+        else:
             inServer = False
 
     UDPClientSocket.close()
@@ -100,7 +109,7 @@ def RunClient(serverIP):
 
 #mount private 127.0.0.1:6864:/Server
 
-def stillInServer(serverRoot: str, currPath: str):
+def verifyInServer(serverRoot: str, currPath: str):
     common = os.path.commonpath([serverRoot, currPath])
     return len(serverRoot) == len(common)
 
