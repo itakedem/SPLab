@@ -66,7 +66,8 @@ def RunClient(serverIP):
             inServer = True
         elif inServer:
             UDPClientSocket.sendto(request.encode('utf-8'), server)
-            print(recvPackets.get()[0].rstrip())
+            if splitted[0] != "cd":
+                print(recvPackets.get()[0].rstrip())
         elif request == 'qqq':
             break
         else:
