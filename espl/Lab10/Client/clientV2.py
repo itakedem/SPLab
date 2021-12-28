@@ -90,7 +90,7 @@ def RunClient(serverIP):
         else:
             currPath = os.getcwd()
 
-        if serverRoot not in Path(currPath).parents:
+        if serverRoot != Path(currPath) or serverRoot not in Path(currPath).parents:
             inServer = False
 
     #UDPClientSocket.sendto(data.encode('utf-8'),server)
