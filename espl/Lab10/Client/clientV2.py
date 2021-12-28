@@ -48,48 +48,7 @@ def RunClient(serverIP):
     print("What is your request:")
     while True:        
         request = input()
-        if request == 'new user':
-            print("Enter: user name, user id ")
-            user_name, user_id = input().split()
-            data = '0' + ' ' + user_name + ' ' + user_id
-            UDPClientSocket.sendto(data.encode('utf-8'),server)
-            print(recvPackets.get()[0])
-        elif request == 'remove user':
-            print("Enter: User name ")
-            user_name = input()
-            data = '1' + ' ' + user_name
-            UDPClientSocket.sendto(data.encode('utf-8'),server)
-            print(recvPackets.get())
-        elif request == 'connect to group':
-            print("Enter: group name ")
-            group_name = input()
-            data = '2' + ' ' + group_name
-            UDPClientSocket.sendto(data.encode('utf-8'),server)
-            print(recvPackets.get()[0])
-        elif request == 'disconnect from group':
-            print("Enter: Group name ")
-            group_name = input()
-            data = '3' + ' ' + group_name
-            UDPClientSocket.sendto(data.encode('utf-8'),server)
-            print(recvPackets.get()[0])
-        elif request == 'send message to user':
-            print("Enter: user name to whom to sent the messege")
-            user_name_toSend = input()  
-            print("Enter: The messege")
-            mssg = input()
-            data = '4' + ' ' + user_name_toSend + ' ' + mssg
-            UDPClientSocket.sendto(data.encode('utf-8'),server)
-            print(recvPackets.get()[0])
-        elif request == 'send message to group':
-            print("Enter: group name to sent the messege")
-            group_name_toSend = input()  
-            print("Enter: The messege")
-            mssg = input()
-            data = '5' + ' ' + group_name_toSend + ' ' + mssg
-            UDPClientSocket.sendto(data.encode('utf-8'),server)
-            print(recvPackets.get()[0])
-        #data = input()
-        elif request == f"mount":
+        if request == f"mount":
             data = '6'
             isMounted = True
             UDPClientSocket.sendto(data.encode('utf-8'), server)
@@ -97,7 +56,7 @@ def RunClient(serverIP):
         elif isMounted and request == f"cd {host}:{port}:/Server":
             print("Entered Server")
             inServer = True
-        elif inServer == True :
+        elif inServer:
             UDPClientSocket.sendto(request.encode('utf-8'), server)
             print(recvPackets.get()[0].rstrip())
         elif request == 'qqq':
