@@ -72,7 +72,6 @@ def RunClient(serverIP):
                 continue
             print("Entered Server")
             UDPClientSocket.sendto(("enterServer").encode('utf-8'), server)
-            recvPackets.get()[0].rstrip()
             inServer = True
         elif inServer:
             UDPClientSocket.sendto(request.encode('utf-8'), server)
