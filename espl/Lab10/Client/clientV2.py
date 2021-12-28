@@ -72,7 +72,8 @@ def RunClient(serverIP):
                                                stdout=subprocess.PIPE).communicate()
                 print(result.decode('utf-8'))
         if inServer:
-            currCmd = UDPClientSocket.sendto(("getcwd()").encode('utf-8'), server)
+            UDPClientSocket.sendto(("getcwd()").encode('utf-8'), server)
+            currCmd = recvPackets.get()[0].rstrip()
         else:
             currCmd = os.getcwd()
 
