@@ -52,9 +52,10 @@ def RunServer(host):
 
             elif isMounted:
                 cleanData = data.split(' ')
-                if (cleanData[0] == 'cd'):
-                    os.chdir(cleanData[1])
+                if data == 'cwd':
                     UDPServerSocket.sendto(os.getcwd().encode('utf-8'), addr)
+                elif (cleanData[0] == 'cd'):
+                    os.chdir(cleanData[1])
                 else:
                     result, err = subprocess.Popen(cleanData,
                                               stderr=subprocess.PIPE,
