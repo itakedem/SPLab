@@ -45,15 +45,14 @@ def RunClient(serverIP):
     threading.Thread(target=RecvData,args=(UDPClientSocket,recvPackets)).start()
     isMounted = False
     inServer = False
-    print("What is your request:")
+    print(os.getcwd(), end="$ ")
     while True:        
         request = input()
-        if request == f"mount":
-            data = '6'
+        if request == f"mount {serverIP}":
             isMounted = True
-            UDPClientSocket.sendto(data.encode('utf-8'), server)
+            UDPClientSocket.sendto(request.encode('utf-8'), server)
             print(recvPackets.get()[0].rstrip())
-        elif isMounted and request == f"cd {host}:{port}:/Server":
+        elif isMounted and request == f"cd {serverIP}:{port}:/Server":
             print("Entered Server")
             inServer = True
         elif inServer:

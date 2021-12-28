@@ -34,18 +34,19 @@ def RunServer(host):
     print('Server Running...')
 
     threading.Thread(target=RecvData,args=(UDPServerSocket,recvPackets)).start()
-    flag = False
+    users = {}
 
     while True:
         while not recvPackets.empty():
             data,addr = recvPackets.get()
             data = data.decode('utf-8')
             li = list(data.split(" "))
-            if (li[0] == '6'):
+            if (li[0] == f"mount {host}"):
+                users[addr] = True
                 print("Got mount command")
                 UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), addr)
                 flag = True
-            elif (flag):
+            elif (users.get(users[addr]) == True):
                 cleanData = data.split(' ')
                 if (cleanData[0] == 'cd'):
                     os.chdir(cleanData[1])
@@ -55,6 +56,9 @@ def RunServer(host):
                                               stderr=subprocess.PIPE,
                                               stdout=subprocess.PIPE).communicate()
                     UDPServerSocket.sendto(result, addr)
+            if li[0] == "unmount":
+                users[addr] = False
+                print(f"{addr} unmounted from server")
     UDPServerSocket.close()
     data_base.close()
 #Serevr Code Ends Here
