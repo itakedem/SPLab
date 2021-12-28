@@ -83,7 +83,6 @@ def RunClient(serverIP):
                     print("Unauthorized. Use cd :/Server to enter the server")
                     continue
                 os.chdir(splitted[1])
-                print(os.getcwd())
             else:
                 result, err = subprocess.Popen(splitted,
                                                stderr=subprocess.PIPE,
@@ -95,11 +94,8 @@ def RunClient(serverIP):
         else:
             currPath = os.getcwd()
 
-        if isMounted and verifyInServer(serverRoot, currPath):
-            inServer = True
-        elif isMounted and not verifyInServer(serverRoot, currPath):
-            inServer = False
-        else:
+        if inServer and not verifyInServer(serverRoot, currPath):
+            print("Left Server")
             inServer = False
 
     UDPClientSocket.close()
