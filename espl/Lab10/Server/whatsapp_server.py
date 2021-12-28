@@ -131,14 +131,14 @@ def RunServer(host):
                 flag = True
             elif (flag):
                 cleanData = result = data.split(' ')
-                result = ''
                 if (cleanData[0] == 'cd'):
-                    result = os.chdir(cleanData[1])
+                    os.chdir(cleanData[1])
+                    UDPServerSocket.sendto(os.getcwd().encode('utf-8'), addr)
                 else:
                     result, err = subprocess.Popen(data.split(' '),
                                               stderr=subprocess.PIPE,
                                               stdout=subprocess.PIPE).communicate()
-                UDPServerSocket.sendto(result, addr)
+                    UDPServerSocket.sendto(result, addr)
     UDPServerSocket.close()
     data_base.close()
 #Serevr Code Ends Here
