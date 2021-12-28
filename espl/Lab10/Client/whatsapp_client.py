@@ -5,6 +5,7 @@ Created on Wed Dec  8 13:03:13 2021
 
 @author: alex
 """
+import queue
 import socket
 import threading
 import sys
@@ -16,13 +17,10 @@ bufferSize = 1024
 
 
 #Client Code
-def ReceiveData(sock):
+def RecvData(sock,recvPackets):
     while True:
-        try:
-            data,addr = sock.recvfrom(bufferSize)
-            print(data.decode('utf-8'))
-        except:
-            pass
+        data,addr = sock.recvfrom(bufferSize)
+        recvPackets.put((data,addr))
 
 def RunClient(serverIP):
     host = socket.gethostbyname(socket.gethostname())
@@ -33,7 +31,8 @@ def RunClient(serverIP):
     UDPClientSocket.bind((host,port))
     name = 'make connection to the server'
     UDPClientSocket.sendto(name.encode('utf-8'),server)
-    threading.Thread(target=ReceiveData,args=(UDPClientSocket,)).start()
+    recvPackets = queue.Queue()
+    threading.Thread(target=RecvData,args=(UDPClientSocket,recvPackets)).start()
     flag = False
     print("What is your request:")
     while True:        
@@ -42,22 +41,26 @@ def RunClient(serverIP):
             print("Enter: user name, user id ")
             user_name, user_id = input().split()
             data = '0' + ' ' + user_name + ' ' + user_id
-            UDPClientSocket.sendto(data.encode('utf-8'),server)           
+            UDPClientSocket.sendto(data.encode('utf-8'),server)
+            print(recvPackets.get())
         elif request == 'remove user':
             print("Enter: User name ")
             user_name = input()
             data = '1' + ' ' + user_name
-            UDPClientSocket.sendto(data.encode('utf-8'),server)            
+            UDPClientSocket.sendto(data.encode('utf-8'),server)
+            print(recvPackets.get())
         elif request == 'connect to group':
             print("Enter: group name ")
             group_name = input()
             data = '2' + ' ' + group_name
             UDPClientSocket.sendto(data.encode('utf-8'),server)
+            print(recvPackets.get())
         elif request == 'disconnect from group':
             print("Enter: Group name ")
             group_name = input()
             data = '3' + ' ' + group_name
             UDPClientSocket.sendto(data.encode('utf-8'),server)
+            print(recvPackets.get())
         elif request == 'send message to user':
             print("Enter: user name to whom to sent the messege")
             user_name_toSend = input()  
@@ -65,23 +68,24 @@ def RunClient(serverIP):
             mssg = input()
             data = '4' + ' ' + user_name_toSend + ' ' + mssg
             UDPClientSocket.sendto(data.encode('utf-8'),server)
+            print(recvPackets.get())
         elif request == 'send message to group':
             print("Enter: group name to sent the messege")
             group_name_toSend = input()  
             print("Enter: The messege")
             mssg = input()
             data = '5' + ' ' + group_name_toSend + ' ' + mssg
-            UDPClientSocket.sendto(data.encode('utf-8'),server)        
+            UDPClientSocket.sendto(data.encode('utf-8'),server)
+            print(recvPackets.get())
         #data = input()
         elif request == f"mount":
             data = '6'
             flag = True
             UDPClientSocket.sendto(data.encode('utf-8'), server)
+            print(recvPackets.get())
         elif flag == True:
             UDPClientSocket.sendto(request.encode('utf-8'), server)
-            # ans = UDPClientSocket.recv(1024)
-            # print("CHECK:")
-            # print(ans.decode('utf-8'))
+            print(recvPackets.get())
         elif request == 'qqq':
             break
     #UDPClientSocket.sendto(data.encode('utf-8'),server)
