@@ -127,6 +127,7 @@ def RunServer(host):
                     UDPServerSocket.sendto(massege.encode('utf-8'),addr)
             elif (li[0] == '6'):
                 print("Got mount command")
+                UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), addr)
                 flag = True
             elif (flag):
                 result = subprocess.run(data.split(' '), capture_output=True, text=True, encoding="utf-8")
