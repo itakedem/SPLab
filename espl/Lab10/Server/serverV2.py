@@ -35,6 +35,7 @@ def RunServer(host):
 
     threading.Thread(target=RecvData,args=(UDPServerSocket,recvPackets)).start()
     mountedUsers = {}
+    rootPath = os.getcwd()
 
     while True:
         while not recvPackets.empty():
@@ -42,8 +43,6 @@ def RunServer(host):
             print(f"Received Data is {data}")
             addr = fullAddr[0]
             isMounted = True if mountedUsers.get(addr) is True else False
-            print(f"isMounted = {isMounted}")
-            print(mountedUsers)
             data = data.decode('utf-8')
             if (data == f"mount {host}"):
                 mountedUsers[addr] = True
@@ -69,6 +68,7 @@ def RunServer(host):
     UDPServerSocket.close()
     data_base.close()
 #Serevr Code Ends Here
+
 
 def create_connection(db_file):
     """ create a database connection to the SQLite database

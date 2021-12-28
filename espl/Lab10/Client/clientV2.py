@@ -45,9 +45,10 @@ def RunClient(serverIP):
     threading.Thread(target=RecvData,args=(UDPClientSocket,recvPackets)).start()
     isMounted = False
     inServer = False
-    currCmd = os.getcwd()
+    currPath = os.getcwd()
+    clientRoot = os.getcwd()
     while True:
-        print(currCmd, end="$ ")
+        print(currPath, end="$ ")
         request = input()
         if request == f"mount {serverIP}":
             isMounted = True
@@ -76,9 +77,12 @@ def RunClient(serverIP):
                 print(result.decode('utf-8'))
         if inServer:
             UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
-            currCmd = recvPackets.get()[0].rstrip()
+            currPath = recvPackets.get()[0].rstrip()
         else:
-            currCmd = os.getcwd()
+            currPath = os.getcwd()
+
+        if currPath == clientRoot:
+            inServer = False
 
     #UDPClientSocket.sendto(data.encode('utf-8'),server)
     UDPClientSocket.close()
