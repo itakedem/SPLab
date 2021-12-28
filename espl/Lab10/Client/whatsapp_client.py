@@ -73,7 +73,7 @@ def RunClient(serverIP):
             data = '5' + ' ' + group_name_toSend + ' ' + mssg
             UDPClientSocket.sendto(data.encode('utf-8'),server)        
         #data = input()
-        elif request == f"mount private {host}:{port}:/Server":
+        elif request == f"mount":
             data = '6'
             flag = True
             UDPClientSocket.sendto(data.encode('utf-8'), server)
@@ -85,6 +85,8 @@ def RunClient(serverIP):
     UDPClientSocket.close()
     os._exit(1)
 #Client Code Ends Here
+
+#mount private 127.0.0.1:6864:/Server
 
 
 
