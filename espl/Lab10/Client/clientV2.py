@@ -76,7 +76,9 @@ def RunClient(serverIP):
         elif inServer:
             UDPClientSocket.sendto(request.encode('utf-8'), server)
             if splitted[0] != "cd":
-                print(recvPackets.get()[0].rstrip())
+                result = recvPackets.get()[0].rstrip()
+                if len(result) > 0:
+                    print(result)
             else:
                 newPath = recvPackets.get()[0].rstrip()
                 inServer = verifyInServer(serverRoot, newPath)
@@ -93,6 +95,7 @@ def RunClient(serverIP):
                                                stderr=subprocess.PIPE,
                                                stdout=subprocess.PIPE).communicate()
                 print(result.decode('utf-8').rstrip())
+
         if inServer:
             UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
             currPath = recvPackets.get()[0].rstrip()
