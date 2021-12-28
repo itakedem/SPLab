@@ -132,7 +132,7 @@ def RunServer(host):
             elif (flag):
                 cleanData = result = data.split(' ')
                 result = ''
-                if (data[0] == 'cd'):
+                if (cleanData[0] == 'cd'):
                     result = os.chdir(data[1])
                 else:
                     result, err = subprocess.Popen(data.split(' '),
