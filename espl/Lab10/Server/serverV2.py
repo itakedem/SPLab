@@ -46,7 +46,7 @@ def RunServer(host):
                 print("Got mount command")
                 UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), addr)
                 flag = True
-            elif (users.get(users[addr[0]]) == True):
+            elif (users.get(users[addr[0]]) is not None and users.get(users[addr[0]]) == True):
                 cleanData = data.split(' ')
                 if (cleanData[0] == 'cd'):
                     os.chdir(cleanData[1])
