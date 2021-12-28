@@ -54,7 +54,6 @@ def RunClient(serverIP):
             UDPClientSocket.sendto(request.encode('utf-8'), server)
             print(recvPackets.get()[0].rstrip())
         elif isMounted and request == f"cd :/Server":
-            UDPClientSocket.sendto("1".encode('utf-8'), server)
             print("Entered Server")
             inServer = True
         elif inServer:
