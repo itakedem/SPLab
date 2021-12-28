@@ -53,6 +53,9 @@ def RunClient(serverIP):
             isMounted = True
             UDPClientSocket.sendto(request.encode('utf-8'), server)
             print(recvPackets.get()[0].rstrip())
+        elif request == "unmount":
+            isMounted = False
+            print("Unmounted from server")
         elif isMounted and request == f"cd :/Server":
             print("Entered Server")
             inServer = True

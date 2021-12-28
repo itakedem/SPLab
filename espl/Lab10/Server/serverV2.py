@@ -49,7 +49,6 @@ def RunServer(host):
             elif isMounted and data == "unmount":
                 mountedUsers[addr] = False
                 print(f"{addr} unmounted from server")
-
             elif isMounted:
                 cleanData = data.split(' ')
                 if data == 'cwd':
@@ -62,8 +61,6 @@ def RunServer(host):
                                               stderr=subprocess.PIPE,
                                               stdout=subprocess.PIPE).communicate()
                     UDPServerSocket.sendto(result, addr)
-            else:
-                UDPServerSocket.sendto("There was an error!".encode('utf-8'), addr)
 
     UDPServerSocket.close()
     data_base.close()
