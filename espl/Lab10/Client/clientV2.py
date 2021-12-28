@@ -34,7 +34,6 @@ def RecvData(sock,recvPackets):
         recvPackets.put((data.decode('utf-8'),addr))
 
 def RunClient(serverIP):
-    print(serverRoot)
     host = socket.gethostbyname(socket.gethostname())
     port = random.randint(6000,10000)
     print('Client IP->'+str(host)+' Port->'+str(port))
