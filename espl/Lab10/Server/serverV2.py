@@ -44,7 +44,7 @@ def RunServer(host):
             li = list(data.split(" "))
             if (data == f"mount {host}"):
                 mountedUsers[addr] = True
-                print("Got mount command")
+                print(f"{addr} mounted the server")
                 UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), addr)
             elif isMounted and li[0] == "unmount":
                 mountedUsers[addr] = False
@@ -53,7 +53,8 @@ def RunServer(host):
             elif isMounted:
                 cleanData = data.split(' ')
                 if data == 'cwd':
-                    UDPServerSocket.sendto(os.getcwd().encode('utf-8'), addr)
+                    loc = os.getcwd()
+                    UDPServerSocket.sendto(loc.encode('utf-8'), addr)
                 elif (cleanData[0] == 'cd'):
                     os.chdir(cleanData[1])
                 else:
@@ -61,6 +62,9 @@ def RunServer(host):
                                               stderr=subprocess.PIPE,
                                               stdout=subprocess.PIPE).communicate()
                     UDPServerSocket.sendto(result, addr)
+            else:
+                UDPServerSocket.sendto("There was an error!".encode('utf-8'), addr)
+
     UDPServerSocket.close()
     data_base.close()
 #Serevr Code Ends Here
