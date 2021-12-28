@@ -42,7 +42,6 @@ def RunServer(host):
             addr = fullAddr[0]
             isMounted = True if mountedUsers.get(addr) is True else False
             data = data.decode('utf-8')
-            print(f"Received Data is {data}")
             if (data == f"mount {host}"):
                 mountedUsers[addr] = True
                 print(f"{addr} mounted the server")
@@ -56,7 +55,6 @@ def RunServer(host):
                     loc = os.getcwd()
                     UDPServerSocket.sendto(loc.encode('utf-8'), fullAddr)
                 elif (splitted[0] == 'cd'):
-                    print(f"Changing dir from {os.getcwd()} to {splitted[1]}")
                     os.chdir(os.getcwd() + f"/{splitted[1]}")
                 else:
                     result, err = subprocess.Popen(splitted,
