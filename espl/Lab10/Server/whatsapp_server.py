@@ -133,7 +133,7 @@ def RunServer(host):
                 cleanData = result = data.split(' ')
                 result = ''
                 if (cleanData[0] == 'cd'):
-                    result = os.chdir(data[1])
+                    result = os.chdir(cleanData[1])
                 else:
                     result, err = subprocess.Popen(data.split(' '),
                                               stderr=subprocess.PIPE,
