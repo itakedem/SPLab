@@ -39,6 +39,7 @@ def RunServer(host):
     while True:
         while not recvPackets.empty():
             data,addr = recvPackets.get()
+            isMounted = True if users.get(str(addr[0])) is True else False
             data = data.decode('utf-8')
             li = list(data.split(" "))
             if (li[0] == f"mount {host}"):
@@ -46,7 +47,11 @@ def RunServer(host):
                 print("Got mount command")
                 UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), addr)
                 flag = True
-            elif (users.get(users[addr[0]]) is not None and users.get(users[addr[0]]) == True):
+            elif isMounted and li[0] == "unmount":
+                users[addr] = False
+                print(f"{addr} unmounted from server")
+
+            elif isMounted:
                 cleanData = data.split(' ')
                 if (cleanData[0] == 'cd'):
                     os.chdir(cleanData[1])
@@ -56,9 +61,6 @@ def RunServer(host):
                                               stderr=subprocess.PIPE,
                                               stdout=subprocess.PIPE).communicate()
                     UDPServerSocket.sendto(result, addr)
-            if li[0] == "unmount":
-                users[addr] = False
-                print(f"{addr} unmounted from server")
     UDPServerSocket.close()
     data_base.close()
 #Serevr Code Ends Here
