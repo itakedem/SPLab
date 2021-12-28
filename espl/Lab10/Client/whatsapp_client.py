@@ -16,11 +16,20 @@ import os
 bufferSize = 1024
 
 
+#Original Code
+def ReceiveData(sock):
+    while True:
+        try:
+            data,addr = sock.recvfrom(bufferSize)
+            print(data.decode('utf-8'))
+        except:
+            pass
+
 #Client Code
 def RecvData(sock,recvPackets):
     while True:
         data, addr = sock.recvfrom(bufferSize)
-        recvPackets.put((data,addr))
+        recvPackets.put((data.decode('utf-8'),addr))
 
 def RunClient(serverIP):
     host = socket.gethostbyname(socket.gethostname())
