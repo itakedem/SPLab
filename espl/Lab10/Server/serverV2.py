@@ -41,7 +41,7 @@ def RunServer(host):
             data, fullAddr = recvPackets.get()
             print(f"Received Data is {data}")
             addr = fullAddr[0]
-            isMounted = True if mountedUsers.get(str(addr[0])) is True else False
+            isMounted = True if mountedUsers.get(addr) is True else False
             print(f"isMounted = {isMounted}")
             print(mountedUsers)
             data = data.decode('utf-8')
