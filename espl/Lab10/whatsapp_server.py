@@ -5,12 +5,14 @@ Created on Fri Dec  3 13:05:25 2021
 
 @author: alex
 """
+import os
 import socket
 import threading
 import queue
 import sys
 import sqlite3
 from sqlite3 import Error
+import subprocess
 
 bufferSize = 1024
 
@@ -40,6 +42,7 @@ def RunServer(host):
     print('Server Running...')
 
     threading.Thread(target=RecvData,args=(UDPServerSocket,recvPackets)).start()
+    flag = False
 
     while True:
         while not recvPackets.empty():
@@ -55,7 +58,7 @@ def RunServer(host):
                 cur.execute("DELETE FROM users WHERE adrr = ?",(addr[1],))
                 data_base.commit() 
                 massege = "SERVER: Done"
-                UDPServerSocket.sendto(massege.encode('utf-8'),addr)                                      
+                UDPServerSocket.sendto(massege.encode('utf-8'),addr)
             elif (li[0] == '2'):#connect to group
                 rows = []
                 rows = cur.execute("SELECT group_name, user_addr FROM groups WHERE group_name = ?",(li[1],),).fetchall()                
@@ -86,7 +89,7 @@ def RunServer(host):
                             cur.execute("DELETE FROM groups WHERE user_addr = ?",(addr[1],))
                             data_base.commit()
                             massege = "SERVER: Done"
-                            UDPServerSocket.sendto(massege.encode('utf-8'),addr)                            
+                            UDPServerSocket.sendto(massege.encode('utf-8'),addr)
             elif (li[0] == '4'):#send message to user
                 rows = cur.execute("SELECT adrr FROM users WHERE user_name = ?",(li[1],),).fetchall()
                 values = []
@@ -122,10 +125,18 @@ def RunServer(host):
                 else:
                     massege = "SERVER: Your not in the group, please join first"
                     UDPServerSocket.sendto(massege.encode('utf-8'),addr)
+            elif (li[0] == '6'):
+                print("Got mount command")
+                flag = True
+            elif (flag):
+                location = os.getcwd()
+                cmd = str(data).split(' ')
+                
+
+
     UDPServerSocket.close()
     data_base.close()
 #Serevr Code Ends Here
-
 
 def create_connection(db_file):
     """ create a database connection to the SQLite database
