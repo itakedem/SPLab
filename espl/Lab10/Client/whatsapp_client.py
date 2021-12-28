@@ -93,7 +93,6 @@ def RunClient(serverIP):
             UDPClientSocket.sendto(data.encode('utf-8'), server)
             print(recvPackets.get()[0].rstrip())
         elif flag == True:
-            print(recvPackets.get()[0].rstrip(), end="$ ")
             UDPClientSocket.sendto(request.encode('utf-8'), server)
             print(recvPackets.get()[0].rstrip(), end="$ ")
         elif request == 'qqq':
