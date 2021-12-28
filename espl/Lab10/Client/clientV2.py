@@ -122,13 +122,7 @@ def verifyInServer(serverRoot: str, currPath: str):
     common = os.path.commonpath([serverRoot, currPath])
     return len(serverRoot) == len(common)
 
-def buildTargetPath(originalPath: str, targetPath: str):
-    splitOriginal = originalPath.split('/')
-    splitTarget = targetPath.split('/')
-    target = ""
-    for i in range(len(splitTarget)):
-        if i < len(splitOriginal):
-            target += splitTarget[i]
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 2:
