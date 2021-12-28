@@ -45,7 +45,7 @@ def RunServer(host):
             if (data == f"mount {host}"):
                 mountedUsers[addr] = True
                 print(f"{addr} mounted the server")
-                UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), addr)
+                UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), fullAddr)
             elif isMounted and data == "unmount":
                 mountedUsers[addr] = False
                 print(f"{addr} unmounted from server")
@@ -53,14 +53,14 @@ def RunServer(host):
                 cleanData = data.split(' ')
                 if data == 'cwd':
                     loc = os.getcwd()
-                    UDPServerSocket.sendto(loc.encode('utf-8'), addr)
+                    UDPServerSocket.sendto(loc.encode('utf-8'), fullAddr)
                 elif (cleanData[0] == 'cd'):
                     os.chdir(cleanData[1])
                 else:
                     result, err = subprocess.Popen(cleanData,
                                               stderr=subprocess.PIPE,
                                               stdout=subprocess.PIPE).communicate()
-                    UDPServerSocket.sendto(result, addr)
+                    UDPServerSocket.sendto(result, fullAddr)
 
     UDPServerSocket.close()
     data_base.close()
