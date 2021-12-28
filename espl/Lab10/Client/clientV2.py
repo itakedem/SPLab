@@ -57,7 +57,7 @@ def RunClient(serverIP):
                 UDPClientSocket.sendto(request.encode('utf-8'), server)
                 print(recvPackets.get()[0].rstrip())
             else:
-                print("Wrong mounting command")
+                print("Not enough arguments for mount")
         elif request == "unmount":
             isMounted = False
             print("Unmounted from server")

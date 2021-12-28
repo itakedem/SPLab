@@ -56,7 +56,7 @@ def RunServer(host):
                     loc = os.getcwd()
                     UDPServerSocket.sendto(loc.encode('utf-8'), fullAddr)
                 elif (splitted[0] == 'cd'):
-                    print(f"Changing dir to {splitted[1]}")
+                    print(f"Changing dir from {os.getcwd()} to {splitted[1]}")
                     os.chdir(splitted[1])
                 else:
                     result, err = subprocess.Popen(splitted,
