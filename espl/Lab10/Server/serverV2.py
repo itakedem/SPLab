@@ -38,10 +38,12 @@ def RunServer(host):
 
     while True:
         while not recvPackets.empty():
-            data,fullAddr = recvPackets.get()
+            data, fullAddr = recvPackets.get()
             print(f"Received Data is {data}")
             addr = fullAddr[0]
             isMounted = True if mountedUsers.get(str(addr[0])) is True else False
+            print(f"isMounted = {isMounted}")
+            print(mountedUsers)
             data = data.decode('utf-8')
             if (data == f"mount {host}"):
                 mountedUsers[addr] = True
