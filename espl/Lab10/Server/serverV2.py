@@ -39,6 +39,7 @@ def RunServer(host):
     while True:
         while not recvPackets.empty():
             data,fullAddr = recvPackets.get()
+            print(f"Received Data is {data}")
             addr = fullAddr[0]
             isMounted = True if mountedUsers.get(str(addr[0])) is True else False
             data = data.decode('utf-8')
@@ -53,6 +54,7 @@ def RunServer(host):
                 cleanData = data.split(' ')
                 if cleanData[0] == 'cwd':
                     loc = os.getcwd()
+                    print(f"Sending Path: {loc}")
                     UDPServerSocket.sendto(loc.encode('utf-8'), fullAddr)
                 elif (cleanData[0] == 'cd'):
                     os.chdir(cleanData[1])
