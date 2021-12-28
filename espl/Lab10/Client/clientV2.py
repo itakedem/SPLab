@@ -47,7 +47,7 @@ def RunClient(serverIP):
     isMounted = False
     inServer = False
     currPath = os.getcwd()
-    serverRoot = Path()
+    serverRoot = ""
 
 
     while True:
@@ -67,7 +67,7 @@ def RunClient(serverIP):
         elif isMounted and request == f"cd :/Server":
             print("Entered Server")
             UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
-            serverRoot = Path(recvPackets.get()[0].rstrip())
+            serverRoot = recvPackets.get()[0].rstrip()
             inServer = True
         elif inServer:
             UDPClientSocket.sendto(request.encode('utf-8'), server)
@@ -90,18 +90,19 @@ def RunClient(serverIP):
         else:
             currPath = os.getcwd()
 
-        if inServer:
-            if serverRoot.root != currPath and serverRoot not in Path(currPath).parents:
-                inServer = False
+        if inServer and not stillInServer(serverRoot, currPath):
+            print("Left server")
+            inServer = False
 
-    #UDPClientSocket.sendto(data.encode('utf-8'),server)
     UDPClientSocket.close()
     os._exit(1)
 #Client Code Ends Here
 
 #mount private 127.0.0.1:6864:/Server
 
-
+def stillInServer(serverRoot: str, currPath: str):
+    common = os.path.commonpath([serverRoot, currPath])
+    return len(serverRoot) == len(common)
 
 
 if __name__ == '__main__':
