@@ -50,10 +50,14 @@ def RunClient(serverIP):
     while True:
         print(currPath, end="$ ")
         request = input()
-        if request == f"mount {serverIP}":
-            isMounted = True
-            UDPClientSocket.sendto(request.encode('utf-8'), server)
-            print(recvPackets.get()[0].rstrip())
+        splitted = request.split(' ')
+        if splitted[0] == f"mount":
+            if len(splitted) == 2:
+                isMounted = True
+                UDPClientSocket.sendto(request.encode('utf-8'), server)
+                print(recvPackets.get()[0].rstrip())
+            else:
+                print("Wrong mounting command")
         elif request == "unmount":
             isMounted = False
             print("Unmounted from server")
@@ -66,12 +70,11 @@ def RunClient(serverIP):
         elif request == 'qqq':
             break
         else:
-            cleanData = request.split(' ')
-            if (cleanData[0] == 'cd'):
-                os.chdir(cleanData[1])
+            if splitted[0] == 'cd':
+                os.chdir(splitted[1])
                 print(os.getcwd())
             else:
-                result, err = subprocess.Popen(cleanData,
+                result, err = subprocess.Popen(splitted,
                                                stderr=subprocess.PIPE,
                                                stdout=subprocess.PIPE).communicate()
                 print(result.decode('utf-8'))

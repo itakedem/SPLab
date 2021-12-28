@@ -35,15 +35,14 @@ def RunServer(host):
 
     threading.Thread(target=RecvData,args=(UDPServerSocket,recvPackets)).start()
     mountedUsers = {}
-    rootPath = os.getcwd()
 
     while True:
         while not recvPackets.empty():
             data, fullAddr = recvPackets.get()
-            print(f"Received Data is {data}")
             addr = fullAddr[0]
             isMounted = True if mountedUsers.get(addr) is True else False
             data = data.decode('utf-8')
+            print(f"Received Data is {data}")
             if (data == f"mount {host}"):
                 mountedUsers[addr] = True
                 print(f"{addr} mounted the server")
@@ -52,38 +51,21 @@ def RunServer(host):
                 mountedUsers[addr] = False
                 print(f"{addr} unmounted from server")
             elif isMounted:
-                cleanData = data.split(' ')
-                if cleanData[0] == 'cwd':
+                splitted = data.split(' ')
+                if splitted[0] == 'cwd':
                     loc = os.getcwd()
-                    print(f"Sending Path: {loc}")
                     UDPServerSocket.sendto(loc.encode('utf-8'), fullAddr)
-                elif (cleanData[0] == 'cd'):
-                    os.chdir(cleanData[1])
+                elif (splitted[0] == 'cd'):
+                    print(f"Changing dir to {splitted[1]}")
+                    os.chdir(splitted[1])
                 else:
-                    result, err = subprocess.Popen(cleanData,
+                    result, err = subprocess.Popen(splitted,
                                               stderr=subprocess.PIPE,
                                               stdout=subprocess.PIPE).communicate()
                     UDPServerSocket.sendto(result, fullAddr)
 
     UDPServerSocket.close()
-    data_base.close()
 #Serevr Code Ends Here
-
-
-def create_connection(db_file):
-    """ create a database connection to the SQLite database
-        specified by db_file
-    :param db_file: database file
-    :return: Connection object or None
-    """
-    conn = None
-    try:
-        conn = sqlite3.connect(db_file)
-        return conn
-    except Error as e:
-        print(e)
-
-    return conn
 
 
 if __name__ == '__main__':
