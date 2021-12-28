@@ -34,21 +34,20 @@ def RunServer(host):
     print('Server Running...')
 
     threading.Thread(target=RecvData,args=(UDPServerSocket,recvPackets)).start()
-    users = {}
+    mountedUsers = {}
 
     while True:
         while not recvPackets.empty():
             data,addr = recvPackets.get()
-            isMounted = True if users.get(str(addr[0])) is True else False
+            isMounted = True if mountedUsers.get(str(addr[0])) is True else False
             data = data.decode('utf-8')
             li = list(data.split(" "))
             if (data == f"mount {host}"):
-                users[addr] = True
+                mountedUsers[addr] = True
                 print("Got mount command")
                 UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), addr)
-                flag = True
             elif isMounted and li[0] == "unmount":
-                users[addr] = False
+                mountedUsers[addr] = False
                 print(f"{addr} unmounted from server")
 
             elif isMounted:
