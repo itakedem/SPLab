@@ -12,6 +12,7 @@ import threading
 import sys
 import random
 import os
+from pathlib import Path
 
 
 bufferSize = 1024
@@ -46,7 +47,9 @@ def RunClient(serverIP):
     isMounted = False
     inServer = False
     currPath = os.getcwd()
-    clientRoot = os.getcwd()
+    serverRoot = ''
+
+
     while True:
         print(currPath, end="$ ")
         request = input()
@@ -63,6 +66,8 @@ def RunClient(serverIP):
             print("Unmounted from server")
         elif isMounted and request == f"cd :/Server":
             print("Entered Server")
+            UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
+            serverRoot = Path(recvPackets.get()[0].rstrip())
             inServer = True
         elif inServer:
             UDPClientSocket.sendto(request.encode('utf-8'), server)
@@ -85,7 +90,7 @@ def RunClient(serverIP):
         else:
             currPath = os.getcwd()
 
-        if currPath == clientRoot:
+        if serverRoot not in Path(currPath).parents:
             inServer = False
 
     #UDPClientSocket.sendto(data.encode('utf-8'),server)
