@@ -79,7 +79,7 @@ def RunClient(serverIP):
             UDPClientSocket.sendto(data.encode('utf-8'), server)
         elif flag == True:
             UDPClientSocket.sendto(request.encode('utf-8'), server)
-            ans = UDPClientSocket.recvfrom(1024)
+            ans, addr = UDPClientSocket.recvfrom(1024)
             print(fr"CHECK = {str(ans)}")
         elif request == 'qqq':
             break
