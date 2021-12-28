@@ -78,6 +78,9 @@ def RunClient(serverIP):
             UDPClientSocket.sendto(request.encode('utf-8'), server)
             if splitted[0] != "cd":
                 print(recvPackets.get()[0].rstrip())
+            else:
+                newPath = recvPackets.get()[0].rstrip()
+                inServer = verifyInServer(serverRoot, newPath)
         elif request == 'qqq':
             break
         else:

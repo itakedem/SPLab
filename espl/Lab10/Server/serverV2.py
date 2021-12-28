@@ -35,6 +35,7 @@ def RunServer(host):
 
     threading.Thread(target=RecvData,args=(UDPServerSocket,recvPackets)).start()
     mountedUsers = {}
+    serverRoot = os.getcwd()
 
     while True:
         while not recvPackets.empty():
@@ -55,7 +56,11 @@ def RunServer(host):
                     loc = os.getcwd()
                     UDPServerSocket.sendto(loc.encode('utf-8'), fullAddr)
                 elif (splitted[0] == 'cd'):
-                    os.chdir(os.getcwd() + f"/{splitted[1]}")
+                    currPath = os.getcwd()
+                    os.chdir(currPath + f"/{splitted[1]}")
+                    UDPServerSocket.sendto(currPath.encode('utf-8'), fullAddr)
+                    if not verifyInServer(serverRoot, os.getcwd()):
+                        os.chdir(serverRoot)
                 else:
                     result, err = subprocess.Popen(splitted,
                                               stderr=subprocess.PIPE,
@@ -63,7 +68,11 @@ def RunServer(host):
                     UDPServerSocket.sendto(result, fullAddr)
 
     UDPServerSocket.close()
-#Serevr Code Ends Here
+#Server Code Ends Here
+
+def verifyInServer(serverRoot: str, currPath: str):
+    common = os.path.commonpath([serverRoot, currPath])
+    return len(serverRoot) == len(common)
 
 
 if __name__ == '__main__':
