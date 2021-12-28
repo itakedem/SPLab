@@ -111,7 +111,7 @@ def RunClient(serverIP):
                 result, err = subprocess.Popen(cleanData,
                                                stderr=subprocess.PIPE,
                                                stdout=subprocess.PIPE).communicate()
-                print(result)
+                print(result.decode('utf-8'))
     #UDPClientSocket.sendto(data.encode('utf-8'),server)
     UDPClientSocket.close()
     os._exit(1)
