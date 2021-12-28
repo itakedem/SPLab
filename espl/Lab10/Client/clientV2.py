@@ -68,6 +68,7 @@ def RunClient(serverIP):
             print("Entered Server")
             UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
             serverRoot = Path(recvPackets.get()[0].rstrip())
+            print(f"serverRoot = {serverRoot}")
             inServer = True
         elif inServer:
             UDPClientSocket.sendto(request.encode('utf-8'), server)
@@ -91,6 +92,7 @@ def RunClient(serverIP):
             currPath = os.getcwd()
 
         if serverRoot != Path(currPath) or serverRoot not in Path(currPath).parents:
+            print(f"currPath = {currPath}")
             inServer = False
 
     #UDPClientSocket.sendto(data.encode('utf-8'),server)
