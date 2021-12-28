@@ -129,11 +129,8 @@ def RunServer(host):
                 print("Got mount command")
                 flag = True
             elif (flag):
-                location = os.getcwd()
-                cmd = str(data).split(' ')
-                
-
-
+                result = subprocess.run(data.split(' '), capture_output=True, text=True, encoding="utf-8")
+                UDPServerSocket.sendto(result.stdout.encode('utf-8'), addr)
     UDPServerSocket.close()
     data_base.close()
 #Serevr Code Ends Here

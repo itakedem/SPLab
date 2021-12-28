@@ -34,6 +34,7 @@ def RunClient(serverIP):
     name = 'make connection to the server'
     UDPClientSocket.sendto(name.encode('utf-8'),server)
     threading.Thread(target=ReceiveData,args=(UDPClientSocket,)).start()
+    flag = False
     print("What is your request:")
     while True:        
         request = input()
@@ -74,7 +75,10 @@ def RunClient(serverIP):
         #data = input()
         elif request == f"mount private {host}:{port}:/Server":
             data = '6'
+            flag = True
             UDPClientSocket.sendto(data.encode('utf-8'), server)
+        elif flag == True:
+            UDPClientSocket.sendto(request.encode('utf-8'), server)
         elif request == 'qqq':
             break
     #UDPClientSocket.sendto(data.encode('utf-8'),server)
