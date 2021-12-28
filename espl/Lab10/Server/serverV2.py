@@ -50,6 +50,8 @@ def RunServer(host):
             elif isMounted and data == "unmount":
                 mountedUsers[addr] = False
                 print(f"{addr} unmounted from server")
+            elif data == "enterServer":
+                os.chdir(serverRoot)
             elif isMounted:
                 splitted = data.split(' ')
                 if splitted[0] == 'cwd':

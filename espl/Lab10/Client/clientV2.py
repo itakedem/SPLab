@@ -71,7 +71,7 @@ def RunClient(serverIP):
                 print("You need to mount the server first!")
                 continue
             print("Entered Server")
-            UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
+            UDPClientSocket.sendto(("enterServer").encode('utf-8'), server)
             recvPackets.get()[0].rstrip()
             inServer = True
         elif inServer:
@@ -97,7 +97,6 @@ def RunClient(serverIP):
         if inServer:
             UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
             currPath = recvPackets.get()[0].rstrip()
-            print(f"return path = {currPath}")
         else:
             currPath = os.getcwd()
 
