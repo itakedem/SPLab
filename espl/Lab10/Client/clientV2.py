@@ -50,6 +50,7 @@ def RunClient(serverIP):
     temp = currPath.split('/')
     temp[len(temp) - 1] = "Server"
     serverRoot = '/'.join(temp)
+    clientRoot = os.getcwd()
 
 
     while True:
@@ -74,6 +75,11 @@ def RunClient(serverIP):
             UDPClientSocket.sendto(("enterServer").encode('utf-8'), server)
             inServer = True
         elif inServer:
+            if splitted[0] == "cp" and (':' in splitted[1] or ':' in splitted[2]):
+                target = splitted[2].split(':')[1]
+                request = f"cp {splitted[1]} {target}"
+            if ':' in splitted[1]:
+                request = f"cd {clientRoot}"
             UDPClientSocket.sendto(request.encode('utf-8'), server)
             if splitted[0] != "cd":
                 result = recvPackets.get()[0].rstrip()
@@ -116,6 +122,13 @@ def verifyInServer(serverRoot: str, currPath: str):
     common = os.path.commonpath([serverRoot, currPath])
     return len(serverRoot) == len(common)
 
+def buildTargetPath(originalPath: str, targetPath: str):
+    splitOriginal = originalPath.split('/')
+    splitTarget = targetPath.split('/')
+    target = ""
+    for i in range(len(splitTarget)):
+        if i < len(splitOriginal):
+            target += splitTarget[i]
 
 if __name__ == '__main__':
     if len(sys.argv) == 2:
