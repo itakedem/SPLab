@@ -69,7 +69,7 @@ def RunClient(serverIP):
         elif isMounted and request == f"cd :/Server":
             print("Entered Server")
             UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
-            recvPackets.get()[0].rstrip()
+            currPath = recvPackets.get()[0].rstrip()
             inServer = True
         elif inServer:
             UDPClientSocket.sendto(request.encode('utf-8'), server)
@@ -87,7 +87,7 @@ def RunClient(serverIP):
                 result, err = subprocess.Popen(splitted,
                                                stderr=subprocess.PIPE,
                                                stdout=subprocess.PIPE).communicate()
-                print(result.decode('utf-8'))
+                print(result.decode('utf-8').rstrip())
         if inServer:
             UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
             currPath = recvPackets.get()[0].rstrip()
