@@ -47,7 +47,7 @@ def RunClient(serverIP):
     isMounted = False
     inServer = False
     currPath = os.getcwd()
-    serverRoot = ''
+    serverRoot = Path()
 
 
     while True:
@@ -90,8 +90,9 @@ def RunClient(serverIP):
         else:
             currPath = os.getcwd()
 
-        if serverRoot.root != currPath and serverRoot not in Path(currPath).parents:
-            inServer = False
+        if inServer:
+            if serverRoot.root != currPath and serverRoot not in Path(currPath).parents:
+                inServer = False
 
     #UDPClientSocket.sendto(data.encode('utf-8'),server)
     UDPClientSocket.close()
