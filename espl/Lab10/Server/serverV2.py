@@ -42,7 +42,7 @@ def RunServer(host):
             isMounted = True if users.get(str(addr[0])) is True else False
             data = data.decode('utf-8')
             li = list(data.split(" "))
-            if (li[0] == f"mount {host}"):
+            if (data == f"mount {host}"):
                 users[addr] = True
                 print("Got mount command")
                 UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), addr)
