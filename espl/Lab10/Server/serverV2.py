@@ -51,7 +51,7 @@ def RunServer(host):
                 print(f"{addr} unmounted from server")
             elif isMounted:
                 cleanData = data.split(' ')
-                if data == 'cwd':
+                if cleanData[0] == 'cwd':
                     loc = os.getcwd()
                     UDPServerSocket.sendto(loc.encode('utf-8'), fullAddr)
                 elif (cleanData[0] == 'cd'):
