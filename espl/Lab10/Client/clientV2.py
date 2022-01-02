@@ -77,7 +77,7 @@ def RunClient(serverIP):
                 continue
             isMounted = True
             if shared:
-                threading.Thread(target=printShared, args=(UDPClientSocket)).start()
+                threading.Thread(target=printShared, args=(UDPClientSocket,)).start()
             UDPClientSocket.sendto(request.encode('utf-8'), server)
             print(recvPackets.get()[0].rstrip())
 
