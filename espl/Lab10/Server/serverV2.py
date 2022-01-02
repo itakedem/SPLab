@@ -65,6 +65,11 @@ def RunServer(host):
                     result, err = subprocess.Popen(splitted,
                                               stderr=subprocess.PIPE,
                                               stdout=subprocess.PIPE).communicate()
+                    if err is not None:
+                        error = f"ERROR: {err}"
+                        UDPServerSocket.sendto(error, fullAddr)
+                        continue
+
                     UDPServerSocket.sendto(result, fullAddr)
 
     UDPServerSocket.close()

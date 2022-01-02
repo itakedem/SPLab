@@ -58,32 +58,43 @@ def RunClient(serverIP):
         request = input()
         splitted = request.split(' ')
         if splitted[0] == f"mount":
-            if len(splitted) == 2:
-                isMounted = True
-                UDPClientSocket.sendto(request.encode('utf-8'), server)
-                print(recvPackets.get()[0].rstrip())
-            else:
-                print("Not enough arguments for mount")
+            if len(splitted) == 1:      # didn't send a server address
+                print("Not enough arguments for mount, using default value")
+            elif splitted[1] != server:     # sent unknown server address
+                print(f"the server in {splitted[1]} is not connected. Please try again")
+                continue
+            isMounted = True
+            UDPClientSocket.sendto(request.encode('utf-8'), server)
+            print(recvPackets.get()[0].rstrip())
+
         elif request == "unmount":
             isMounted = False
             print("Unmounted from server")
+
         elif request == f"cd :/Server":
             if not isMounted:
                 print("You need to mount the server first!")
-                continue
+                continue        # can't enter server without mount
             print("Entered Server")
             UDPClientSocket.sendto(("enterServer").encode('utf-8'), server)
             inServer = True
+
         elif inServer:
-            if len(splitted) > 1 and (splitted[0] == "cp" and 'cwd' in splitted[2]):
+            if len(splitted) > 1 and (splitted[0] == "cp" and 'cwd' in splitted[2]):        #coping file from server to client
                 indOfStart = splitted[2].find('/')
                 targetLoc = splitted[2][indOfStart:] if indOfStart > 0 else ""
                 target = f"{clientRoot}{targetLoc}"
                 request = f"cp {splitted[1]} {target}"
                 print(f"the CP request is {request}")
-            if len(splitted) > 1 and (':' in splitted[1]):
-                request = f"cd {clientRoot}"
-            UDPClientSocket.sendto(request.encode('utf-8'), server)
+
+            if request == "cd :/local": #leaving server
+                print("Left Server")
+                os.chdir(clientRoot)
+                currPath = clientRoot
+                inServer = False
+                continue
+
+            UDPClientSocket.sendto(request.encode('utf-8'), server)     #sending the command to the server
             if splitted[0] != "cd":
                 result = recvPackets.get()[0].rstrip()
                 if len(result) > 0:
@@ -91,6 +102,7 @@ def RunClient(serverIP):
             else:
                 newPath = recvPackets.get()[0].rstrip()
                 inServer = verifyInServer(serverRoot, newPath)
+
         elif request == 'qqq':
             break
         else:
@@ -103,18 +115,22 @@ def RunClient(serverIP):
                 result, err = subprocess.Popen(splitted,
                                                stderr=subprocess.PIPE,
                                                stdout=subprocess.PIPE).communicate()
+                if err is not None:
+                    print(f"ERROR: {err}")
+                    continue
+
                 print(result.decode('utf-8').rstrip())
 
-        if inServer:
+        if inServer:        # setting the current directory from server or client, depends on "inServer"
             UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
             currPath = recvPackets.get()[0].rstrip()
         else:
             currPath = os.getcwd()
 
-        if inServer and not verifyInServer(serverRoot, currPath):
+        if inServer and not verifyInServer(serverRoot, currPath):       # exiting server
             print("Left Server")
             os.chdir(clientRoot)
-            currPath = os.getcwd()
+            currPath = clientRoot
             inServer = False
 
     UDPClientSocket.close()
