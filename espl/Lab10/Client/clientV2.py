@@ -112,6 +112,7 @@ def RunClient(serverIP):
 
         if inServer and not verifyInServer(serverRoot, currPath):
             print("Left Server")
+            currPath = clientRoot
             inServer = False
 
     UDPClientSocket.close()
