@@ -110,7 +110,7 @@ def RunServer(host):
 def sendGroupMsg(UDPSocket, msg, addrList, notSend):
     for addr in addrList:
         if addr is not notSend:
-            UDPSocket.sendTo(msg.encode('utf-8'), addr)
+            UDPSocket.sendto(msg.encode('utf-8'), addr)
 
 
 if __name__ == '__main__':
