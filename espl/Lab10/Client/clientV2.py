@@ -56,7 +56,11 @@ def RunClient(serverIP):
 
     while True:
         print(currPath, end="$ ")
-        request = input()
+        request = None
+        while request is None:
+            request = input()
+            print(recvPackets.get()[0].rstrip())
+
         splitted = request.split(' ')
 
         if splitted[0] == f"mount":
