@@ -75,8 +75,9 @@ def RunClient(serverIP):
             UDPClientSocket.sendto(("enterServer").encode('utf-8'), server)
             inServer = True
         elif inServer:
-            if splitted[0] == "cp" and (':' in splitted[1] or ':' in splitted[2]):
-                target = splitted[2].split(':')[1]
+            if splitted[0] == "cp" and 'cwd' in splitted[2]:
+                targetLoc = splitted[2].split(':')[1]
+                target = f"{clientRoot}/{targetLoc}"
                 request = f"cp {splitted[1]} {target}"
             if ':' in splitted[1]:
                 request = f"cd {clientRoot}"
