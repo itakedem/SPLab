@@ -109,7 +109,9 @@ def RunServer(host):
 
 def sendGroupMsg(UDPSocket, msg, addrList, notSend):
     for addr in addrList:
+        print(f"outside {addr}")
         if addr is not notSend:
+            print(f"inside {addr} != {notSend}")
             UDPSocket.sendto(msg.encode('utf-8'), addr)
 
 
