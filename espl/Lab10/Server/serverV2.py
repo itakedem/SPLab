@@ -67,13 +67,14 @@ def RunServer(host):
             elif isMounted and data == "unmount":
                 mountedUsers[addr] = False
                 if fullAddr in sharedUsers:
-                    sharedUsers.remove(addr)
+                    sharedUsers.remove(fullAddr)
                 print(f"{addr} unmounted from server")
 
             elif data == "enterServer":
                 os.chdir(serverRoot)
 
             elif isMounted:
+                print(f"sharedUsers = \n{sharedUsers}")
                 if splitted[0] == 'cwd':
                     loc = os.getcwd()
                     if fullAddr in sharedUsers:
