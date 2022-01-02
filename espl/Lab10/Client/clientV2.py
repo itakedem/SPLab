@@ -57,9 +57,11 @@ def RunClient(serverIP):
         print(currPath, end="$ ")
         request = input()
         splitted = request.split(' ')
+
         if splitted[0] == f"mount":
             if len(splitted) == 1:  # didn't send a server address
                 print("Not enough arguments for mount, using default value")
+                request = f"{request} {serverIP}"
             elif splitted[1] != server:  # sent unknown server address
                 print(f"the server in {splitted[1]} is not connected. Please try again")
                 continue
