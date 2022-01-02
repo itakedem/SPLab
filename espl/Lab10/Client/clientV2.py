@@ -14,36 +14,37 @@ import random
 import os
 from pathlib import Path
 
-
 bufferSize = 1024
 
 
-#Original Code
+# Original Code
 def ReceiveData(sock):
     while True:
         try:
-            data,addr = sock.recvfrom(bufferSize)
+            data, addr = sock.recvfrom(bufferSize)
             print(data.decode('utf-8'))
         except:
             pass
 
-#Client Code
-def RecvData(sock,recvPackets):
+
+# Client Code
+def RecvData(sock, recvPackets):
     while True:
         data, addr = sock.recvfrom(bufferSize)
-        recvPackets.put((data.decode('utf-8'),addr))
+        recvPackets.put((data.decode('utf-8'), addr))
+
 
 def RunClient(serverIP):
     host = socket.gethostbyname(socket.gethostname())
-    port = random.randint(6000,10000)
-    print('Client IP->'+str(host)+' Port->'+str(port))
-    server = (str(serverIP),5000)
-    UDPClientSocket = socket.socket(family=socket.AF_INET,type=socket.SOCK_DGRAM)
-    UDPClientSocket.bind((host,port))
+    port = random.randint(6000, 10000)
+    print('Client IP->' + str(host) + ' Port->' + str(port))
+    server = (str(serverIP), 5000)
+    UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+    UDPClientSocket.bind((host, port))
     name = 'make connection to the server'
-    UDPClientSocket.sendto(name.encode('utf-8'),server)
+    UDPClientSocket.sendto(name.encode('utf-8'), server)
     recvPackets = queue.Queue()
-    threading.Thread(target=RecvData,args=(UDPClientSocket,recvPackets)).start()
+    threading.Thread(target=RecvData, args=(UDPClientSocket, recvPackets)).start()
     isMounted = False
     inServer = False
     currPath = os.getcwd()
@@ -52,15 +53,14 @@ def RunClient(serverIP):
     serverRoot = '/'.join(temp)
     clientRoot = os.getcwd()
 
-
     while True:
         print(currPath, end="$ ")
         request = input()
         splitted = request.split(' ')
         if splitted[0] == f"mount":
-            if len(splitted) == 1:      # didn't send a server address
+            if len(splitted) == 1:  # didn't send a server address
                 print("Not enough arguments for mount, using default value")
-            elif splitted[1] != server:     # sent unknown server address
+            elif splitted[1] != server:  # sent unknown server address
                 print(f"the server in {splitted[1]} is not connected. Please try again")
                 continue
             isMounted = True
@@ -74,27 +74,28 @@ def RunClient(serverIP):
         elif request == f"cd :/Server":
             if not isMounted:
                 print("You need to mount the server first!")
-                continue        # can't enter server without mount
+                continue  # can't enter server without mount
             print("Entered Server")
             UDPClientSocket.sendto(("enterServer").encode('utf-8'), server)
             inServer = True
 
         elif inServer:
-            if len(splitted) > 1 and (splitted[0] == "cp" and 'cwd' in splitted[2]):        #coping file from server to client
+            if len(splitted) > 1 and (
+                    splitted[0] == "cp" and 'cwd' in splitted[2]):  # coping file from server to client
                 indOfStart = splitted[2].find('/')
                 targetLoc = splitted[2][indOfStart:] if indOfStart > 0 else ""
                 target = f"{clientRoot}{targetLoc}"
                 request = f"cp {splitted[1]} {target}"
                 print(f"the CP request is {request}")
 
-            if request == "cd :/local": #leaving server
+            if request == "cd :/local":  # leaving server
                 print("Left Server")
                 os.chdir(clientRoot)
                 currPath = clientRoot
                 inServer = False
                 continue
 
-            UDPClientSocket.sendto(request.encode('utf-8'), server)     #sending the command to the server
+            UDPClientSocket.sendto(request.encode('utf-8'), server)  # sending the command to the server
             if splitted[0] != "cd":
                 result = recvPackets.get()[0].rstrip()
                 if len(result) > 0:
@@ -112,22 +113,24 @@ def RunClient(serverIP):
                     continue
                 os.chdir(splitted[1])
             else:
-                result, err = subprocess.Popen(splitted,
-                                               stderr=subprocess.PIPE,
-                                               stdout=subprocess.PIPE).communicate()
-                if err is not None:
-                    print(f"ERROR: {err}")
+                result = ""
+                try:
+                    result, err = subprocess.Popen(splitted,
+                                                   stderr=subprocess.PIPE,
+                                                   stdout=subprocess.PIPE).communicate()
+                except:
+                    print(f"ERROR!")
                     continue
 
                 print(result.decode('utf-8').rstrip())
 
-        if inServer:        # setting the current directory from server or client, depends on "inServer"
+        if inServer:  # setting the current directory from server or client, depends on "inServer"
             UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
             currPath = recvPackets.get()[0].rstrip()
         else:
             currPath = os.getcwd()
 
-        if inServer and not verifyInServer(serverRoot, currPath):       # exiting server
+        if inServer and not verifyInServer(serverRoot, currPath):  # exiting server
             print("Left Server")
             os.chdir(clientRoot)
             currPath = clientRoot
@@ -135,14 +138,15 @@ def RunClient(serverIP):
 
     UDPClientSocket.close()
     os._exit(1)
-#Client Code Ends Here
 
-#mount private 127.0.0.1:6864:/Server
+
+# Client Code Ends Here
+
+# mount private 127.0.0.1:6864:/Server
 
 def verifyInServer(serverRoot: str, currPath: str):
     common = os.path.commonpath([serverRoot, currPath])
     return len(serverRoot) == len(common)
-
 
 
 if __name__ == '__main__':
@@ -150,5 +154,3 @@ if __name__ == '__main__':
         RunClient(sys.argv[1])
     else:
         RunClient("127.0.0.1")
-
-
