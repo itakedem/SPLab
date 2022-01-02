@@ -62,11 +62,12 @@ def RunServer(host):
                     os.chdir(currPath + f"/{splitted[1]}")
                     UDPServerSocket.sendto(currPath.encode('utf-8'), fullAddr)
                 else:
-                    result, err = subprocess.Popen(splitted,
-                                              stderr=subprocess.PIPE,
-                                              stdout=subprocess.PIPE).communicate()
-                    if err is not None:
-                        error = f"ERROR: {err}"
+                    try:
+                        result, err = subprocess.Popen(splitted,
+                                                  stderr=subprocess.PIPE,
+                                                  stdout=subprocess.PIPE).communicate()
+                    except:
+                        error = f"ERROR".encode('utf-8')
                         UDPServerSocket.sendto(error, fullAddr)
                         continue
 
