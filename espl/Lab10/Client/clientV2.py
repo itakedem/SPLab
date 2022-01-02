@@ -62,7 +62,14 @@ def RunClient(serverIP):
             if len(splitted) == 1:  # didn't send a server address
                 print("Not enough arguments for mount, using default value")
                 request = f"{request} {serverIP}"
-            elif splitted[1] != server:  # sent unknown server address
+            elif len(splitted) == 2:
+                if splitted[1] == "shared":
+                    print("Not enough arguments for mount, using default value")
+                    request = f"{request} {serverIP}"
+                elif splitted[2] != serverIP:
+                    print(f"the server in {splitted[1]} is not connected. Please try again")
+                    continue
+            elif splitted[1] != serverIP:  # sent unknown server address
                 print(f"the server in {splitted[1]} is not connected. Please try again")
                 continue
             isMounted = True
