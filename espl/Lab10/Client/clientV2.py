@@ -18,11 +18,12 @@ bufferSize = 1024
 
 
 # Original Code
-def ReceiveData(sock):
+def printShared(sock):
     while True:
         try:
             data, addr = sock.recvfrom(bufferSize)
-            print(data.decode('utf-8'))
+            data = data.decode('utf-8')
+            print(f"{addr} {data}")
         except:
             pass
 
@@ -73,6 +74,8 @@ def RunClient(serverIP):
                 print(f"the server in {splitted[1]} is not connected. Please try again")
                 continue
             isMounted = True
+            if splitted[2] == "shared":
+                threading.Thread(target=printShared, args=(UDPClientSocket)).start()
             UDPClientSocket.sendto(request.encode('utf-8'), server)
             print(recvPackets.get()[0].rstrip())
 

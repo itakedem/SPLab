@@ -24,6 +24,12 @@ def RecvData(sock,recvPackets):
         data,addr = sock.recvfrom(bufferSize)
         recvPackets.put((data,addr))
 
+
+def recvShared(sock):
+    while True:
+        data,addr = sock.recvfrom(bufferSize)
+        print(f"{addr} {data}")
+
 def RunServer(host):
     port = 5000
     print('Server hosting on IP-> '+str(host))
@@ -74,7 +80,6 @@ def RunServer(host):
                 os.chdir(serverRoot)
 
             elif isMounted:
-                print(f"sharedUsers = \n{sharedUsers}")
                 if splitted[0] == 'cwd':
                     loc = os.getcwd()
                     if fullAddr in sharedUsers:
@@ -110,9 +115,7 @@ def RunServer(host):
 
 def sendGroupMsg(UDPSocket, msg, addrList, notSend):
     for addr in addrList:
-        print(f"outside {addr}")
         if addr is not notSend:
-            print(f"inside {addr} != {notSend}")
             UDPSocket.sendto(msg.encode('utf-8'), addr)
 
 
