@@ -45,10 +45,9 @@ def RunClient(serverIP):
     name = 'make connection to the server'
     UDPClientSocket.sendto(name.encode('utf-8'), server)
     recvPackets = queue.Queue()
-    threading.Thread(target=printShared, args=(UDPClientSocket,)).start()
+    threading.Thread(target=RecvData, args=(UDPClientSocket, recvPackets)).start()
     isMounted = False
     inServer = False
-    shared = False
     currPath = os.getcwd()
     temp = currPath.split('/')
     temp[len(temp) - 1] = "Server"
@@ -56,6 +55,7 @@ def RunClient(serverIP):
     clientRoot = os.getcwd()
 
     while True:
+        print(currPath, end="$ ")
         request = input()
         splitted = request.split(' ')
 
@@ -75,8 +75,7 @@ def RunClient(serverIP):
                 print(f"the server in {splitted[1]} is not connected. Please try again")
                 continue
             isMounted = True
-            if shared:
-                threading.Thread(target=printShared, args=(UDPClientSocket,)).start()
+
             UDPClientSocket.sendto(request.encode('utf-8'), server)
             print(recvPackets.get()[0].rstrip())
 
