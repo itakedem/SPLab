@@ -48,15 +48,21 @@ def RunServer(host):
 
             if splitted[0] == "mount":
                 if host in data:
-                    if splitted[1] == "shared":
-                        sharedUsers.append(addr)
-                    else:
-                        UDPServerSocket.sendto("Error Mounting, too many arguments".encode('utf-8'), fullAddr)
+                    if len(splitted) == 3:
+                        if splitted[1] == "shared":
+                            sharedUsers.append(addr)
+                        else:
+                            UDPServerSocket.sendto("Error Mounting, too many arguments".encode('utf-8'), fullAddr)
+                    elif len(splitted) == 1:
+                        UDPServerSocket.sendto("Error Mounting, not enough arguments".encode('utf-8'), fullAddr)
                         continue
+                else:
+                    UDPServerSocket.sendto("Error Mounting, wrong arguments".encode('utf-8'), fullAddr)
+                    continue
 
-                    mountedUsers[addr] = True
-                    print(f"{addr} mounted the server")
-                    UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), fullAddr)
+                mountedUsers[addr] = True
+                print(f"{addr} mounted the server")
+                UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), fullAddr)
 
             elif isMounted and data == "unmount":
                 mountedUsers[addr] = False
