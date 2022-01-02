@@ -69,7 +69,7 @@ def RunClient(serverIP):
                 elif splitted[2] != serverIP:
                     print(f"the server in {splitted[1]} is not connected. Please try again")
                     continue
-            elif splitted[1] != serverIP:  # sent unknown server address
+            elif serverIP not in splitted[1]:  # sent unknown server address
                 print(f"the server in {splitted[1]} is not connected. Please try again")
                 continue
             isMounted = True
