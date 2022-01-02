@@ -80,6 +80,7 @@ def RunClient(serverIP):
                 targetLoc = splitted[1][indOfStart:] if indOfStart > 0 else ""
                 target = f"{clientRoot}{targetLoc}"
                 request = f"cp {splitted[1]} {target}"
+                print(f"the CP request is {request}")
             if len(splitted) > 1 and (':' in splitted[1]):
                 request = f"cd {clientRoot}"
             UDPClientSocket.sendto(request.encode('utf-8'), server)
