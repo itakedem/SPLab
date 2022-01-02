@@ -50,7 +50,7 @@ def RunServer(host):
                 if host in data:
                     if len(splitted) == 3:
                         if splitted[1] == "shared":
-                            sharedUsers.append(addr)
+                            sharedUsers.append(fullAddr)
                         else:
                             UDPServerSocket.sendto("Error Mounting, too many arguments".encode('utf-8'), fullAddr)
                     elif len(splitted) == 1:
@@ -66,7 +66,7 @@ def RunServer(host):
 
             elif isMounted and data == "unmount":
                 mountedUsers[addr] = False
-                if addr in sharedUsers:
+                if fullAddr in sharedUsers:
                     sharedUsers.remove(addr)
                 print(f"{addr} unmounted from server")
 
@@ -76,7 +76,7 @@ def RunServer(host):
             elif isMounted:
                 if splitted[0] == 'cwd':
                     loc = os.getcwd()
-                    if addr in sharedUsers:
+                    if fullAddr in sharedUsers:
                         sendGroupMsg(UDPServerSocket, loc, sharedUsers, addr)
                     else:
                         UDPServerSocket.sendto(loc.encode('utf-8'), fullAddr)
@@ -84,7 +84,7 @@ def RunServer(host):
                 elif (splitted[0] == 'cd'):
                     currPath = os.getcwd()
                     os.chdir(currPath + f"/{splitted[1]}")
-                    if addr in sharedUsers:
+                    if fullAddr in sharedUsers:
                         sendGroupMsg(UDPServerSocket, currPath, sharedUsers, addr)
                     else:
                         UDPServerSocket.sendto(currPath.encode('utf-8'), fullAddr)
@@ -99,7 +99,7 @@ def RunServer(host):
                         UDPServerSocket.sendto(error, fullAddr)
                         continue
 
-                    if addr in sharedUsers:
+                    if fullAddr in sharedUsers:
                         sendGroupMsg(UDPServerSocket, result.decode('utf-8'), sharedUsers, addr)
                     else:
                         UDPServerSocket.sendto(result, fullAddr)
