@@ -48,6 +48,7 @@ def RunClient(serverIP):
     threading.Thread(target=RecvData, args=(UDPClientSocket, recvPackets)).start()
     isMounted = False
     inServer = False
+    shared = False
     currPath = os.getcwd()
     temp = currPath.split('/')
     temp[len(temp) - 1] = "Server"
@@ -67,6 +68,7 @@ def RunClient(serverIP):
                 if splitted[1] == "shared":
                     print("Not enough arguments for mount, using default value")
                     request = f"{request} {serverIP}"
+                    shared = True
                 elif splitted[2] != serverIP:
                     print(f"the server in {splitted[1]} is not connected. Please try again")
                     continue
@@ -74,7 +76,7 @@ def RunClient(serverIP):
                 print(f"the server in {splitted[1]} is not connected. Please try again")
                 continue
             isMounted = True
-            if splitted[2] == "shared":
+            if shared:
                 threading.Thread(target=printShared, args=(UDPClientSocket)).start()
             UDPClientSocket.sendto(request.encode('utf-8'), server)
             print(recvPackets.get()[0].rstrip())
