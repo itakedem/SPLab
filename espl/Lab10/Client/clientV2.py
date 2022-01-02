@@ -76,8 +76,8 @@ def RunClient(serverIP):
             inServer = True
         elif inServer:
             if len(splitted) > 1 and (splitted[0] == "cp" and 'cwd' in splitted[2]):
-                indOfStart = splitted[1].find('/')
-                targetLoc = splitted[1][indOfStart:] if indOfStart > 0 else ""
+                indOfStart = splitted[2].find('/')
+                targetLoc = splitted[2][indOfStart:] if indOfStart > 0 else ""
                 target = f"{clientRoot}{targetLoc}"
                 request = f"cp {splitted[1]} {target}"
                 print(f"the CP request is {request}")
