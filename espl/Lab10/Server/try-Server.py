@@ -36,6 +36,7 @@ def RunServer(host):
     threading.Thread(target=RecvData, args=(UDPServerSocket, recvPackets)).start()
     mountedUsers = {}
     sharedUsers = []
+    sharedUsersInServer = []
     serverRoot = os.getcwd()
     lastCommand = None
 
@@ -74,12 +75,13 @@ def RunServer(host):
 
             elif data == "cd :/Server":
                 os.chdir(serverRoot)
-
+                if fullAddr in sharedUsers: 
+                    sharedUsersInServer.append(fullAddr)
             elif isMounted:
                 if splitted[0] == 'cwd':
                     loc = os.getcwd()
                     if fullAddr in sharedUsers:
-                        sendGroupMsg(UDPServerSocket,lastCommand, loc, sharedUsers, fullAddr)
+                        sendGroupMsg(UDPServerSocket,'no', loc, sharedUsersInServer, fullAddr)
                     else:
                         UDPServerSocket.sendto(loc.encode('utf-8'), fullAddr)
 
@@ -87,7 +89,7 @@ def RunServer(host):
                     currPath = os.getcwd()
                     os.chdir(currPath + f"/{splitted[1]}")
                     if fullAddr in sharedUsers:
-                        sendGroupMsg(UDPServerSocket, ' ',  currPath, sharedUsers, fullAddr)
+                        sendGroupMsg(UDPServerSocket, ' ',  currPath, sharedUsersInServer, fullAddr)
                     else:
                         UDPServerSocket.sendto(currPath.encode('utf-8'), fullAddr)
 
@@ -102,7 +104,7 @@ def RunServer(host):
                         continue
 
                     if fullAddr in sharedUsers:
-                        sendGroupMsg(UDPServerSocket,data, result.decode('utf-8'), sharedUsers, fullAddr)
+                        sendGroupMsg(UDPServerSocket,data, result.decode('utf-8'), sharedUsersInServer, fullAddr)
                     else:
                         UDPServerSocket.sendto(result, fullAddr)
 
@@ -112,7 +114,7 @@ def RunServer(host):
 # Server Code Ends Here
 
 def sendGroupMsg(UDPSocket,command, msg, addrList, notSend):
-    # command = f"({notSend[1]}) {command}"
+    command = f"({notSend[1]}) {command}"
     for addr in addrList:
         if addr[1] != notSend[1]:
             UDPSocket.sendto(command.encode('utf-8'), addr)
