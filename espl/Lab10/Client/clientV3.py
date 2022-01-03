@@ -67,7 +67,7 @@ def RunClient(serverIP):
         while currInput == None:
             if not recvPackets.empty():
                 ans = recvPackets.get()[0].rstrip()
-                if "no" in  ans:
+                if "no" in ans:
                     curr = recvPackets.get()[0].rstrip()
                     continue
                 else:
@@ -114,12 +114,11 @@ def RunClient(serverIP):
 
         elif inServer:
             if len(splitted) > 1 and (
-                    splitted[0] == "cp" and 'cwd' in splitted[2]):  # coping file from server to client
+                    splitted[0] == "get" and 'cwd' in splitted[2]):  # coping file from server to client
                 indOfStart = splitted[2].find('/')
                 targetLoc = splitted[2][indOfStart:] if indOfStart > 0 else ""
                 target = f"{clientRoot}{targetLoc}"
-                request = f"cp {splitted[1]} {target}"
-                print(f"the CP request is {request}")
+                request = f"get {splitted[1]} {target}"
 
             if request == "cd :/local":  # leaving server
                 print("Left Server")
@@ -133,6 +132,11 @@ def RunClient(serverIP):
                 result = recvPackets.get()[0].rstrip()
                 if len(result) > 0:
                     print(result)
+            elif splitted[0] == "get":
+                indOfStart = splitted[2].find('/')
+                targetLoc = splitted[2][indOfStart:] if indOfStart > 0 else ""
+                path = f"{clientRoot}{targetLoc}"
+                handleFiles(recvPackets.get()[0].rstrip(), path)
             else:
                 newPath = recvPackets.get()[0].rstrip()
                 inServer = verifyInServer(serverRoot, newPath)
@@ -185,6 +189,14 @@ def verifyInServer(serverRoot: str, currPath: str):
     common = os.path.commonpath([serverRoot, currPath])
     return len(serverRoot) == len(common)
 
+def handleFiles(packets, path):
+    if os.path.exists(path):
+        os.remove(path)
+    with open(path, 'wb') as f:
+        while (not packets.empty()):
+            data, addr = packets.get()
+            f.write(data)
+    f.close()
 
 if __name__ == '__main__':
     if len(sys.argv) == 2:
