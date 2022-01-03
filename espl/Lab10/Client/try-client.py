@@ -12,10 +12,11 @@ import threading
 import sys
 import random
 import os
+import time
 from pathlib import Path
 
 bufferSize = 1024
-
+currInput = None
 
 # Original Code
 def ReceiveData(sock):
@@ -33,8 +34,14 @@ def RecvData(sock, recvPackets):
         data, addr = sock.recvfrom(bufferSize)
         recvPackets.put((data.decode('utf-8'), addr))
 
+def waitForInput():
+    global currInput
+    while True:
+        currInput = input()
+
 
 def RunClient(serverIP):
+    global currInput
     host = socket.gethostbyname(socket.gethostname())
     port = random.randint(6000, 10000)
     print('Client IP->' + str(host) + ' Port->' + str(port))
@@ -45,6 +52,7 @@ def RunClient(serverIP):
     UDPClientSocket.sendto(name.encode('utf-8'), server)
     recvPackets = queue.Queue()
     threading.Thread(target=RecvData, args=(UDPClientSocket, recvPackets)).start()
+    threading.Thread(target=waitForInput).start()
     isMounted = False
     inServer = False
     currPath = os.getcwd()
@@ -54,8 +62,19 @@ def RunClient(serverIP):
     clientRoot = os.getcwd()
 
     while True:
-        print(currPath, end="$ ")
-        request = input()
+        print(f"{currPath}$", end=" ")
+        sys.stdout.flush()
+        while currInput == None:
+            if not recvPackets.empty():
+                ans = recvPackets.get()[0].rstrip()
+                print(ans)
+                if "cd" in ans:
+                    currPath = recvPackets.get()[0].rstrip()
+                break
+        if currInput == None:
+            continue
+        request = currInput
+        currInput = None
         splitted = request.split(' ')
 
         if splitted[0] == f"mount":
@@ -66,10 +85,10 @@ def RunClient(serverIP):
                 if splitted[1] == "shared":
                     print("Not enough arguments for mount, using default value")
                     request = f"{request} {serverIP}"
-                elif splitted[2] != serverIP:
+                elif splitted[1] != serverIP:
                     print(f"the server in {splitted[1]} is not connected. Please try again")
                     continue
-            elif splitted[1] != serverIP:  # sent unknown server address
+            elif splitted[2] != serverIP:  # sent unknown server address
                 print(f"the server in {splitted[1]} is not connected. Please try again")
                 continue
             isMounted = True
@@ -85,7 +104,7 @@ def RunClient(serverIP):
                 print("You need to mount the server first!")
                 continue  # can't enter server without mount
             print("Entered Server")
-            UDPClientSocket.sendto(("enterServer").encode('utf-8'), server)
+            UDPClientSocket.sendto(("cd :/Server").encode('utf-8'), server)
             inServer = True
 
         elif inServer:

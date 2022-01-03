@@ -37,13 +37,15 @@ def RunServer(host):
     mountedUsers = {}
     sharedUsers = []
     serverRoot = os.getcwd()
+    lastCommand = None
 
     while True:
         while not recvPackets.empty():
             data, fullAddr = recvPackets.get()
-            addr = fullAddr[0]
+            addr = fullAddr[1]
             isMounted = True if mountedUsers.get(addr) is True else False
             data = data.decode('utf-8')
+            lastCommand = data if data != "cwd" else lastCommand
             splitted = data.split(' ')
 
             if splitted[0] == "mount":
@@ -70,15 +72,14 @@ def RunServer(host):
                     sharedUsers.remove(fullAddr)
                 print(f"{addr} unmounted from server")
 
-            elif data == "enterServer":
+            elif data == "cd :/Server":
                 os.chdir(serverRoot)
 
             elif isMounted:
-                print(f"sharedUsers = \n{sharedUsers}")
                 if splitted[0] == 'cwd':
                     loc = os.getcwd()
                     if fullAddr in sharedUsers:
-                        sendGroupMsg(UDPServerSocket, loc, sharedUsers, addr)
+                        sendGroupMsg(UDPServerSocket,lastCommand, loc, sharedUsers, fullAddr)
                     else:
                         UDPServerSocket.sendto(loc.encode('utf-8'), fullAddr)
 
@@ -86,7 +87,7 @@ def RunServer(host):
                     currPath = os.getcwd()
                     os.chdir(currPath + f"/{splitted[1]}")
                     if fullAddr in sharedUsers:
-                        sendGroupMsg(UDPServerSocket, currPath, sharedUsers, addr)
+                        sendGroupMsg(UDPServerSocket, ' ',  currPath, sharedUsers, fullAddr)
                     else:
                         UDPServerSocket.sendto(currPath.encode('utf-8'), fullAddr)
 
@@ -101,7 +102,7 @@ def RunServer(host):
                         continue
 
                     if fullAddr in sharedUsers:
-                        sendGroupMsg(UDPServerSocket, result.decode('utf-8'), sharedUsers, addr)
+                        sendGroupMsg(UDPServerSocket,data, result.decode('utf-8'), sharedUsers, fullAddr)
                     else:
                         UDPServerSocket.sendto(result, fullAddr)
 
@@ -110,12 +111,12 @@ def RunServer(host):
 
 # Server Code Ends Here
 
-def sendGroupMsg(UDPSocket, msg, addrList, notSend):
+def sendGroupMsg(UDPSocket,command, msg, addrList, notSend):
+    # command = f"({notSend[1]}) {command}"
     for addr in addrList:
-        print(f"outside {addr}")
-        if addr is not notSend:
-            print(f"inside {addr} != {notSend}")
-            UDPSocket.sendto(msg.encode('utf-8'), addr)
+        if addr[1] != notSend[1]:
+            UDPSocket.sendto(command.encode('utf-8'), addr)
+        UDPSocket.sendto(msg.encode('utf-8'), addr)
 
 
 if __name__ == '__main__':
