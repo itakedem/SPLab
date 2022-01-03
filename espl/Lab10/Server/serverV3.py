@@ -87,7 +87,10 @@ def RunServer(host):
 
                 elif (splitted[0] == 'cd'):
                     currPath = os.getcwd()
-                    os.chdir(currPath + f"/{splitted[1]}")
+                    try:
+                        os.chdir(currPath + f"/{splitted[1]}")
+                    except:
+                        print(f"{fullAddr} entered wrong path.")
                     if fullAddr in sharedUsers:
                         sendGroupMsg(UDPServerSocket, data,  os.getcwd(), sharedUsersInServer, fullAddr)
                     else:

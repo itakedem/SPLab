@@ -144,7 +144,11 @@ def RunClient(serverIP):
                 if verifyInServer(serverRoot, f"{currPath}/{splitted[1]}") and not inServer:
                     print("Unauthorized. Use cd :/Server to enter the server")
                     continue
-                os.chdir(splitted[1])
+                try:
+                    os.chdir(splitted[1])
+                except:
+                    print("Wrong Path!")
+                    continue
             else:
                 result = ""
                 try:
