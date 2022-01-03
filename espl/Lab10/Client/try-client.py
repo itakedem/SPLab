@@ -1,126 +1,165 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Fri Dec  3 13:05:25 2021
+Created on Wed Dec  8 13:03:13 2021
 
 @author: alex
 """
-import os
-import socket
-import threading
 import queue
-import sys
-import sqlite3
-from sqlite3 import Error
+import socket
 import subprocess
+import threading
+import sys
+import random
+import os
+from pathlib import Path
 
 bufferSize = 1024
 
 
-# Server Code
+# Original Code
+def ReceiveData(sock):
+    while True:
+        try:
+            data, addr = sock.recvfrom(bufferSize)
+            print(data.decode('utf-8'))
+        except:
+            pass
+
+
+# Client Code
 def RecvData(sock, recvPackets):
     while True:
         data, addr = sock.recvfrom(bufferSize)
-        recvPackets.put((data, addr))
+        recvPackets.put((data.decode('utf-8'), addr))
 
 
-def RunServer(host):
-    port = 5000
-    print('Server hosting on IP-> ' + str(host))
-    UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-    UDPServerSocket.bind((host, port))
+def RunClient(serverIP):
+    host = socket.gethostbyname(socket.gethostname())
+    port = random.randint(6000, 10000)
+    print('Client IP->' + str(host) + ' Port->' + str(port))
+    server = (str(serverIP), 5000)
+    UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+    UDPClientSocket.bind((host, port))
+    name = 'make connection to the server'
+    UDPClientSocket.sendto(name.encode('utf-8'), server)
     recvPackets = queue.Queue()
-
-    print('Server Running...')
-
-    threading.Thread(target=RecvData, args=(UDPServerSocket, recvPackets)).start()
-    mountedUsers = {}
-    sharedUsers = []
-    serverRoot = os.getcwd()
+    threading.Thread(target=RecvData, args=(UDPClientSocket, recvPackets)).start()
+    isMounted = False
+    inServer = False
+    currPath = os.getcwd()
+    temp = currPath.split('/')
+    temp[len(temp) - 1] = "Server"
+    serverRoot = '/'.join(temp)
+    clientRoot = os.getcwd()
 
     while True:
-        while not recvPackets.empty():
-            data, fullAddr = recvPackets.get()
-            addr = fullAddr[0]
-            isMounted = True if mountedUsers.get(addr) is True else False
-            data = data.decode('utf-8')
-            splitted = data.split(' ')
+        print(currPath, end="$ ")
+        request = input()
+        splitted = request.split(' ')
 
-            if splitted[0] == "mount":
-                if host in data:
-                    if len(splitted) == 3:
-                        if splitted[1] == "shared":
-                            sharedUsers.append(fullAddr)
-                        else:
-                            UDPServerSocket.sendto("Error Mounting, too many arguments".encode('utf-8'), fullAddr)
-                    elif len(splitted) == 1:
-                        UDPServerSocket.sendto("Error Mounting, not enough arguments".encode('utf-8'), fullAddr)
-                        continue
-                else:
-                    UDPServerSocket.sendto("Error Mounting, wrong arguments".encode('utf-8'), fullAddr)
+        if splitted[0] == f"mount":
+            if len(splitted) == 1:  # didn't send a server address
+                print("Not enough arguments for mount, using default value")
+                request = f"{request} {serverIP}"
+            elif len(splitted) == 2:
+                if splitted[1] == "shared":
+                    print("Not enough arguments for mount, using default value")
+                    request = f"{request} {serverIP}"
+                elif splitted[2] != serverIP:
+                    print(f"the server in {splitted[1]} is not connected. Please try again")
+                    continue
+            elif splitted[1] != serverIP:  # sent unknown server address
+                print(f"the server in {splitted[1]} is not connected. Please try again")
+                continue
+            isMounted = True
+            UDPClientSocket.sendto(request.encode('utf-8'), server)
+            print(recvPackets.get()[0].rstrip())
+
+        elif request == "unmount":
+            isMounted = False
+            print("Unmounted from server")
+
+        elif request == f"cd :/Server":
+            if not isMounted:
+                print("You need to mount the server first!")
+                continue  # can't enter server without mount
+            print("Entered Server")
+            UDPClientSocket.sendto(("enterServer").encode('utf-8'), server)
+            inServer = True
+
+        elif inServer:
+            if len(splitted) > 1 and (
+                    splitted[0] == "cp" and 'cwd' in splitted[2]):  # coping file from server to client
+                indOfStart = splitted[2].find('/')
+                targetLoc = splitted[2][indOfStart:] if indOfStart > 0 else ""
+                target = f"{clientRoot}{targetLoc}"
+                request = f"cp {splitted[1]} {target}"
+                print(f"the CP request is {request}")
+
+            if request == "cd :/local":  # leaving server
+                print("Left Server")
+                os.chdir(clientRoot)
+                currPath = clientRoot
+                inServer = False
+                continue
+
+            UDPClientSocket.sendto(request.encode('utf-8'), server)  # sending the command to the server
+            if splitted[0] != "cd":
+                result = recvPackets.get()[0].rstrip()
+                if len(result) > 0:
+                    print(result)
+            else:
+                newPath = recvPackets.get()[0].rstrip()
+                inServer = verifyInServer(serverRoot, newPath)
+
+        elif request == 'qqq':
+            break
+        else:
+            if splitted[0] == 'cd':
+                if verifyInServer(serverRoot, f"{currPath}/{splitted[1]}") and not inServer:
+                    print("Unauthorized. Use cd :/Server to enter the server")
+                    continue
+                os.chdir(splitted[1])
+            else:
+                result = ""
+                try:
+                    result, err = subprocess.Popen(splitted,
+                                                   stderr=subprocess.PIPE,
+                                                   stdout=subprocess.PIPE).communicate()
+                except:
+                    print(f"ERROR!")
                     continue
 
-                mountedUsers[addr] = True
-                print(f"{addr} mounted the server")
-                UDPServerSocket.sendto("Mounting Completed".encode('utf-8'), fullAddr)
+                print(result.decode('utf-8').rstrip())
 
-            elif isMounted and data == "unmount":
-                mountedUsers[addr] = False
-                if fullAddr in sharedUsers:
-                    sharedUsers.remove(fullAddr)
-                print(f"{addr} unmounted from server")
+        if inServer:  # setting the current directory from server or client, depends on "inServer"
+            UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
+            currPath = recvPackets.get()[0].rstrip()
+        else:
+            currPath = os.getcwd()
 
-            elif data == "enterServer":
-                os.chdir(serverRoot)
+        if inServer and not verifyInServer(serverRoot, currPath):  # exiting server
+            print("Left Server")
+            os.chdir(clientRoot)
+            currPath = clientRoot
+            inServer = False
 
-            elif isMounted:
-                print(f"sharedUsers = \n{sharedUsers}")
-                if splitted[0] == 'cwd':
-                    loc = os.getcwd()
-                    if fullAddr in sharedUsers:
-                        sendGroupMsg(UDPServerSocket, loc, sharedUsers, addr)
-                    else:
-                        UDPServerSocket.sendto(loc.encode('utf-8'), fullAddr)
-
-                elif (splitted[0] == 'cd'):
-                    currPath = os.getcwd()
-                    os.chdir(currPath + f"/{splitted[1]}")
-                    if fullAddr in sharedUsers:
-                        sendGroupMsg(UDPServerSocket, currPath, sharedUsers, addr)
-                    else:
-                        UDPServerSocket.sendto(currPath.encode('utf-8'), fullAddr)
-
-                else:
-                    try:
-                        result, err = subprocess.Popen(splitted,
-                                                       stderr=subprocess.PIPE,
-                                                       stdout=subprocess.PIPE).communicate()
-                    except:
-                        error = f"SERVER ERROR!".encode('utf-8')
-                        UDPServerSocket.sendto(error, fullAddr)
-                        continue
-
-                    if fullAddr in sharedUsers:
-                        sendGroupMsg(UDPServerSocket, result.decode('utf-8'), sharedUsers, addr)
-                    else:
-                        UDPServerSocket.sendto(result, fullAddr)
-
-    UDPServerSocket.close()
+    UDPClientSocket.close()
+    os._exit(1)
 
 
-# Server Code Ends Here
+# Client Code Ends Here
 
-def sendGroupMsg(UDPSocket, msg, addrList, notSend):
-    for addr in addrList:
-        print(f"outside {addr}")
-        if addr is not notSend:
-            print(f"inside {addr} != {notSend}")
-            UDPSocket.sendto(msg.encode('utf-8'), addr)
+# mount private 127.0.0.1:6864:/Server
+
+def verifyInServer(serverRoot: str, currPath: str):
+    common = os.path.commonpath([serverRoot, currPath])
+    return len(serverRoot) == len(common)
 
 
 if __name__ == '__main__':
     if len(sys.argv) == 2:
-        RunServer(sys.argv[1])
+        RunClient(sys.argv[1])
     else:
-        RunServer("127.0.0.1")
-
+        RunClient("127.0.0.1")
