@@ -72,6 +72,9 @@ def RunClient(serverIP):
                     continue
                 else:
                     print(ans)
+                    if "cd" in ans:
+                        currPath = recvPackets.get()[0].rstrip()
+                        
                 break
         if currInput == None:
             continue

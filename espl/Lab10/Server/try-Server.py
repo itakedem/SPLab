@@ -89,7 +89,7 @@ def RunServer(host):
                     currPath = os.getcwd()
                     os.chdir(currPath + f"/{splitted[1]}")
                     if fullAddr in sharedUsers:
-                        sendGroupMsg(UDPServerSocket, ' ',  currPath, sharedUsersInServer, fullAddr)
+                        sendGroupMsg(UDPServerSocket, data,  os.getcwd(), sharedUsersInServer, fullAddr)
                     else:
                         UDPServerSocket.sendto(currPath.encode('utf-8'), fullAddr)
 
