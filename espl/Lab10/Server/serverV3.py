@@ -95,7 +95,14 @@ def RunServer(host):
                         sendGroupMsg(UDPServerSocket, data,  os.getcwd(), sharedUsersInServer, fullAddr)
                     else:
                         UDPServerSocket.sendto(currPath.encode('utf-8'), fullAddr)
-
+                elif splitted[0] == 'get':
+                    if os.path.isfile(splitted[1]):
+                        file = open(splitted[1], 'rb')
+                        readBuffer = file.read(bufferSize)
+                        while (readBuffer):
+                            UDPServerSocket.sendto(readBuffer, addr)
+                            readBuffer = file.read(bufferSize)
+                        file.close()
                 else:
                     try:
                         result, err = subprocess.Popen(splitted,
