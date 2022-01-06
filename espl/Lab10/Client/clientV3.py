@@ -55,7 +55,6 @@ def RunClient(serverIP):
     threading.Thread(target=waitForInput).start()
     isMounted = False
     inServer = False
-    isShared = False
     currPath = os.getcwd()
     temp = currPath.split('/')
     temp[len(temp) - 1] = "Server"
@@ -65,20 +64,20 @@ def RunClient(serverIP):
     while True:
         print(f"{currPath}$", end=" ")
         sys.stdout.flush()
-        while currInput == None and isShared:
-            if not recvPackets.empty():
-                ans = recvPackets.get()[0].rstrip()
-                if "no" in ans:
-                    curr = recvPackets.get()[0].rstrip()
-                    continue
-                else:
-                    print(ans)
-                    if "cd" in ans:
-                        currPath = recvPackets.get()[0].rstrip()
-                        
-                break
-        if currInput == None:
-            continue
+        # while currInput == None:
+        #     if not recvPackets.empty():
+        #         ans = recvPackets.get()[0].rstrip()
+        #         if "no" in ans:
+        #             curr = recvPackets.get()[0].rstrip()
+        #             continue
+        #         else:
+        #             print(ans)
+        #             if "cd" in ans:
+        #                 currPath = recvPackets.get()[0].rstrip()
+        #
+        #         break
+        # if currInput == None:
+        #     continue
         request = currInput
         currInput = None
         splitted = request.split(' ')
