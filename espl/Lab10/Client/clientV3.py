@@ -52,7 +52,7 @@ def RunClient(serverIP):
     UDPClientSocket.sendto(name.encode('utf-8'), server)
     recvPackets = queue.Queue()
     threading.Thread(target=RecvData, args=(UDPClientSocket, recvPackets)).start()
-    threading.Thread(target=waitForInput).start()
+    # threading.Thread(target=waitForInput).start()
     isMounted = False
     inServer = False
     currPath = os.getcwd()
