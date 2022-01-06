@@ -78,8 +78,7 @@ def RunClient(serverIP):
         #         break
         # if currInput == None:
         #     continue
-        request = currInput
-        currInput = None
+        request = input()
         splitted = request.split(' ')
 
         if splitted[0] == f"mount":
