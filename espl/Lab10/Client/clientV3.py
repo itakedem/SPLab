@@ -133,12 +133,12 @@ def RunClient(serverIP):
                 if len(result) > 0:
                     print(result)
             elif splitted[0] == "get":
-                indOfStart = splitted[2].find('/')
-                targetLoc = splitted[2][indOfStart:] if indOfStart > 0 else ""
-                path = f"{clientRoot}{targetLoc}"
+                if splitted[2] == "cwd":
+                    path = clientRoot
+                path = f"{clientRoot}/{splitted[1]}"
                 getRequest = f"get {splitted[1]} {path}"
                 UDPClientSocket.sendto(getRequest.encode('utf-8'), server)
-                handleFiles(recvPackets, f"{path}/{splitted[1]}")
+                handleFiles(recvPackets, path)
             else:
                 newPath = recvPackets.get()[0].rstrip()
                 inServer = verifyInServer(serverRoot, newPath)
