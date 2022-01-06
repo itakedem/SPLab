@@ -75,9 +75,7 @@ def RunClient(serverIP):
                         currPath = recvPackets.get()[0].rstrip()
 
                 break
-        if currInput == None:
-            continue
-        request = currInput
+        request = input()
         currInput = None
         splitted = request.split(' ')
 
