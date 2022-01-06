@@ -176,6 +176,7 @@ def verifyInServer(serverRoot: str, currPath: str):
     return len(serverRoot) == len(common)
 
 def handleFiles(packets, path):
+    print(f"packets' size = {len(packets)}")
     if os.path.exists(path):
         os.remove(path)
     with open(path, 'wb') as f:
