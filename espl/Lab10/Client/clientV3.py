@@ -133,8 +133,6 @@ def RunClient(serverIP):
                 if len(result) > 0:
                     print(result)
             elif splitted[0] == "get":
-                if splitted[2] == "cwd":
-                    path = clientRoot
                 path = f"{clientRoot}/{splitted[1]}"
                 getRequest = f"get {splitted[1]} {path}"
                 UDPClientSocket.sendto(getRequest.encode('utf-8'), server)
@@ -197,7 +195,7 @@ def handleFiles(packets, path):
     with open(path, 'wb') as f:
         while (not packets.empty()):
             data, addr = packets.get()
-            print(f"received: {data}\nat {path}")
+            print(f"received: {data} \nat {path}")
             f.write(data)
     f.close()
 
