@@ -138,7 +138,7 @@ def RunClient(serverIP):
                 path = f"{clientRoot}{targetLoc}"
                 getRequest = f"get {splitted[1]} {path}"
                 UDPClientSocket.sendto(getRequest.encode('utf-8'), server)
-                handleFiles(recvPackets, path)
+                handleFiles(recvPackets, f"{path}/{splitted[1]}")
             else:
                 newPath = recvPackets.get()[0].rstrip()
                 inServer = verifyInServer(serverRoot, newPath)
