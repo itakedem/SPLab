@@ -194,7 +194,7 @@ def handleFiles(packets, path):
     if os.path.exists(path):
         os.remove(path)
     with open(path, 'wb') as f:
-        while (not packets.empty()):
+        while (packets.empty() == False):
             data, addr = packets.get()
             print(f"received: {data}")
             print(f"at: {path}")
