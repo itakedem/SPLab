@@ -18,6 +18,7 @@ from pathlib import Path
 bufferSize = 1024
 currInput = None
 
+
 # Original Code
 def ReceiveData(sock):
     while True:
@@ -33,6 +34,7 @@ def RecvData(sock, recvPackets):
     while True:
         data, addr = sock.recvfrom(bufferSize)
         recvPackets.put((data.decode('utf-8'), addr))
+
 
 def waitForInput():
     global currInput
@@ -100,20 +102,19 @@ def RunClient(serverIP):
         elif inServer:
             if len(splitted) > 1 and (
                     splitted[0] == "get" and 'cwd' in splitted[2]):  # coping file from server to client
-                indOfStart = splitted[2].find('/')
-                targetLoc = splitted[2][indOfStart:] if indOfStart > 0 else ""
-                target = f"{clientRoot}{targetLoc}"
-                request = f"get {splitted[1]} {target}"
+                path = f"{clientRoot}/{splitted[1]}"
+                getRequest = f"get {splitted[1]} {path}"
+                UDPClientSocket.sendto(getRequest.encode('utf-8'), server)
+                handleFiles(recvPackets, path)
 
-            if request == "cd :/local":  # leaving server
+            elif request == "cd :/local":  # leaving server
                 print("Left Server")
                 os.chdir(clientRoot)
                 currPath = clientRoot
                 inServer = False
                 continue
 
-            UDPClientSocket.sendto(request.encode('utf-8'), server)  # sending the command to the server
-            if splitted[0] != "cd":
+            elif splitted[0] != "cd":
                 result = recvPackets.get()[0].rstrip()
                 if len(result) > 0:
                     print(result)
@@ -175,8 +176,9 @@ def verifyInServer(serverRoot: str, currPath: str):
     common = os.path.commonpath([serverRoot, currPath])
     return len(serverRoot) == len(common)
 
+
 def handleFiles(packets, path):
-    print(f"packets' size = {len(packets)}")
+    print(f"Entered handleFiles")
     if os.path.exists(path):
         os.remove(path)
     with open(path, 'wb') as f:
@@ -186,6 +188,7 @@ def handleFiles(packets, path):
             print(f"at: {path}")
             f.write(data)
     f.close()
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 2:
