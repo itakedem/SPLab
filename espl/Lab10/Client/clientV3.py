@@ -63,21 +63,22 @@ def RunClient(serverIP):
 
     while True:
         print(f"{currPath}$", end=" ")
-        # while currInput == None:
-        #     if not recvPackets.empty():
-        #         ans = recvPackets.get()[0].rstrip()
-        #         if "no" in ans:
-        #             curr = recvPackets.get()[0].rstrip()
-        #             continue
-        #         else:
-        #             print(ans)
-        #             if "cd" in ans:
-        #                 currPath = recvPackets.get()[0].rstrip()
-        #
-        #         break
-        # if currInput == None:
-        #     continue
-        request = input()
+        sys.stdout.flush()
+        while currInput == None:
+            if not recvPackets.empty():
+                ans = ""
+                if "no" in ans:
+                    continue
+                else:
+                    print(ans)
+                    if "cd" in ans:
+                        currPath = recvPackets.get()[0].rstrip()
+
+                break
+        if currInput == None:
+            continue
+        request = currInput
+        currInput = None
         splitted = request.split(' ')
 
         if splitted[0] == f"mount":
