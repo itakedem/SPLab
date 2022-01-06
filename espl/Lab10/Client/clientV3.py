@@ -55,6 +55,7 @@ def RunClient(serverIP):
     threading.Thread(target=waitForInput).start()
     isMounted = False
     inServer = False
+    isShared = False
     currPath = os.getcwd()
     temp = currPath.split('/')
     temp[len(temp) - 1] = "Server"
@@ -64,7 +65,7 @@ def RunClient(serverIP):
     while True:
         print(f"{currPath}$", end=" ")
         sys.stdout.flush()
-        while currInput == None:
+        while currInput == None and isShared:
             if not recvPackets.empty():
                 ans = recvPackets.get()[0].rstrip()
                 if "no" in ans:
