@@ -153,8 +153,11 @@ def RunClient(serverIP):
                 print(result.decode('utf-8').rstrip())
 
         if inServer:  # setting the current directory from server or client, depends on "inServer"
-            UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
-            currPath = recvPackets.get()[0].rstrip()
+            if splitted[0] == "get":
+                continue
+            else:
+                UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
+                currPath = recvPackets.get()[0].rstrip()
         else:
             currPath = os.getcwd()
 
@@ -182,7 +185,7 @@ def handleFiles(packets, path):
     if os.path.exists(path):
         os.remove(path)
     with open(path, 'wb') as f:
-        while (packets.empty() == False):
+        while packets.empty() == False:
             data, addr = packets.get()
             print(f"received: {data}")
             print(f"at: {path}")
