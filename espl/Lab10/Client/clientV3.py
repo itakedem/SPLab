@@ -56,9 +56,10 @@ def RunClient(serverIP):
     UDPClientSocket.sendto(name.encode('utf-8'), server)
     recvPackets = queue.Queue()
     threading.Thread(target=RecvData, args=(UDPClientSocket, recvPackets)).start()
-    threading.Thread(target=waitForInput).start()
+    # threading.Thread(target=waitForInput).start()
     isMounted = False
     inServer = False
+    currInput = "Started"
     currPath = os.getcwd()
     temp = currPath.split('/')
     temp[len(temp) - 1] = "Server"
@@ -67,7 +68,6 @@ def RunClient(serverIP):
 
     while True:
         print(f"{currPath}$", end=" ")
-        sys.stdout.flush()
         while currInput is None:
             if not recvPackets.empty():
                 ans = recvPackets.get()[0].rstrip()
@@ -80,10 +80,8 @@ def RunClient(serverIP):
                         currPath = recvPackets.get()[0].rstrip()
 
                 break
-        if currInput is None:
-            continue
         request = input()
-        currInput = None
+        currInput = request
         splitted = request.split(' ')
 
         if splitted[0] == f"mount":
