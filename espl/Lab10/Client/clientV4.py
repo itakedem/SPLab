@@ -96,10 +96,14 @@ def RunClient(serverIP):
             continue
         if splitted_request[0] == 'mount':
             is_mounted = True
+            if splitted_request[1] == 'shared':
+                request = f'mount shared {serverIP}:{port}:/Server'
+            else:
+                request = f'mount private {serverIP}:{port}:/Server'
             UDPClientSocket.sendto(request.encode('utf-8'), server)
-        elif splitted_request[0] == 'cd' and is_mounted == True and (
-                splitted_request[1] == (str(serverIP) + ':5000:/Server')):
+        elif request == 'cd :/Server' and is_mounted == True:
             is_local = False
+            request = "cd 127.0.0.1:5000:/Server"
             execute_command(request, UDPClientSocket, is_local, server)
             data = recvPackets.get()[0]
             handle_recieved_msg(data)
@@ -135,5 +139,8 @@ def RunClient(serverIP):
 
 
 if __name__ == '__main__':
-    RunClient(sys.argv[1])
+    if len(sys.argv) == 2:
+        RunClient(sys.argv[1])
+    else:
+        RunClient("127.0.0.1")
 
