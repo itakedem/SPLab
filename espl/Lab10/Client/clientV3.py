@@ -71,7 +71,7 @@ def RunClient(serverIP):
     while True:
         print(f"{currPath}$", end=" ")
         sys.stdout.flush()
-        while currInput == None:
+        while False:
             if not recvPackets.empty():
                 ans = recvPackets.get()[0].rstrip()
                 if "no" in ans:
