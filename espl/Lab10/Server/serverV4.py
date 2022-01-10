@@ -66,7 +66,7 @@ def RunServer(host):
                 if li[0] == 'cd':
                     msg = ''
                     # handle cd ip:port:/Server
-                    if len(li[1].split(':')) > 0 and (li[1].split(':')[0] == str(host) and li[1].split(':')[1] == str(port)):
+                    if data == "cd :/Server":
                         os.chdir(os.path.realpath(sys.argv[0]).split('/Server')[0] + '/Server')
                         msg = 'cwd /Server'
                         reply(msg, addr, UDPServerSocket)
