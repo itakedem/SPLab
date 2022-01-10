@@ -103,6 +103,9 @@ def RunServer(host):
                             UDPServerSocket.sendto(readBuffer, fullAddr)
                             readBuffer = file.read(bufferSize)
                         file.close()
+                    else:
+                        UDPServerSocket.sendto(f"Error Getting".encode('utf-8'), fullAddr)
+
                 else:
                     try:
                         result, err = subprocess.Popen(splitted,
