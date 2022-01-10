@@ -204,6 +204,7 @@ def verifyInServer(serverRoot: str, currPath: str):
 
 def handleFiles(packets, path):
     print(f"path: {path}")
+    time.sleep(1)
     with open(path, 'wb') as f:
         while (not packets.empty()):
             data, addr = packets.get()
