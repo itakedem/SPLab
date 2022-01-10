@@ -137,13 +137,14 @@ def RunClient(serverIP):
 
             UDPClientSocket.sendto(request.encode('utf-8'), server)  # sending the command to the server
 
-            if splitted[0] != "cd":
+
+            if splitted[0] == "get":
+                path = f"{clientRoot}/{splitted[1]}"
+                handleFiles(recvPackets, path)
+            elif splitted[0] != "cd":
                 result = recvPackets.get()[0].rstrip()
                 if len(result) > 0:
                     print(result)
-            elif splitted[0] == "get":
-                path = f"{clientRoot}/{splitted[1]}"
-                handleFiles(recvPackets, path)
             else:
                 newPath = recvPackets.get()[0].rstrip()
                 inServer = verifyInServer(serverRoot, newPath)
