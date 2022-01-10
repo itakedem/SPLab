@@ -190,8 +190,6 @@ def verifyInServer(serverRoot: str, currPath: str):
 
 def handleFiles(packets, path):
     print(f"path: {path}")
-    if os.path.exists(path):
-        os.remove(path)
     with open(path, 'wb') as f:
         while (not packets.empty()):
             data, addr = packets.get()
