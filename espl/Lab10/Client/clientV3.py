@@ -201,6 +201,8 @@ def verifyInServer(serverRoot: str, currPath: str):
 
 def handleFiles(packets, path):
     time.sleep(1)
+    if os.path.exists(path):
+        os.remove(path)
     with open(path, 'wb') as f:
         while (not packets.empty()):
             data, addr = packets.get()
@@ -208,8 +210,8 @@ def handleFiles(packets, path):
                 f.write(data.encode('utf-8'))
             else:
                 f.write(data)
-
     f.close()
+    print("Copied the file!")
 
 
 if __name__ == '__main__':
