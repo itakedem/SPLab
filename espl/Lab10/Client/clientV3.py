@@ -17,7 +17,7 @@ from pathlib import Path
 
 bufferSize = 1024
 currInput = None
-syncFiles = False
+
 
 # Original Code
 def ReceiveData(sock):
@@ -30,9 +30,9 @@ def ReceiveData(sock):
 def RecvData(sock, recvPackets):
     while True:
         data, addr = sock.recvfrom(bufferSize)
-        if not syncFiles:
+        try:
             dataToQ = data.decode('utf-8')
-        else:
+        except:
             dataToQ = data
 
         recvPackets.put((dataToQ, addr))
@@ -124,7 +124,6 @@ def RunClient(serverIP):
             if len(splitted) > 1 and (
                     splitted[0] == "get" and 'cwd' in splitted[2]):  # coping file from server to client
                 request = f"get {splitted[1]} {clientRoot}"
-                syncFiles = True
 
             elif request == "cd :/local":  # leaving server
                 print("Left Server")
@@ -201,15 +200,12 @@ def verifyInServer(serverRoot: str, currPath: str):
 
 
 def handleFiles(packets, path):
-    print(f"path: {path}")
     time.sleep(1)
     with open(path, 'wb') as f:
         while (not packets.empty()):
             data, addr = packets.get()
-            print(f"data = {data}")
-            f.write(data)
+            f.write(data.encode('utf-8'))
     f.close()
-    syncFiles = False
 
 
 if __name__ == '__main__':
