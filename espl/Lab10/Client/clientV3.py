@@ -204,10 +204,10 @@ def handleFiles(packets, path):
     with open(path, 'wb') as f:
         while (not packets.empty()):
             data, addr = packets.get()
-            if type(data) == 'bytes':
-                f.write(data)
-            else:
+            if type(data) == 'str':
                 f.write(data.encode('utf-8'))
+            else:
+                f.write(data)
 
     f.close()
 
