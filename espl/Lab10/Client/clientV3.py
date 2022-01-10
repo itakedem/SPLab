@@ -207,6 +207,7 @@ def handleFiles(packets, path):
     with open(path, 'wb') as f:
         while (not packets.empty()):
             data, addr = packets.get()
+            print(f"data = {data}")
             f.write(data)
     f.close()
 
