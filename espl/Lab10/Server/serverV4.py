@@ -53,6 +53,7 @@ def RunServer(host):
                     reply('Invalid mount arguments', addr, UDPServerSocket)
                 elif li[2].split(':')[0] != str(host) or int(li[2].split(':')[1]) != port:
                     reply('Incorrect IP or Port', addr, UDPServerSocket)
+                    continue
                 else:
                     obj = {
                         'Type': li[1],

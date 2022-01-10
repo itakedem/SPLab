@@ -97,9 +97,9 @@ def RunClient(serverIP):
         if splitted_request[0] == 'mount':
             is_mounted = True
             if len(splitted_request) > 1 and splitted_request[1] == 'shared':
-                request = f'mount shared {serverIP}:{port}:/Server'
+                request = f'mount shared {serverIP}:5000:/Server'
             else:
-                request = f'mount private {serverIP}:{port}:/Server'
+                request = f'mount private {serverIP}:5000:/Server'
             UDPClientSocket.sendto(request.encode('utf-8'), server)
         elif request == 'cd :/Server' and is_mounted == True:
             is_local = False
