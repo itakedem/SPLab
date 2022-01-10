@@ -91,31 +91,45 @@ def RunClient(serverIP):
     while True:
         print(clientRoot, end='$ ')
         request = input()
-        splitted_request = request.split()
+        splitted = request.split()
         if request == '':
             continue
-        if splitted_request[0] == 'mount':
+        if splitted[0] == 'mount':
+            if len(splitted) == 1:  # didn't send a server address
+                print("Not enough arguments for mount, using default value")
+                request = f"{request} private {serverIP}"
+            elif len(splitted) == 2:
+                if splitted[1] == "shared":
+                    print("Not enough arguments for mount, using default value")
+                    request = f"{request} {serverIP}"
+                elif splitted[1] != serverIP:
+                    print(f"the server in {splitted[1]} is not connected. Please try again")
+                    continue
+            elif splitted[2] != serverIP:  # sent unknown server address
+                print(f"the server in {splitted[1]} is not connected. Please try again")
+                continue
             isMounted = True
             UDPClientSocket.sendto(request.encode('utf-8'), server)
-        elif splitted_request[0] == 'cd' and isMounted == True and (
-                splitted_request[1] == ':/Server'):
+
+        elif splitted[0] == 'cd' and isMounted == True and (
+                splitted[1] == ':/Server'):
             isLocal = False
             execute_command(request, UDPClientSocket, isLocal, server)
             data = recvPackets.get()[0]
             handle_recieved_msg(data)
-        elif splitted_request[0] == 'cd' and (splitted_request[1].split(':')[0] == 'local'):
+        elif splitted[0] == 'cd' and (splitted[1].split(':')[0] == 'local'):
             if isMounted == True:
                 isLocal = True
-                parsed_command = splitted_request[0] + ' ' + splitted_request[1].split(':')[1]
+                parsed_command = splitted[0] + ' ' + splitted[1].split(':')[1]
                 execute_command(parsed_command, UDPClientSocket, isLocal, server)
         elif request == 'qqq':
             break
-        elif splitted_request[0] == 'get':
+        elif splitted[0] == 'get':
             if isMounted == True and isLocal == False:
-                path = splitted_request[2]
+                path = splitted[2]
                 if (path == 'cwd'):
                     path = clientRoot
-                path = path + '/' + splitted_request[1]
+                path = path + '/' + splitted[1]
                 execute_command(request, UDPClientSocket, isLocal, server)
                 handle_recieved_file(recvPackets, path)
 

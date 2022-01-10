@@ -47,19 +47,18 @@ def RunServer(host):
             li = data.split()
             full_addr = addr[0]+':'+str(addr[1])
             if li[0] == 'mount':
-                if li[1] != 'private' and li[1] != 'shared':
-                    reply('Invalid mount type', addr, UDPServerSocket)
-                elif len(li[2].split(':')) != 3:
-                    reply('Invalid mount arguments', addr, UDPServerSocket)
-                elif li[2].split(':')[0] != str(host) or int(li[2].split(':')[1]) != port:
-                    reply('Incorrect IP or Port', addr, UDPServerSocket)
+                if host in data:
+                    if len(li) != 3:
+                        UDPServerSocket.sendto("Error Mounting, too many arguments".encode('utf-8'), addr)
                 else:
-                    obj = {
-                        'Type': li[1],
-                        'Path': os.path.realpath(sys.argv[0]).split('/Server')[0] + '/Server',
-                        'Addr': addr
-                        }
-                    clients[full_addr] = obj
+                    UDPServerSocket.sendto("Error Mounting, wrong arguments".encode('utf-8'), addr)
+                    continue
+                obj = {
+                    'Type': li[1],
+                    'Path': os.path.realpath(sys.argv[0]).split('/Server')[0] + '/Server',
+                    'Addr': addr
+                    }
+                clients[full_addr] = obj
             else:
                 # when client send a message, first change to the client's directory
                 os.chdir(clients[full_addr]['Path'])
