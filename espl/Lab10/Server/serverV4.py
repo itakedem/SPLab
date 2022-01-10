@@ -128,6 +128,9 @@ def send(data,addr, UDPServerSocket):
     UDPServerSocket.sendto(data.encode('utf-8'), addr)
 
 if __name__ == '__main__':
-    RunServer(sys.argv[1])
+    if len(sys.argv) == 2:
+        RunServer(sys.argv[1])
+    else:
+        RunServer("127.0.0.1")
 
 # cd 127.0.0.1:5000:/Server

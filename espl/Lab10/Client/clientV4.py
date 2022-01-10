@@ -135,5 +135,8 @@ def RunClient(serverIP):
 
 
 if __name__ == '__main__':
-    RunClient(sys.argv[1])
+    if len(sys.argv) == 2:
+        RunClient(sys.argv[1])
+    else:
+        RunClient("127.0.0.1")
 
