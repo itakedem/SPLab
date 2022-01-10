@@ -195,7 +195,10 @@ def RunClient(serverIP):
 # mount private 127.0.0.1:6864:/Server
 
 def verifyInServer(serverRoot: str, currPath: str):
-    common = os.path.commonpath([serverRoot, currPath])
+    try:
+        common = os.path.commonpath([serverRoot, currPath])
+    except:
+        return False
     return len(serverRoot) == len(common)
 
 
