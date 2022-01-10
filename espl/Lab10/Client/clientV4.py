@@ -96,7 +96,7 @@ def RunClient(serverIP):
             continue
         if splitted_request[0] == 'mount':
             is_mounted = True
-            if splitted_request[1] == 'shared':
+            if len(splitted_request) > 1 and splitted_request[1] == 'shared':
                 request = f'mount shared {serverIP}:{port}:/Server'
             else:
                 request = f'mount private {serverIP}:{port}:/Server'
