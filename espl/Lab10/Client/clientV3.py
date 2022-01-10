@@ -117,12 +117,9 @@ def RunClient(serverIP):
         elif inServer:
             if len(splitted) > 1 and (
                     splitted[0] == "get" and 'cwd' in splitted[2]):  # coping file from server to client
-                indOfStart = splitted[2].find('/')
-                targetLoc = splitted[2][indOfStart:] if indOfStart > 0 else ""
-                target = f"{clientRoot}{targetLoc}"
-                request = f"get {splitted[1]} {target}"
+                request = f"get {splitted[1]} {clientRoot}"
 
-            if request == "cd :/local":  # leaving server
+            elif request == "cd :/local":  # leaving server
                 print("Left Server")
                 os.chdir(clientRoot)
                 currPath = clientRoot
