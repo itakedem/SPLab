@@ -47,18 +47,19 @@ def RunServer(host):
             li = data.split()
             full_addr = addr[0]+':'+str(addr[1])
             if li[0] == 'mount':
-                if host in data:
-                    if len(li) != 3:
-                        UDPServerSocket.sendto("Error Mounting, too many arguments".encode('utf-8'), addr)
+                if li[1] != 'private' and li[1] != 'shared':
+                    reply('Invalid mount type', addr, UDPServerSocket)
+                elif len(li[2].split(':')) != 3:
+                    reply('Invalid mount arguments', addr, UDPServerSocket)
+                elif li[2].split(':')[0] != str(host) or int(li[2].split(':')[1]) != port:
+                    reply('Incorrect IP or Port', addr, UDPServerSocket)
                 else:
-                    UDPServerSocket.sendto("Error Mounting, wrong arguments".encode('utf-8'), addr)
-                    continue
-                obj = {
-                    'Type': li[1],
-                    'Path': os.path.realpath(sys.argv[0]).split('/Server')[0] + '/Server',
-                    'Addr': addr
-                    }
-                clients[full_addr] = obj
+                    obj = {
+                        'Type': li[1],
+                        'Path': os.path.realpath(sys.argv[0]).split('/Server')[0] + '/Server',
+                        'Addr': addr
+                        }
+                    clients[full_addr] = obj
             else:
                 # when client send a message, first change to the client's directory
                 os.chdir(clients[full_addr]['Path'])
@@ -66,7 +67,7 @@ def RunServer(host):
                 if li[0] == 'cd':
                     msg = ''
                     # handle cd ip:port:/Server
-                    if data == "cd :/Server":
+                    if len(li[1].split(':')) > 0 and (li[1].split(':')[0] == str(host) and li[1].split(':')[1] == str(port)):
                         os.chdir(os.path.realpath(sys.argv[0]).split('/Server')[0] + '/Server')
                         msg = 'cwd /Server'
                         reply(msg, addr, UDPServerSocket)
@@ -127,9 +128,6 @@ def send(data,addr, UDPServerSocket):
     UDPServerSocket.sendto(data.encode('utf-8'), addr)
 
 if __name__ == '__main__':
-    if len(sys.argv) == 2:
-        RunServer(sys.argv[1])
-    else:
-        RunServer("127.0.0.1")
+    RunServer(sys.argv[1])
 
 # cd 127.0.0.1:5000:/Server

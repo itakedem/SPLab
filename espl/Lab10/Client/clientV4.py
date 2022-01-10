@@ -14,15 +14,15 @@ import subprocess
 import queue
 
 bufferSize = 1024
-clientRoot = os.getcwd()
+cwd = os.getcwd()
 
 
-def execute_command(request, UDPClientSocket, isLocal, server):
-    global clientRoot
-    if isLocal == True:
+def execute_command(request, UDPClientSocket, is_local, server):
+    global cwd
+    if is_local == True:
         if (request.split()[0] == 'cd'):
             os.chdir(request.split()[1])
-            clientRoot = os.getcwd()
+            cwd = os.getcwd()
         else:
             output = subprocess.run(request, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                     shell=True).stdout.decode('utf-8')
@@ -43,7 +43,7 @@ def RecvData(sock, recvPackets):
 
 
 def handle_recieved_msg(data):
-    global clientRoot
+    global cwd
     data = data.decode('utf-8')
     shared = False
     if (data != None and data != ''):
@@ -57,11 +57,11 @@ def handle_recieved_msg(data):
                 return
 
         if (data.split()[0] == 'cwd'):
-            clientRoot = data.split()[1]
+            cwd = data.split()[1]
         else:
             print(data)
             if (shared == True):
-                print(clientRoot, end='$ ', flush=True)
+                print(cwd, end='$ ', flush=True)
 
 
 def handle_recieved_file(recvPackets, path):
@@ -75,7 +75,7 @@ def handle_recieved_file(recvPackets, path):
 
 
 def RunClient(serverIP):
-    global clientRoot
+    global cwd
     host = socket.gethostbyname(socket.gethostname())
     port = random.randint(6000, 10000)
     print('Client IP->' + str(host) + ' Port->' + str(port))
@@ -86,58 +86,44 @@ def RunClient(serverIP):
     threading.Thread(target=RecvData, args=(UDPClientSocket, recvPackets)).start()
 
     print("Connected to the server")
-    isLocal = True
-    isMounted = False
+    is_local = True
+    is_mounted = False
     while True:
-        print(clientRoot, end='$ ')
+        print(cwd, end='$ ')
         request = input()
-        splitted = request.split()
+        splitted_request = request.split()
         if request == '':
             continue
-        if splitted[0] == 'mount':
-            if len(splitted) == 1:  # didn't send a server address
-                print("Not enough arguments for mount, using default value")
-                request = f"{request} private {serverIP}"
-            elif len(splitted) == 2:
-                if splitted[1] == "shared":
-                    print("Not enough arguments for mount, using default value")
-                    request = f"{request} {serverIP}"
-                elif splitted[1] != serverIP:
-                    print(f"the server in {splitted[1]} is not connected. Please try again")
-                    continue
-            elif splitted[2] != serverIP:  # sent unknown server address
-                print(f"the server in {splitted[1]} is not connected. Please try again")
-                continue
-            isMounted = True
+        if splitted_request[0] == 'mount':
+            is_mounted = True
             UDPClientSocket.sendto(request.encode('utf-8'), server)
-
-        elif splitted[0] == 'cd' and isMounted == True and (
-                splitted[1] == ':/Server'):
-            isLocal = False
-            execute_command(request, UDPClientSocket, isLocal, server)
+        elif splitted_request[0] == 'cd' and is_mounted == True and (
+                splitted_request[1] == (str(serverIP) + ':5000:/Server')):
+            is_local = False
+            execute_command(request, UDPClientSocket, is_local, server)
             data = recvPackets.get()[0]
             handle_recieved_msg(data)
-        elif splitted[0] == 'cd' and (splitted[1].split(':')[0] == 'local'):
-            if isMounted == True:
-                isLocal = True
-                parsed_command = splitted[0] + ' ' + splitted[1].split(':')[1]
-                execute_command(parsed_command, UDPClientSocket, isLocal, server)
+        elif splitted_request[0] == 'cd' and (splitted_request[1].split(':')[0] == 'local'):
+            if is_mounted == True:
+                is_local = True
+                parsed_command = splitted_request[0] + ' ' + splitted_request[1].split(':')[1]
+                execute_command(parsed_command, UDPClientSocket, is_local, server)
         elif request == 'qqq':
             break
-        elif splitted[0] == 'get':
-            if isMounted == True and isLocal == False:
-                path = splitted[2]
+        elif splitted_request[0] == 'get':
+            if is_mounted == True and is_local == False:
+                path = splitted_request[2]
                 if (path == 'cwd'):
-                    path = clientRoot
-                path = path + '/' + splitted[1]
-                execute_command(request, UDPClientSocket, isLocal, server)
+                    path = cwd
+                path = path + '/' + splitted_request[1]
+                execute_command(request, UDPClientSocket, is_local, server)
                 handle_recieved_file(recvPackets, path)
 
             else:
                 print("You are not connected to the server")
         else:
-            execute_command(request, UDPClientSocket, isLocal, server)
-            if (isLocal == False):
+            execute_command(request, UDPClientSocket, is_local, server)
+            if (is_local == False):
                 data = recvPackets.get()[0]
                 handle_recieved_msg(data)
 
@@ -149,8 +135,5 @@ def RunClient(serverIP):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 2:
-        RunClient(sys.argv[1])
-    else:
-        RunClient("127.0.0.1")
+    RunClient(sys.argv[1])
 
