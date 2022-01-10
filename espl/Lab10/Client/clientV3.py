@@ -33,7 +33,12 @@ def ReceiveData(sock):
 def RecvData(sock, recvPackets):
     while True:
         data, addr = sock.recvfrom(bufferSize)
-        recvPackets.put((data.decode('utf-8'), addr))
+        try:
+            dataToQ = data.decode('utf-8')
+        except:
+            dataToQ = data
+
+        recvPackets.put((dataToQ, addr))
 
 
 def waitForInput():
