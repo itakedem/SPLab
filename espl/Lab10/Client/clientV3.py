@@ -56,7 +56,7 @@ def RunClient(serverIP):
     UDPClientSocket.sendto(name.encode('utf-8'), server)
     recvPackets = queue.Queue()
     threading.Thread(target=RecvData, args=(UDPClientSocket, recvPackets)).start()
-    # threading.Thread(target=waitForInput).start()
+    threading.Thread(target=waitForInput).start()
     isMounted = False
     inServer = False
     currPath = os.getcwd()
@@ -67,8 +67,8 @@ def RunClient(serverIP):
 
     while True:
         print(f"{currPath}$", end=" ")
-        # sys.stdout.flush()
-        while False:
+        sys.stdout.flush()
+        while currInput is None:
             if not recvPackets.empty():
                 ans = recvPackets.get()[0].rstrip()
                 if "no" in ans:
@@ -80,8 +80,8 @@ def RunClient(serverIP):
                         currPath = recvPackets.get()[0].rstrip()
 
                 break
-        # if currInput == None:
-        #     continue
+        if currInput is None:
+            continue
         request = input()
         currInput = None
         splitted = request.split(' ')
