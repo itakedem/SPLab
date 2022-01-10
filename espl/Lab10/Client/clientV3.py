@@ -141,6 +141,7 @@ def RunClient(serverIP):
             if splitted[0] == "get":
                 path = f"{clientRoot}/{splitted[1]}"
                 handleFiles(recvPackets, path)
+                continue
             elif splitted[0] != "cd":
                 result = recvPackets.get()[0].rstrip()
                 if len(result) > 0:
