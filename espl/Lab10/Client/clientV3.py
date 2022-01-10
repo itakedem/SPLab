@@ -54,7 +54,7 @@ def RunClient(serverIP):
     UDPClientSocket.sendto(name.encode('utf-8'), server)
     recvPackets = queue.Queue()
     threading.Thread(target=RecvData, args=(UDPClientSocket, recvPackets)).start()
-    # threading.Thread(target=waitForInput).start()
+    threading.Thread(target=waitForInput).start()
     isMounted = False
     inServer = False
     currPath = os.getcwd()
@@ -65,8 +65,23 @@ def RunClient(serverIP):
 
     while True:
         print(f"{currPath}$", end=" ")
+        sys.stdout.flush()
+        while currInput == None:
+            if not recvPackets.empty():
+                ans = recvPackets.get()[0].rstrip()
+                if "no" in ans:
+                    curr = recvPackets.get()[0].rstrip()
+                    continue
+                else:
+                    print(ans)
+                    if "cd" in ans:
+                        currPath = recvPackets.get()[0].rstrip()
 
-        request = input()
+                break
+        if currInput == None:
+            continue
+        request = currInput
+        currInput = None
         splitted = request.split(' ')
 
         if splitted[0] == f"mount":
@@ -102,22 +117,27 @@ def RunClient(serverIP):
         elif inServer:
             if len(splitted) > 1 and (
                     splitted[0] == "get" and 'cwd' in splitted[2]):  # coping file from server to client
-                path = f"{clientRoot}/{splitted[1]}"
-                getRequest = f"get {splitted[1]} {path}"
-                UDPClientSocket.sendto(getRequest.encode('utf-8'), server)
-                handleFiles(recvPackets, path)
+                indOfStart = splitted[2].find('/')
+                targetLoc = splitted[2][indOfStart:] if indOfStart > 0 else ""
+                target = f"{clientRoot}{targetLoc}"
+                request = f"get {splitted[1]} {target}"
 
-            elif request == "cd :/local":  # leaving server
+            if request == "cd :/local":  # leaving server
                 print("Left Server")
                 os.chdir(clientRoot)
                 currPath = clientRoot
                 inServer = False
                 continue
 
-            elif splitted[0] != "cd":
+            UDPClientSocket.sendto(request.encode('utf-8'), server)  # sending the command to the server
+
+            if splitted[0] != "cd":
                 result = recvPackets.get()[0].rstrip()
                 if len(result) > 0:
                     print(result)
+            elif splitted[0] == "get":
+                path = f"{clientRoot}/{splitted[1]}"
+                handleFiles(recvPackets, path)
             else:
                 newPath = recvPackets.get()[0].rstrip()
                 inServer = verifyInServer(serverRoot, newPath)
@@ -147,11 +167,8 @@ def RunClient(serverIP):
                 print(result.decode('utf-8').rstrip())
 
         if inServer:  # setting the current directory from server or client, depends on "inServer"
-            if splitted[0] == "get":
-                continue
-            else:
-                UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
-                currPath = recvPackets.get()[0].rstrip()
+            UDPClientSocket.sendto(("cwd").encode('utf-8'), server)
+            currPath = recvPackets.get()[0].rstrip()
         else:
             currPath = os.getcwd()
 
@@ -175,14 +192,11 @@ def verifyInServer(serverRoot: str, currPath: str):
 
 
 def handleFiles(packets, path):
-    print(f"Entered handleFiles")
     if os.path.exists(path):
         os.remove(path)
     with open(path, 'wb') as f:
-        while packets.empty() == False:
+        while (not packets.empty()):
             data, addr = packets.get()
-            print(f"received: {data}")
-            print(f"at: {path}")
             f.write(data)
     f.close()
 

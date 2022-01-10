@@ -100,10 +100,9 @@ def RunServer(host):
                         file = open(splitted[1], 'rb')
                         readBuffer = file.read(bufferSize)
                         while (readBuffer):
-                            UDPServerSocket.sendto(readBuffer, fullAddr)
+                            UDPServerSocket.sendto(readBuffer, addr)
                             readBuffer = file.read(bufferSize)
                         file.close()
-                        continue
                 else:
                     try:
                         result, err = subprocess.Popen(splitted,
