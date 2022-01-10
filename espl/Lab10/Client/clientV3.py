@@ -120,6 +120,10 @@ def RunClient(serverIP):
             inServer = True
 
         elif inServer:
+            if splitted[0] == "get" and len(splitted) < 3:
+                print("Not enough arguments!")
+                continue
+
             if len(splitted) > 1 and (
                     splitted[0] == "get" and 'cwd' in splitted[2]):  # coping file from server to client
                 request = f"get {splitted[1]} {clientRoot}"
