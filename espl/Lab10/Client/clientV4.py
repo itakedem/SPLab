@@ -18,11 +18,11 @@ clientRoot = os.getcwd()
 
 
 def execute_command(request, UDPClientSocket, isLocal, server):
-    global cwd
+    global clientRoot
     if isLocal == True:
         if (request.split()[0] == 'cd'):
             os.chdir(request.split()[1])
-            cwd = os.getcwd()
+            clientRoot = os.getcwd()
         else:
             output = subprocess.run(request, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                     shell=True).stdout.decode('utf-8')
@@ -43,7 +43,7 @@ def RecvData(sock, recvPackets):
 
 
 def handle_recieved_msg(data):
-    global cwd
+    global clientRoot
     data = data.decode('utf-8')
     shared = False
     if (data != None and data != ''):
@@ -57,11 +57,11 @@ def handle_recieved_msg(data):
                 return
 
         if (data.split()[0] == 'cwd'):
-            cwd = data.split()[1]
+            clientRoot = data.split()[1]
         else:
             print(data)
             if (shared == True):
-                print(cwd, end='$ ', flush=True)
+                print(clientRoot, end='$ ', flush=True)
 
 
 def handle_recieved_file(recvPackets, path):
@@ -75,7 +75,7 @@ def handle_recieved_file(recvPackets, path):
 
 
 def RunClient(serverIP):
-    global cwd
+    global clientRoot
     host = socket.gethostbyname(socket.gethostname())
     port = random.randint(6000, 10000)
     print('Client IP->' + str(host) + ' Port->' + str(port))
@@ -89,7 +89,7 @@ def RunClient(serverIP):
     isLocal = True
     isMounted = False
     while True:
-        print(cwd, end='$ ')
+        print(clientRoot, end='$ ')
         request = input()
         splitted_request = request.split()
         if request == '':
